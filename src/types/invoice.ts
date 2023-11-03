@@ -17,6 +17,18 @@ export type CustomerInfoAction = {
   payload: string
 }
 
+export type InvoiceInfoState = {
+  invoiceNumber: string
+  dateIssue: string
+  dueDate: string
+  sendingMethod: string
+}
+
+export type InvoiceInfoAction = {
+  type: string
+  payload: string
+}
+
 export type MenuOptions = {
   value: string
   label: string

@@ -1,28 +1,41 @@
 import InputPullback from '@/components/inputPullback'
 import { SelectMenu } from '@/components/selectMenu'
-import { useState } from 'react'
+import {
+  InvoiceInfoInitialState,
+  invoiceInfoReducers
+} from '@/reducers/createInvoice'
+import { useReducer } from 'react'
 
 const InvoiceInfo = () => {
-  const [invoiceNumber, setInvoiceNumber] = useState('')
-  const [invoiceDateIssue, setInvoiceDateIssue] = useState('')
-  const [invoiceDueDate, setInvoiceDueDate] = useState('')
-  const [sendingMethod, setSendingMethod] = useState('')
+  const [invoiceInfoState, invoiceInfoDispatch] = useReducer(
+    invoiceInfoReducers,
+    InvoiceInfoInitialState
+  )
   const sendingInvoiceOptions = [
     { value: 'mail', label: 'Mail' },
     { value: 'whatsapp', label: 'Whatsapp' },
     { value: 'inhand', label: 'In-hand' }
-  ]
+  ] // Todo: CONSTANTS or BACKEND
+
+  console.log(invoiceInfoState) // Todo: Remove / testing
 
   const onChangeInvoiceNumber = (e: any) => {
-    setInvoiceNumber(e.target.value)
+    invoiceInfoDispatch({ type: 'INVOICE_NUMBER', payload: e.target.value })
   }
 
   const onChangeInvoiceDueDate = (e: any) => {
-    setInvoiceDueDate(e.target.value)
+    invoiceInfoDispatch({ type: 'INVOICE_DUE_DATE', payload: e.target.value })
   }
 
   const onChangeInvoiceDateIssue = (e: any) => {
-    setInvoiceDateIssue(e.target.value)
+    invoiceInfoDispatch({ type: 'INVOICE_DATE_ISSUE', payload: e.target.value })
+  }
+
+  const onSetMethod = (value: any) => {
+    invoiceInfoDispatch({
+      type: 'INVOICE_SENDING_METHOD',
+      payload: value
+    })
   }
   return (
     <>
@@ -30,7 +43,7 @@ const InvoiceInfo = () => {
       <div className='flex justify-between mt-2 items-center'>
         <div className='w-[calc(60%-8rem)]'>
           <InputPullback
-            value={invoiceNumber}
+            value={invoiceInfoState.invoiceNumber}
             type='number'
             onChange={onChangeInvoiceNumber}
             placeholder='Invoice Number #'
@@ -38,15 +51,15 @@ const InvoiceInfo = () => {
         </div>
         <div className='w-32'>
           <SelectMenu
-            value={sendingMethod}
-            setValue={setSendingMethod}
+            value={invoiceInfoState.sendingMethod}
+            setValue={onSetMethod}
             options={sendingInvoiceOptions}
             label='Send via'
           />
         </div>
         <div className='w-1/6'>
           <InputPullback
-            value={invoiceDateIssue}
+            value={invoiceInfoState.dateIssue}
             type='number'
             onChange={onChangeInvoiceDateIssue}
             placeholder='Date Issue'
@@ -54,7 +67,7 @@ const InvoiceInfo = () => {
         </div>
         <div className='w-1/6'>
           <InputPullback
-            value={invoiceDueDate}
+            value={invoiceInfoState.dueDate}
             type='number'
             onChange={onChangeInvoiceDueDate}
             placeholder='Due Date'

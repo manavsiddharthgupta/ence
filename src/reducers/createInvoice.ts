@@ -1,4 +1,9 @@
-import { CustomerInfoAction, CustomerInfoState } from '@/types/invoice'
+import {
+  CustomerInfoAction,
+  CustomerInfoState,
+  InvoiceInfoAction,
+  InvoiceInfoState
+} from '@/types/invoice'
 
 export const customerInfoInitialState: CustomerInfoState = {
   email: '',
@@ -7,6 +12,13 @@ export const customerInfoInitialState: CustomerInfoState = {
   pincode: '',
   state: '',
   country: ''
+}
+
+export const InvoiceInfoInitialState: InvoiceInfoState = {
+  invoiceNumber: '',
+  dateIssue: '',
+  dueDate: '',
+  sendingMethod: ''
 }
 
 export const customerInfoReducers = (
@@ -43,6 +55,36 @@ export const customerInfoReducers = (
       return {
         ...state,
         country: action.payload
+      }
+    default:
+      return state
+  }
+}
+
+export const invoiceInfoReducers = (
+  state: InvoiceInfoState,
+  action: InvoiceInfoAction
+) => {
+  switch (action.type) {
+    case 'INVOICE_NUMBER':
+      return {
+        ...state,
+        invoiceNumber: action.payload
+      }
+    case 'INVOICE_DATE_ISSUE':
+      return {
+        ...state,
+        dateIssue: action.payload
+      }
+    case 'INVOICE_DUE_DATE':
+      return {
+        ...state,
+        dueDate: action.payload
+      }
+    case 'INVOICE_SENDING_METHOD':
+      return {
+        ...state,
+        sendingMethod: action.payload
       }
     default:
       return state
