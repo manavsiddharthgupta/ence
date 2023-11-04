@@ -19,21 +19,21 @@ const InvoiceInfo = () => {
 
   console.log(invoiceInfoState) // Todo: Remove / testing
 
-  const onChangeInvoiceNumber = (e: any) => {
+  const onChangeInvoiceNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     invoiceInfoDispatch({
       type: 'INVOICE_NUMBER',
       payload: { invoiceNumber: e.target.value }
     })
   }
 
-  const onChangeInvoiceDueDate = (e: any) => {
+  const onChangeInvoiceDueDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     invoiceInfoDispatch({
       type: 'INVOICE_DUE_DATE',
       payload: { dueDate: e.target.value }
     })
   }
 
-  const onChangeInvoiceDateIssue = (e: any) => {
+  const onChangeInvoiceDateIssue = (e: React.ChangeEvent<HTMLInputElement>) => {
     invoiceInfoDispatch({
       type: 'INVOICE_DATE_ISSUE',
       payload: { dateIssue: e.target.value }

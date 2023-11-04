@@ -23,42 +23,42 @@ const CustomerInfo = () => {
     { id: 6, value: 'Hellen Schmidt' }
   ] // Todo: Remove / testing
 
-  const onChangeCustomerWhatsapp = (e: any) => {
+  const onChangeCustomerWhatsapp = (e: React.ChangeEvent<HTMLInputElement>) => {
     customerInfoDispatch({
       type: 'CUSTOMER_WHATSAPP_NUMBER',
       payload: { whatsappNumber: e.target.value }
     })
   }
 
-  const onChangeCustomerEmail = (e: any) => {
+  const onChangeCustomerEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     customerInfoDispatch({
       type: 'CUSTOMER_EMAIL',
       payload: { email: e.target.value }
     })
   }
 
-  const onChangeCustomerPincode = (e: any) => {
+  const onChangeCustomerPincode = (e: React.ChangeEvent<HTMLInputElement>) => {
     customerInfoDispatch({
       type: 'CUSTOMER_PINCODE',
       payload: { pincode: e.target.value }
     })
   }
 
-  const onChangeCustomerCity = (e: any) => {
+  const onChangeCustomerCity = (e: React.ChangeEvent<HTMLInputElement>) => {
     customerInfoDispatch({
       type: 'CUSTOMER_CITY',
       payload: { city: e.target.value }
     })
   }
 
-  const onChangeCustomerState = (e: any) => {
+  const onChangeCustomerState = (e: React.ChangeEvent<HTMLInputElement>) => {
     customerInfoDispatch({
       type: 'CUSTOMER_STATE',
       payload: { state: e.target.value }
     })
   }
 
-  const onChangeCustomerCountry = (e: any) => {
+  const onChangeCustomerCountry = (e: React.ChangeEvent<HTMLInputElement>) => {
     customerInfoDispatch({
       type: 'CUSTOMER_COUNTRY',
       payload: { country: e.target.value }

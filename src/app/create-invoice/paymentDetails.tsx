@@ -50,7 +50,7 @@ const PaymentDetails = () => {
   ] // Will Removed From Here
 
   console.log(paymentInfoState)
-  const onChangeNotes = (e: any) => {
+  const onChangeNotes = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     paymentInfoDispatch({
       type: 'NOTES',
       payload: {
@@ -59,7 +59,7 @@ const PaymentDetails = () => {
     })
   }
 
-  const onChangeGstPercent = (e: any) => {
+  const onChangeGstPercent = (e: React.ChangeEvent<HTMLInputElement>) => {
     paymentInfoDispatch({
       type: 'GST_PERCENT',
       payload: {
@@ -68,7 +68,7 @@ const PaymentDetails = () => {
     })
   }
 
-  const onChangeShippingCharges = (e: any) => {
+  const onChangeShippingCharges = (e: React.ChangeEvent<HTMLInputElement>) => {
     paymentInfoDispatch({
       type: 'SHIPPING_CHARGES',
       payload: {

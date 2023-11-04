@@ -122,7 +122,6 @@ export const itemsInfoReducers = (
   switch (action.type) {
     case 'ITEM_NAME':
       state[action.payload.index].name = action.payload.value + ''
-      console.log(state)
       return [...state]
 
     case 'ITEM_PRICE':

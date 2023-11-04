@@ -67,21 +67,21 @@ const Item = ({
   total: number
   itemsInfoDispatch: Dispatch<ItemsInfoAction>
 }) => {
-  const onChangeItemName = (e: any) => {
+  const onChangeItemName = (e: React.ChangeEvent<HTMLInputElement>) => {
     itemsInfoDispatch({
       type: 'ITEM_NAME',
       payload: { index: id, value: e.target.value }
     })
   }
 
-  const onChangeItemQuantity = (e: any) => {
+  const onChangeItemQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
     itemsInfoDispatch({
       type: 'ITEM_QUANTITY',
       payload: { index: id, value: e.target.value }
     })
   }
 
-  const onChangeItemPrice = (e: any) => {
+  const onChangeItemPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     itemsInfoDispatch({
       type: 'ITEM_PRICE',
       payload: { index: id, value: e.target.value }
