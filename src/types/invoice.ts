@@ -12,9 +12,25 @@ export interface CustomerInfoState {
   country: string
 }
 
-export type CustomerInfoAction = {
+export interface CustomerInfoAction {
   type: string
   payload: string
+}
+
+export type ItemsInfoState = {
+  id: number
+  name: string
+  quantity: number | string
+  price: number | string
+  total: number
+}[]
+
+export type ItemsInfoAction = {
+  type: string
+  payload: {
+    index: number
+    value: string | number
+  }
 }
 
 export type InvoiceInfoState = {

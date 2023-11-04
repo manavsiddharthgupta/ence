@@ -5,12 +5,14 @@ const InputPullback = ({
   value,
   onChange,
   placeholder,
-  type = 'text'
+  type = 'text',
+  readonly = false
 }: {
   value: string | number
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   placeholder: string
   type: string
+  readonly?: boolean
 }) => {
   const [focused, setIfFocused] = useState(false)
 
@@ -39,6 +41,7 @@ const InputPullback = ({
           }
         }}
         onChange={onChange}
+        readOnly={readonly}
       />
       <p
         className={`w-fit absolute dark:text-zinc-400 text-zinc-600 z-0 ${focusedInput}`}
