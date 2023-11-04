@@ -4,7 +4,9 @@ import {
   InvoiceInfoAction,
   InvoiceInfoState,
   ItemsInfoAction,
-  ItemsInfoState
+  ItemsInfoState,
+  PaymentInfoAction,
+  PaymentInfoState
 } from '@/types/invoice'
 
 export const customerInfoInitialState: CustomerInfoState = {
@@ -32,6 +34,16 @@ export const ItemsInfoInitialState: ItemsInfoState = [
     total: 0
   }
 ]
+
+export const PaymentInfoInitailState: PaymentInfoState = {
+  terms: '',
+  status: '',
+  method: '',
+  gst: '0',
+  notes: '',
+  tax: 0,
+  shippingCharge: '0'
+}
 
 export const customerInfoReducers = (
   state: CustomerInfoState,
@@ -134,6 +146,51 @@ export const itemsInfoReducers = (
           total: 0
         }
       ]
+    default:
+      return state
+  }
+}
+
+export const paymentInfoReducers = (
+  state: PaymentInfoState,
+  action: PaymentInfoAction
+) => {
+  switch (action.type) {
+    case 'PAYMENT_TERMS':
+      return {
+        ...state,
+        ...action.payload
+      }
+    case 'PAYMENT_METHOD':
+      return {
+        ...state,
+        ...action.payload
+      }
+    case 'PAYMENT_STATUS':
+      return {
+        ...state,
+        ...action.payload
+      }
+    case 'NOTES':
+      return {
+        ...state,
+        ...action.payload
+      }
+    case 'GST_PERCENT':
+      return {
+        ...state,
+        ...action.payload
+      }
+    case 'TAX':
+      return {
+        ...state,
+        ...action.payload
+      }
+    case 'SHIPPING_CHARGES':
+      return {
+        ...state,
+        ...action.payload
+      }
     default:
       return state
   }

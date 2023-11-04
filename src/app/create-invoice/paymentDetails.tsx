@@ -1,14 +1,18 @@
-import InputPullback from '@/components/inputPullback'
 import { SelectMenu } from '@/components/selectMenu'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { formatAmount } from '@/lib/helpers'
-import { useState } from 'react'
+import {
+  PaymentInfoInitailState,
+  paymentInfoReducers
+} from '@/reducers/createInvoice'
+import { useReducer } from 'react'
 
 const PaymentDetails = () => {
-  const [paymentTerms, setPaymentTerms] = useState('')
-  const [paymentMethods, setPaymentMethod] = useState('')
-  const [paymentStatus, setPaymentStatus] = useState('')
+  const [paymentInfoState, paymentInfoDispatch] = useReducer(
+    paymentInfoReducers,
+    PaymentInfoInitailState
+  )
   const paymentTermsOptions = [
     {
       value: 'immediate',
@@ -30,20 +34,75 @@ const PaymentDetails = () => {
       value: 'net 90',
       label: 'NET 90'
     }
-  ]
+  ] // Will Removed From Here
 
   const paymentMethodOptions = [
     { value: 'cash', label: 'Cash' },
     { value: 'digital wallets', label: 'Digital Wallets' },
     { value: 'rtgs', label: 'RTGS' }
-  ]
+  ] // Will Removed From Here
 
   const paymentStatusOptions = [
     { value: 'paid', label: 'Paid' },
     { value: 'pending', label: 'Pending' },
     { value: 'partially paid', label: 'Partially Paid' },
     { value: 'unpaid', label: 'Unpaid' }
-  ]
+  ] // Will Removed From Here
+
+  console.log(paymentInfoState)
+  const onChangeNotes = (e: any) => {
+    paymentInfoDispatch({
+      type: 'NOTES',
+      payload: {
+        notes: e.target.value
+      }
+    })
+  }
+
+  const onChangeGstPercent = (e: any) => {
+    paymentInfoDispatch({
+      type: 'GST_PERCENT',
+      payload: {
+        gst: e.target.value
+      }
+    })
+  }
+
+  const onChangeShippingCharges = (e: any) => {
+    paymentInfoDispatch({
+      type: 'SHIPPING_CHARGES',
+      payload: {
+        shippingCharge: e.target.value
+      }
+    })
+  }
+
+  const onSetPaymentTerm = (value: any) => {
+    paymentInfoDispatch({
+      type: 'PAYMENT_TERMS',
+      payload: {
+        terms: value
+      }
+    })
+  }
+
+  const onSetPaymentMethod = (value: any) => {
+    paymentInfoDispatch({
+      type: 'PAYMENT_METHOD',
+      payload: {
+        method: value
+      }
+    })
+  }
+
+  const onSetPaymentStatus = (value: any) => {
+    paymentInfoDispatch({
+      type: 'PAYMENT_STATUS',
+      payload: {
+        status: value
+      }
+    })
+  }
   return (
     <>
       <h3 className='text-lg'>Payment info</h3>
@@ -53,8 +112,8 @@ const PaymentDetails = () => {
             Payment Terms
           </p>
           <SelectMenu
-            value={paymentTerms}
-            setValue={setPaymentTerms}
+            value={paymentInfoState.terms}
+            setValue={onSetPaymentTerm}
             options={paymentTermsOptions}
             label='Select Payment terms'
           />
@@ -64,8 +123,8 @@ const PaymentDetails = () => {
             Payment Methods
           </p>
           <SelectMenu
-            value={paymentMethods}
-            setValue={setPaymentMethod}
+            value={paymentInfoState.method}
+            setValue={onSetPaymentMethod}
             options={paymentMethodOptions}
             label='Select Payment Method'
           />
@@ -75,8 +134,8 @@ const PaymentDetails = () => {
             Payment Status
           </p>
           <SelectMenu
-            value={paymentStatus}
-            setValue={setPaymentStatus}
+            value={paymentInfoState.status}
+            setValue={onSetPaymentStatus}
             options={paymentStatusOptions}
             label='Select Payment Status'
           />
@@ -94,6 +153,7 @@ const PaymentDetails = () => {
             className='bg-transparent dark:border-zinc-600 border-zinc-400 placeholder:dark:text-zinc-300/80 placeholder:text-zinc-700/80'
             placeholder='Type your message here.'
             id='message'
+            onChange={onChangeNotes}
           />
         </div>
         <div className='max-w-xs w-full p-1'>
@@ -104,9 +164,10 @@ const PaymentDetails = () => {
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5 dark:bg-zinc-800/10 bg-zinc-200/40 rounded-sm'>
             <p>GST(%)</p>
             <input
+              value={paymentInfoState.gst}
               type='number'
               className='outline-none border-none w-1/3 bg-transparent text-right remove-arrow'
-              defaultValue={0.0}
+              onChange={onChangeGstPercent}
             />
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
@@ -116,9 +177,10 @@ const PaymentDetails = () => {
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5 dark:bg-zinc-800/10 bg-zinc-200/40 rounded-sm'>
             <p>Shipping Charges(₹)</p>
             <input
+              value={paymentInfoState.shippingCharge}
               type='number'
               className='outline-none border-none w-1/3 bg-transparent text-right remove-arrow'
-              defaultValue={0.0}
+              onChange={onChangeShippingCharges}
             />
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
