@@ -20,8 +20,8 @@ export const customerInfoInitialState: CustomerInfoState = {
 
 export const InvoiceInfoInitialState: InvoiceInfoState = {
   invoiceNumber: '',
-  dateIssue: '',
-  dueDate: '',
+  dateIssue: undefined,
+  dueDate: undefined,
   sendingMethod: ''
 }
 

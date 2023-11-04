@@ -35,8 +35,8 @@ export type ItemsInfoAction = {
 
 export type InvoiceInfoState = {
   invoiceNumber: string
-  dateIssue: string
-  dueDate: string
+  dateIssue: Date | undefined
+  dueDate: Date | undefined
   sendingMethod: string
 }
 

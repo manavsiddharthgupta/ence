@@ -1,10 +1,11 @@
+import InputDate from '@/components/input-date'
 import InputPullback from '@/components/inputPullback'
 import { SelectMenu } from '@/components/selectMenu'
 import {
   InvoiceInfoInitialState,
   invoiceInfoReducers
 } from '@/reducers/createInvoice'
-import { useReducer } from 'react'
+import { SetStateAction, useReducer } from 'react'
 
 const InvoiceInfo = () => {
   const [invoiceInfoState, invoiceInfoDispatch] = useReducer(
@@ -26,17 +27,19 @@ const InvoiceInfo = () => {
     })
   }
 
-  const onChangeInvoiceDueDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeInvoiceDueDate = (value: SetStateAction<Date | undefined>) => {
     invoiceInfoDispatch({
       type: 'INVOICE_DUE_DATE',
-      payload: { dueDate: e.target.value }
+      payload: { dueDate: value }
     })
   }
 
-  const onChangeInvoiceDateIssue = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeInvoiceDateIssue = (
+    value: SetStateAction<Date | undefined>
+  ) => {
     invoiceInfoDispatch({
       type: 'INVOICE_DATE_ISSUE',
-      payload: { dateIssue: e.target.value }
+      payload: { dateIssue: value }
     })
   }
 
@@ -67,17 +70,15 @@ const InvoiceInfo = () => {
           />
         </div>
         <div className='w-1/6'>
-          <InputPullback
+          <InputDate
             value={invoiceInfoState.dateIssue}
-            type='number'
             onChange={onChangeInvoiceDateIssue}
             placeholder='Date Issue'
           />
         </div>
         <div className='w-1/6'>
-          <InputPullback
+          <InputDate
             value={invoiceInfoState.dueDate}
-            type='number'
             onChange={onChangeInvoiceDueDate}
             placeholder='Due Date'
           />
