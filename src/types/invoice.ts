@@ -14,7 +14,7 @@ export interface CustomerInfoState {
 
 export interface CustomerInfoAction {
   type: string
-  payload: string
+  payload: object
 }
 
 export type ItemsInfoState = {
@@ -42,7 +42,7 @@ export type InvoiceInfoState = {
 
 export type InvoiceInfoAction = {
   type: string
-  payload: string
+  payload: object
 }
 
 export type PaymentInfoState = {

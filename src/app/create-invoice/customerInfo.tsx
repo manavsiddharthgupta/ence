@@ -26,28 +26,43 @@ const CustomerInfo = () => {
   const onChangeCustomerWhatsapp = (e: any) => {
     customerInfoDispatch({
       type: 'CUSTOMER_WHATSAPP_NUMBER',
-      payload: e.target.value
+      payload: { whatsappNumber: e.target.value }
     })
   }
 
   const onChangeCustomerEmail = (e: any) => {
-    customerInfoDispatch({ type: 'CUSTOMER_EMAIL', payload: e.target.value })
+    customerInfoDispatch({
+      type: 'CUSTOMER_EMAIL',
+      payload: { email: e.target.value }
+    })
   }
 
   const onChangeCustomerPincode = (e: any) => {
-    customerInfoDispatch({ type: 'CUSTOMER_PINCODE', payload: e.target.value })
+    customerInfoDispatch({
+      type: 'CUSTOMER_PINCODE',
+      payload: { pincode: e.target.value }
+    })
   }
 
   const onChangeCustomerCity = (e: any) => {
-    customerInfoDispatch({ type: 'CUSTOMER_CITY', payload: e.target.value })
+    customerInfoDispatch({
+      type: 'CUSTOMER_CITY',
+      payload: { city: e.target.value }
+    })
   }
 
   const onChangeCustomerState = (e: any) => {
-    customerInfoDispatch({ type: 'CUSTOMER_STATE', payload: e.target.value })
+    customerInfoDispatch({
+      type: 'CUSTOMER_STATE',
+      payload: { state: e.target.value }
+    })
   }
 
   const onChangeCustomerCountry = (e: any) => {
-    customerInfoDispatch({ type: 'CUSTOMER_COUNTRY', payload: e.target.value })
+    customerInfoDispatch({
+      type: 'CUSTOMER_COUNTRY',
+      payload: { country: e.target.value }
+    })
   }
 
   return (

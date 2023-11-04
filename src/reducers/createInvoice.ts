@@ -53,32 +53,32 @@ export const customerInfoReducers = (
     case 'CUSTOMER_EMAIL':
       return {
         ...state,
-        email: action.payload
+        ...action.payload
       }
     case 'CUSTOMER_WHATSAPP_NUMBER':
       return {
         ...state,
-        whatsappNumber: action.payload
+        ...action.payload
       }
     case 'CUSTOMER_CITY':
       return {
         ...state,
-        city: action.payload
+        ...action.payload
       }
     case 'CUSTOMER_PINCODE':
       return {
         ...state,
-        pincode: action.payload
+        ...action.payload
       }
     case 'CUSTOMER_STATE':
       return {
         ...state,
-        state: action.payload
+        ...action.payload
       }
     case 'CUSTOMER_COUNTRY':
       return {
         ...state,
-        country: action.payload
+        ...action.payload
       }
     default:
       return state
@@ -93,22 +93,22 @@ export const invoiceInfoReducers = (
     case 'INVOICE_NUMBER':
       return {
         ...state,
-        invoiceNumber: action.payload
+        ...action.payload
       }
     case 'INVOICE_DATE_ISSUE':
       return {
         ...state,
-        dateIssue: action.payload
+        ...action.payload
       }
     case 'INVOICE_DUE_DATE':
       return {
         ...state,
-        dueDate: action.payload
+        ...action.payload
       }
     case 'INVOICE_SENDING_METHOD':
       return {
         ...state,
-        sendingMethod: action.payload
+        ...action.payload
       }
     default:
       return state

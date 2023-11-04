@@ -20,21 +20,30 @@ const InvoiceInfo = () => {
   console.log(invoiceInfoState) // Todo: Remove / testing
 
   const onChangeInvoiceNumber = (e: any) => {
-    invoiceInfoDispatch({ type: 'INVOICE_NUMBER', payload: e.target.value })
+    invoiceInfoDispatch({
+      type: 'INVOICE_NUMBER',
+      payload: { invoiceNumber: e.target.value }
+    })
   }
 
   const onChangeInvoiceDueDate = (e: any) => {
-    invoiceInfoDispatch({ type: 'INVOICE_DUE_DATE', payload: e.target.value })
+    invoiceInfoDispatch({
+      type: 'INVOICE_DUE_DATE',
+      payload: { dueDate: e.target.value }
+    })
   }
 
   const onChangeInvoiceDateIssue = (e: any) => {
-    invoiceInfoDispatch({ type: 'INVOICE_DATE_ISSUE', payload: e.target.value })
+    invoiceInfoDispatch({
+      type: 'INVOICE_DATE_ISSUE',
+      payload: { dateIssue: e.target.value }
+    })
   }
 
   const onSetMethod = (value: any) => {
     invoiceInfoDispatch({
       type: 'INVOICE_SENDING_METHOD',
-      payload: value
+      payload: { sendingMethod: value }
     })
   }
   return (
