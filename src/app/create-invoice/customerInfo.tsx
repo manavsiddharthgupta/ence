@@ -1,59 +1,74 @@
-"use client";
-import InputCombobox from "@/components/combobox";
-import InputPullback from "@/components/inputPullback";
+'use client'
+import InputCombobox from '@/components/combobox'
+import InputPullback from '@/components/inputPullback'
 import {
   customerInfoInitialState,
-  customerInfoReducers,
-} from "@/reducers/createInvoice";
-import { useReducer, useState } from "react";
+  customerInfoReducers
+} from '@/reducers/createInvoice'
+import { useReducer, useState } from 'react'
 
 const CustomerInfo = () => {
   const [customerInfoState, customerInfoDispatch] = useReducer(
     customerInfoReducers,
     customerInfoInitialState
-  );
-  const [customerLegalName, setCustomerLegalName] = useState("");
-  console.log(customerInfoState, customerLegalName); // Todo: Remove / testing
+  )
+  const [customerLegalName, setCustomerLegalName] = useState('')
+  console.log(customerInfoState, customerLegalName) // Todo: Remove / testing
   const people = [
-    { id: 1, value: "Wade Cooper" },
-    { id: 2, value: "Arlene Mccoy" },
-    { id: 3, value: "Devon Webb" },
-    { id: 4, value: "Tom Cook" },
-    { id: 5, value: "Tanya Fox" },
-    { id: 6, value: "Hellen Schmidt" },
-  ]; // Todo: Remove / testing
+    { id: 1, value: 'Wade Cooper' },
+    { id: 2, value: 'Arlene Mccoy' },
+    { id: 3, value: 'Devon Webb' },
+    { id: 4, value: 'Tom Cook' },
+    { id: 5, value: 'Tanya Fox' },
+    { id: 6, value: 'Hellen Schmidt' }
+  ] // Todo: Remove / testing
 
-  const onChangeCustomerWhatsapp = (e: any) => {
+  const onChangeCustomerWhatsapp = (e: React.ChangeEvent<HTMLInputElement>) => {
     customerInfoDispatch({
-      type: "CUSTOMER_WHATSAPP_NUMBER",
-      payload: e.target.value,
-    });
-  };
+      type: 'CUSTOMER_WHATSAPP_NUMBER',
+      payload: { whatsappNumber: e.target.value }
+    })
+  }
 
-  const onChangeCustomerEmail = (e: any) => {
-    customerInfoDispatch({ type: "CUSTOMER_EMAIL", payload: e.target.value });
-  };
+  const onChangeCustomerEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    customerInfoDispatch({
+      type: 'CUSTOMER_EMAIL',
+      payload: { email: e.target.value }
+    })
+  }
 
-  const onChangeCustomerPincode = (e: any) => {
-    customerInfoDispatch({ type: "CUSTOMER_PINCODE", payload: e.target.value });
-  };
+  const onChangeCustomerPincode = (e: React.ChangeEvent<HTMLInputElement>) => {
+    customerInfoDispatch({
+      type: 'CUSTOMER_PINCODE',
+      payload: { pincode: e.target.value }
+    })
+  }
 
-  const onChangeCustomerCity = (e: any) => {
-    customerInfoDispatch({ type: "CUSTOMER_CITY", payload: e.target.value });
-  };
+  const onChangeCustomerCity = (e: React.ChangeEvent<HTMLInputElement>) => {
+    customerInfoDispatch({
+      type: 'CUSTOMER_CITY',
+      payload: { city: e.target.value }
+    })
+  }
 
-  const onChangeCustomerState = (e: any) => {
-    customerInfoDispatch({ type: "CUSTOMER_STATE", payload: e.target.value });
-  };
+  const onChangeCustomerState = (e: React.ChangeEvent<HTMLInputElement>) => {
+    customerInfoDispatch({
+      type: 'CUSTOMER_STATE',
+      payload: { state: e.target.value }
+    })
+  }
 
-  const onChangeCustomerCountry = (e: any) => {
-    customerInfoDispatch({ type: "CUSTOMER_COUNTRY", payload: e.target.value });
-  };
+  const onChangeCustomerCountry = (e: React.ChangeEvent<HTMLInputElement>) => {
+    customerInfoDispatch({
+      type: 'CUSTOMER_COUNTRY',
+      payload: { country: e.target.value }
+    })
+  }
 
   return (
     <>
-      <h3 className="text-lg">Customer info</h3>
-      <div className="mt-2 flex flex-col gap-4">
+      <h3 className='text-lg'>Customer info</h3>
+      <div className='mt-2 flex flex-col gap-4'>
         <InputCombobox
           selectedValue={customerLegalName}
           setSelectedValue={setCustomerLegalName}
@@ -61,55 +76,55 @@ const CustomerInfo = () => {
         />
         <InputPullback
           value={customerInfoState.whatsappNumber}
-          type="number"
+          type='number'
           onChange={onChangeCustomerWhatsapp}
-          placeholder="Customer Whatsapp Number"
+          placeholder='Customer Whatsapp Number'
         />
         <InputPullback
           value={customerInfoState.email}
-          type="text"
+          type='text'
           onChange={onChangeCustomerEmail}
-          placeholder="Customer Email"
+          placeholder='Customer Email'
         />
       </div>
-      <div className="w-full flex mt-4 justify-between">
-        <div className="w-[48%]">
+      <div className='w-full flex mt-4 justify-between'>
+        <div className='w-[48%]'>
           <InputPullback
             value={customerInfoState.pincode}
-            type="number"
+            type='number'
             onChange={onChangeCustomerPincode}
-            placeholder="Pincode"
+            placeholder='Pincode'
           />
         </div>
-        <div className="w-[48%]">
+        <div className='w-[48%]'>
           <InputPullback
             value={customerInfoState.city}
-            type="text"
+            type='text'
             onChange={onChangeCustomerCity}
-            placeholder="City"
+            placeholder='City'
           />
         </div>
       </div>
-      <div className="w-full flex mt-4 justify-between">
-        <div className="w-[48%]">
+      <div className='w-full flex mt-4 justify-between'>
+        <div className='w-[48%]'>
           <InputPullback
             value={customerInfoState.state}
-            type="text"
+            type='text'
             onChange={onChangeCustomerState}
-            placeholder="State"
+            placeholder='State'
           />
         </div>
-        <div className="w-[48%]">
+        <div className='w-[48%]'>
           <InputPullback
             value={customerInfoState.country}
-            type="text"
+            type='text'
             onChange={onChangeCustomerCountry}
-            placeholder="Country"
+            placeholder='Country'
           />
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default CustomerInfo;
+export default CustomerInfo
