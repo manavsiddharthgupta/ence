@@ -3,7 +3,7 @@ const dashboard = () => {
     <div>
       <p>Welcome to Home page 🚀 </p>
     </div>
-  );
-};
+  )
+}
 
-export default dashboard;
+export default dashboard

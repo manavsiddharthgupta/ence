@@ -1,4 +1,4 @@
-import { permanentRedirect } from "next/navigation";
+import { permanentRedirect } from 'next/navigation'
 export default function Home() {
-  permanentRedirect("/home");
+  permanentRedirect('/home')
 }

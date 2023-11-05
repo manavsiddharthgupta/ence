@@ -1,68 +1,91 @@
-import InputPullback from "@/components/inputPullback";
-import { SelectMenu } from "@/components/selectMenu";
-import { useState } from "react";
+import InputDate from '@/components/input-date'
+import InputPullback from '@/components/inputPullback'
+import { SelectMenu } from '@/components/selectMenu'
+import {
+  InvoiceInfoInitialState,
+  invoiceInfoReducers
+} from '@/reducers/createInvoice'
+import { SetStateAction, useReducer } from 'react'
 
 const InvoiceInfo = () => {
-  const [invoiceNumber, setInvoiceNumber] = useState("");
-  const [invoiceDateIssue, setInvoiceDateIssue] = useState("");
-  const [invoiceDueDate, setInvoiceDueDate] = useState("");
-  const [sendingMethod, setSendingMethod] = useState("");
+  const [invoiceInfoState, invoiceInfoDispatch] = useReducer(
+    invoiceInfoReducers,
+    InvoiceInfoInitialState
+  )
   const sendingInvoiceOptions = [
-    { value: "mail", label: "Mail" },
-    { value: "whatsapp", label: "Whatsapp" },
-    { value: "inhand", label: "In-hand" },
-  ];
+    { value: 'mail', label: 'Mail' },
+    { value: 'whatsapp', label: 'Whatsapp' },
+    { value: 'inhand', label: 'In-hand' }
+  ] // Todo: CONSTANTS or BACKEND
 
-  const onChangeInvoiceNumber = (e: any) => {
-    setInvoiceNumber(e.target.value);
-  };
+  console.log(invoiceInfoState) // Todo: Remove / testing
 
-  const onChangeInvoiceDueDate = (e: any) => {
-    setInvoiceDueDate(e.target.value);
-  };
+  const onChangeInvoiceNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
+    invoiceInfoDispatch({
+      type: 'INVOICE_NUMBER',
+      payload: { invoiceNumber: e.target.value }
+    })
+  }
 
-  const onChangeInvoiceDateIssue = (e: any) => {
-    setInvoiceDateIssue(e.target.value);
-  };
+  const onChangeInvoiceDueDate = (value: SetStateAction<Date | undefined>) => {
+    invoiceInfoDispatch({
+      type: 'INVOICE_DUE_DATE',
+      payload: { dueDate: value }
+    })
+  }
+
+  const onChangeInvoiceDateIssue = (
+    value: SetStateAction<Date | undefined>
+  ) => {
+    invoiceInfoDispatch({
+      type: 'INVOICE_DATE_ISSUE',
+      payload: { dateIssue: value }
+    })
+  }
+
+  const onSetMethod = (value: any) => {
+    invoiceInfoDispatch({
+      type: 'INVOICE_SENDING_METHOD',
+      payload: { sendingMethod: value }
+    })
+  }
   return (
     <>
-      <h3 className="text-lg">Invoice info</h3>
-      <div className="flex justify-between mt-2 items-center">
-        <div className="w-[calc(60%-8rem)]">
+      <h3 className='text-lg'>Invoice info</h3>
+      <div className='flex justify-between mt-2 items-center'>
+        <div className='w-[calc(60%-8rem)]'>
           <InputPullback
-            value={invoiceNumber}
-            type="number"
+            value={invoiceInfoState.invoiceNumber}
+            type='number'
             onChange={onChangeInvoiceNumber}
-            placeholder="Invoice Number #"
+            placeholder='Invoice Number #'
           />
         </div>
-        <div className="w-32">
+        <div className='w-32'>
           <SelectMenu
-            value={sendingMethod}
-            setValue={setSendingMethod}
+            value={invoiceInfoState.sendingMethod}
+            setValue={onSetMethod}
             options={sendingInvoiceOptions}
-            label="Send via"
+            label='Send via'
           />
         </div>
-        <div className="w-1/6">
-          <InputPullback
-            value={invoiceDateIssue}
-            type="number"
+        <div className='w-1/6'>
+          <InputDate
+            value={invoiceInfoState.dateIssue}
             onChange={onChangeInvoiceDateIssue}
-            placeholder="Date Issue"
+            placeholder='Date Issue'
           />
         </div>
-        <div className="w-1/6">
-          <InputPullback
-            value={invoiceDueDate}
-            type="number"
+        <div className='w-1/6'>
+          <InputDate
+            value={invoiceInfoState.dueDate}
             onChange={onChangeInvoiceDueDate}
-            placeholder="Due Date"
+            placeholder='Due Date'
           />
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default InvoiceInfo;
+export default InvoiceInfo
