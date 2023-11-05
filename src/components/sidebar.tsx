@@ -53,7 +53,7 @@ const SideItems = () => {
       icon: <FileTextIcon />,
       subType: {
         status: true,
-        values: [{ label: 'Create', to: '/create-invoice' }]
+        values: [{ label: 'Create', to: '/invoice/create' }]
       }
     }
     // {
