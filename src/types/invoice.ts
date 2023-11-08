@@ -18,7 +18,7 @@ export interface CustomerInfoAction {
 }
 
 export type ItemsInfoState = {
-  id: number
+  id: string
   name: string
   quantity: number | string
   price: number | string

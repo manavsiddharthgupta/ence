@@ -8,6 +8,7 @@ import {
   PaymentInfoAction,
   PaymentInfoState
 } from '@/types/invoice'
+import { v4 as uuidv4 } from 'uuid'
 
 export const customerInfoInitialState: CustomerInfoState = {
   email: '',
@@ -27,7 +28,7 @@ export const InvoiceInfoInitialState: InvoiceInfoState = {
 
 export const ItemsInfoInitialState: ItemsInfoState = [
   {
-    id: 0,
+    id: uuidv4(),
     name: '',
     price: '',
     quantity: '',
@@ -138,13 +139,21 @@ export const itemsInfoReducers = (
       return [
         ...state,
         {
-          id: action.payload.index,
+          id: uuidv4(),
           name: '',
           price: '',
           quantity: '',
           total: 0
         }
       ]
+    case 'DELETE_ITEM':
+      if (state.length < 2) {
+        return state
+      }
+      const filteredItems = state.filter((item) => {
+        return item.id !== action.payload.value
+      })
+      return [...filteredItems]
     default:
       return state
   }
