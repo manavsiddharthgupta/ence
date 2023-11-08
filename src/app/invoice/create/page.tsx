@@ -7,8 +7,11 @@ import InvoiceInfo from './invoiceInfo'
 import ItemsInfo from './itemsInfo'
 import { formatAmount } from '@/lib/helpers'
 import { Button } from '@/components/ui/button'
+import { Modal, useDisclosure } from '@nextui-org/react'
+import PreviewModal from './preview-modal'
 
 const createInvoice = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const separatorStyle = 'my-6 h-[0.5px] dark:bg-zinc-700 bg-zinc-300'
   return (
     <div className='relative w-full'>
@@ -59,6 +62,7 @@ const createInvoice = () => {
             <Button
               variant='ghost'
               className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50'
+              onClick={() => onOpen()}
             >
               Preview
             </Button>
@@ -77,6 +81,9 @@ const createInvoice = () => {
           </div>
         </div>
       </div>
+      <Modal backdrop='blur' isOpen={isOpen} onClose={onClose}>
+        <PreviewModal />
+      </Modal>
     </div>
   )
 }

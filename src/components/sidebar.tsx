@@ -18,19 +18,19 @@ const Sidebar = ({
 }) => {
   return (
     <nav className='border-r-2 dark:border-zinc-800/90 border-zinc-200/90 border-white bg-zinc-50 dark:bg-zinc-900 w-56 h-screen px-4 dark:text-white fixed left-0 top-0'>
-      <div className='h-[73%] pt-8'>
+      <div className='h-[calc(100%-112px)] pt-8'>
         <h1 className='font-bold text-lg text-center'>ENCE</h1>
         <div className='h-[calc(100%-28px)] overflow-y-auto py-4'>
           <SideItems />
         </div>
       </div>
-      <div className='h-[7%] flex flex-col justify-between'>
+      <div className='h-8 flex flex-col justify-between'>
         <div className=' flex items-center justify-center'>
           <Switch onCheckedChange={onChangeThemeHandler} />
         </div>
         <Separator className='dark:bg-zinc-700 bg-zinc-300 h-[0.5px]' />
       </div>
-      <div className='h-[20%] pb-8'></div>
+      <div className='h-20 pb-8'></div>
     </nav>
   )
 }

@@ -1,5 +1,6 @@
 'use client'
 import { Theme, ThemeProvider } from '@/context/theme'
+import { NextUIProvider } from '@nextui-org/react'
 import { useState } from 'react'
 import Sidebar from './sidebar'
 
@@ -19,10 +20,12 @@ const Card = ({ children }: { children: React.ReactNode }) => {
   return (
     <ThemeProvider value={{ theme: theme, setTheme: onSetTheme }}>
       <body className={className}>
-        <Sidebar onChangeThemeHandler={onSetTheme} />
-        <main className='ml-56 px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
-          {children}
-        </main>
+        <NextUIProvider>
+          <Sidebar onChangeThemeHandler={onSetTheme} />
+          <main className='ml-56 px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
+            {children}
+          </main>
+        </NextUIProvider>
       </body>
     </ThemeProvider>
   )
