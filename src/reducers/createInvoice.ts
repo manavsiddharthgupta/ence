@@ -81,6 +81,11 @@ export const customerInfoReducers = (
         ...state,
         ...action.payload
       }
+    case 'CUSTOMER_SET_ALL':
+      return {
+        ...state,
+        ...action.payload
+      }
     default:
       return state
   }

@@ -70,7 +70,7 @@ const createInvoice = () => {
               variant='outline'
               className='hover:bg-yellow-600 border-yellow-600 text-yellow-600 hover:text-white bg-transparent border-2'
             >
-              Save Changes
+              Save as draft
             </Button>
             <Button
               variant='default'
@@ -81,7 +81,13 @@ const createInvoice = () => {
           </div>
         </div>
       </div>
-      <Modal backdrop='blur' isOpen={isOpen} onClose={onClose}>
+      <Modal
+        backdrop='blur'
+        scrollBehavior={'inside'}
+        isOpen={isOpen}
+        onClose={onClose}
+        size={'5xl'}
+      >
         <PreviewModal />
       </Modal>
     </div>

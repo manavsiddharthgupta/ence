@@ -5,7 +5,7 @@ import {
   customerInfoInitialState,
   customerInfoReducers
 } from '@/reducers/createInvoice'
-import { useReducer, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 
 const CustomerInfo = () => {
   const [customerInfoState, customerInfoDispatch] = useReducer(
@@ -13,8 +13,25 @@ const CustomerInfo = () => {
     customerInfoInitialState
   )
   const [customerLegalName, setCustomerLegalName] = useState('')
+  useEffect(() => {
+    // set Customer Info using Id
+    if (customerLegalName) {
+      customerInfoDispatch({
+        type: 'CUSTOMER_SET_ALL',
+        payload: {
+          email: 'customer@test.com',
+          whatsappNumber: 9876543210,
+          city: 'City',
+          pincode: '101010',
+          state: 'Mumbai',
+          country: 'India'
+        }
+      })
+    }
+  }, [customerLegalName])
   console.log(customerInfoState, customerLegalName) // Todo: Remove / testing
   const people = [
+    { id: 0, value: 'Test Customer' },
     { id: 1, value: 'Wade Cooper' },
     { id: 2, value: 'Arlene Mccoy' },
     { id: 3, value: 'Devon Webb' },
