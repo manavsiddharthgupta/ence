@@ -1,20 +1,35 @@
 'use client'
 import InputCombobox from '@/components/combobox'
 import InputPullback from '@/components/inputPullback'
-import {
-  customerInfoInitialState,
-  customerInfoReducers
-} from '@/reducers/createInvoice'
-import { useReducer, useState } from 'react'
+import { useInvoiceContext } from '@/context/invoice'
+import { useEffect } from 'react'
 
 const CustomerInfo = () => {
-  const [customerInfoState, customerInfoDispatch] = useReducer(
-    customerInfoReducers,
-    customerInfoInitialState
-  )
-  const [customerLegalName, setCustomerLegalName] = useState('')
-  console.log(customerInfoState, customerLegalName) // Todo: Remove / testing
+  const {
+    customerInfoState,
+    customerInfoDispatch,
+    customerLegalName,
+    setCustomerLegalName
+  } = useInvoiceContext()
+
+  useEffect(() => {
+    // set Customer Info using Id
+    if (customerLegalName) {
+      customerInfoDispatch({
+        type: 'CUSTOMER_SET_ALL',
+        payload: {
+          email: 'customer@test.com',
+          whatsappNumber: 9876543210,
+          city: 'City',
+          pincode: '101010',
+          state: 'Mumbai',
+          country: 'India'
+        }
+      })
+    }
+  }, [customerLegalName])
   const people = [
+    { id: 0, value: 'Test Customer' },
     { id: 1, value: 'Wade Cooper' },
     { id: 2, value: 'Arlene Mccoy' },
     { id: 3, value: 'Devon Webb' },
