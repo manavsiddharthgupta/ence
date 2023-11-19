@@ -1,18 +1,12 @@
 import InputPullback from '@/components/inputPullback'
-import {
-  ItemsInfoInitialState,
-  itemsInfoReducers
-} from '@/reducers/createInvoice'
 import { ItemsInfoAction } from '@/types/invoice'
-import { Dispatch, useReducer } from 'react'
+import { Dispatch } from 'react'
 import { Button } from '@/components/ui/button'
 import { PlusIcon, TrashIcon } from '@radix-ui/react-icons'
+import { useInvoiceContext } from '@/context/invoice'
 
 const ItemsInfo = () => {
-  const [itemsInfoState, itemsInfoDispatch] = useReducer(
-    itemsInfoReducers,
-    ItemsInfoInitialState
-  )
+  const { itemsInfoState, itemsInfoDispatch } = useInvoiceContext()
 
   console.log(itemsInfoState) // Todo: Remove / testing
 

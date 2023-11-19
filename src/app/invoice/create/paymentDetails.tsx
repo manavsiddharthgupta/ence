@@ -1,18 +1,11 @@
 import { SelectMenu } from '@/components/selectMenu'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { useInvoiceContext } from '@/context/invoice'
 import { formatAmount } from '@/lib/helpers'
-import {
-  PaymentInfoInitailState,
-  paymentInfoReducers
-} from '@/reducers/createInvoice'
-import { useReducer } from 'react'
 
 const PaymentDetails = () => {
-  const [paymentInfoState, paymentInfoDispatch] = useReducer(
-    paymentInfoReducers,
-    PaymentInfoInitailState
-  )
+  const { paymentInfoState, paymentInfoDispatch } = useInvoiceContext()
   const paymentTermsOptions = [
     {
       value: 'immediate',

@@ -10,7 +10,7 @@ import {
 } from '@/types/invoice'
 import { v4 as uuidv4 } from 'uuid'
 
-export const customerInfoInitialState: CustomerInfoState = {
+export const CustomerInfoInitialState: CustomerInfoState = {
   email: '',
   whatsappNumber: '',
   city: '',

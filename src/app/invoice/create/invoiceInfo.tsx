@@ -1,17 +1,11 @@
 import InputDate from '@/components/input-date'
 import InputPullback from '@/components/inputPullback'
 import { SelectMenu } from '@/components/selectMenu'
-import {
-  InvoiceInfoInitialState,
-  invoiceInfoReducers
-} from '@/reducers/createInvoice'
-import { SetStateAction, useReducer } from 'react'
+import { useInvoiceContext } from '@/context/invoice'
+import { SetStateAction } from 'react'
 
 const InvoiceInfo = () => {
-  const [invoiceInfoState, invoiceInfoDispatch] = useReducer(
-    invoiceInfoReducers,
-    InvoiceInfoInitialState
-  )
+  const { invoiceInfoState, invoiceInfoDispatch } = useInvoiceContext()
   const sendingInvoiceOptions = [
     { value: 'mail', label: 'Mail' },
     { value: 'whatsapp', label: 'Whatsapp' },

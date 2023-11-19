@@ -1,17 +1,11 @@
 'use client'
 import InputCombobox from '@/components/combobox'
 import InputPullback from '@/components/inputPullback'
-import {
-  customerInfoInitialState,
-  customerInfoReducers
-} from '@/reducers/createInvoice'
-import { useEffect, useReducer, useState } from 'react'
+import { useInvoiceContext } from '@/context/invoice'
+import { useEffect, useState } from 'react'
 
 const CustomerInfo = () => {
-  const [customerInfoState, customerInfoDispatch] = useReducer(
-    customerInfoReducers,
-    customerInfoInitialState
-  )
+  const { customerInfoState, customerInfoDispatch } = useInvoiceContext()
   const [customerLegalName, setCustomerLegalName] = useState('')
   useEffect(() => {
     // set Customer Info using Id

@@ -40,7 +40,7 @@ const SideItems = () => {
   const [collapse, setCollapse] = useState<null | string>()
   const router = useRouter()
   const pathname = usePathname()
-  console.log(collapse)
+
   const items = [
     {
       label: 'Home',
