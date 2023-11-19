@@ -15,17 +15,19 @@ import {
   PaymentInfoAction,
   PaymentInfoState
 } from '@/types/invoice'
-import { Dispatch, createContext, useContext } from 'react'
+import { Dispatch, SetStateAction, createContext, useContext } from 'react'
 
 type InvoiceContextType = {
   customerInfoState: CustomerInfoState
   invoiceInfoState: InvoiceInfoState
   itemsInfoState: ItemsInfoState
   paymentInfoState: PaymentInfoState
+  customerLegalName: string
   customerInfoDispatch: Dispatch<CustomerInfoAction>
   invoiceInfoDispatch: Dispatch<InvoiceInfoAction>
   itemsInfoDispatch: Dispatch<ItemsInfoAction>
   paymentInfoDispatch: Dispatch<PaymentInfoAction>
+  setCustomerLegalName: Dispatch<SetStateAction<string>>
 }
 
 const InvoiceContext = createContext<InvoiceContextType>({
@@ -33,10 +35,12 @@ const InvoiceContext = createContext<InvoiceContextType>({
   invoiceInfoState: InvoiceInfoInitialState,
   itemsInfoState: ItemsInfoInitialState,
   paymentInfoState: PaymentInfoInitailState,
+  customerLegalName: '',
   customerInfoDispatch: () => {},
   invoiceInfoDispatch: () => {},
   itemsInfoDispatch: () => {},
-  paymentInfoDispatch: () => {}
+  paymentInfoDispatch: () => {},
+  setCustomerLegalName: () => {}
 })
 
 export const useInvoiceContext = () => useContext(InvoiceContext)

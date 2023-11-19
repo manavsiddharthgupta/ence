@@ -2,11 +2,16 @@
 import InputCombobox from '@/components/combobox'
 import InputPullback from '@/components/inputPullback'
 import { useInvoiceContext } from '@/context/invoice'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 const CustomerInfo = () => {
-  const { customerInfoState, customerInfoDispatch } = useInvoiceContext()
-  const [customerLegalName, setCustomerLegalName] = useState('')
+  const {
+    customerInfoState,
+    customerInfoDispatch,
+    customerLegalName,
+    setCustomerLegalName
+  } = useInvoiceContext()
+
   useEffect(() => {
     // set Customer Info using Id
     if (customerLegalName) {

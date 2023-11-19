@@ -9,9 +9,17 @@ import { formatAmount } from '@/lib/helpers'
 import { Button } from '@/components/ui/button'
 import { Modal, useDisclosure } from '@nextui-org/react'
 import PreviewModal from './preview-modal'
+import { useInvoiceContext } from '@/context/invoice'
 
 const createInvoice = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const {
+    customerInfoState,
+    customerLegalName,
+    invoiceInfoState,
+    itemsInfoState,
+    paymentInfoState
+  } = useInvoiceContext()
   const separatorStyle = 'my-6 h-[0.5px] dark:bg-zinc-700 bg-zinc-300'
   return (
     <div className='relative w-full'>
@@ -75,6 +83,16 @@ const createInvoice = () => {
             <Button
               variant='default'
               className='bg-emerald-600 text-white hover:bg-emerald-700'
+              onClick={() => {
+                const invoiceData = {
+                  customerInfoState,
+                  customerLegalName,
+                  invoiceInfoState,
+                  itemsInfoState,
+                  paymentInfoState
+                }
+                console.log(invoiceData)
+              }}
             >
               Save
             </Button>
