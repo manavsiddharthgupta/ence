@@ -7,8 +7,16 @@ import InvoiceInfo from './invoiceInfo'
 import ItemsInfo from './itemsInfo'
 import { formatAmount } from '@/lib/helpers'
 import { Button } from '@/components/ui/button'
+import { useInvoiceContext } from '@/context/invoice'
 
 const createInvoice = () => {
+  const {
+    customerInfoState,
+    customerLegalName,
+    invoiceInfoState,
+    itemsInfoState,
+    paymentInfoState
+  } = useInvoiceContext()
   const separatorStyle = 'my-6 h-[0.5px] dark:bg-zinc-700 bg-zinc-300'
   return (
     <div className='relative w-full'>
@@ -66,13 +74,23 @@ const createInvoice = () => {
               variant='outline'
               className='hover:bg-yellow-600 border-yellow-600 text-yellow-600 hover:text-white bg-transparent border-2'
             >
-              Save Changes
+              Save as draft
             </Button>
             <Button
               variant='default'
               className='bg-emerald-600 text-white hover:bg-emerald-700'
+              onClick={() => {
+                const invoiceData = {
+                  customerInfoState,
+                  customerLegalName,
+                  invoiceInfoState,
+                  itemsInfoState,
+                  paymentInfoState
+                }
+                console.log(invoiceData)
+              }}
             >
-              Proceed
+              Save
             </Button>
           </div>
         </div>

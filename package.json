@@ -27,12 +27,14 @@
     "react-day-picker": "^8.9.1",
     "react-dom": "^18",
     "tailwind-merge": "^1.14.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/uuid": "^9.0.7",
     "autoprefixer": "^10",
     "postcss": "^8",
     "tailwindcss": "^3",
