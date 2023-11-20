@@ -11,6 +11,15 @@ import {
 } from '@radix-ui/react-icons'
 import { useState } from 'react'
 import { Theme, useTheme } from '@/context/theme'
+import { signOut, useSession } from 'next-auth/react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover'
+import { Button } from './ui/button'
+import { LogOut, Settings } from 'lucide-react'
 
 const Sidebar = ({
   onChangeThemeHandler
@@ -18,6 +27,8 @@ const Sidebar = ({
   onChangeThemeHandler: () => void
 }) => {
   const { theme } = useTheme()
+  const { data: session } = useSession()
+  console.log(session) //Todo : remove
   return (
     <nav className='border-r-2 dark:border-zinc-800/90 border-zinc-200/90 border-white bg-zinc-50 dark:bg-zinc-900 w-56 h-screen px-4 dark:text-white fixed left-0 top-0'>
       <div className='h-[calc(100%-112px)] pt-8'>
@@ -35,7 +46,45 @@ const Sidebar = ({
         </div>
         <Separator className='dark:bg-zinc-700 bg-zinc-300 h-[0.5px]' />
       </div>
-      <div className='h-20 pb-8'></div>
+      <div className='h-16 pb-4 flex items-end truncate'>
+        <div className='flex gap-4 items-center px-3'>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Avatar className='w-9 h-9'>
+                <AvatarImage
+                  src={session?.user?.image || 'https://github.com/shadcn.png'}
+                />
+                <AvatarFallback>T</AvatarFallback>
+              </Avatar>
+            </PopoverTrigger>
+            <PopoverContent className='w-52 dark:border-zinc-600 border-zinc-400 dark:bg-zinc-900 bg-white'>
+              <Button
+                className='w-full bg-transparent border-none hover:bg-zinc-100/80 hover:dark:bg-zinc-800/50 justify-start gap-4'
+                variant='outline'
+                size='sm'
+              >
+                <Settings size='16px' />
+                <span className='text-xs font-medium'>Manage</span>
+              </Button>
+              <Button
+                onClick={() => signOut()}
+                className='w-full bg-transparent border-none hover:bg-zinc-100/80 hover:dark:bg-zinc-800/50 justify-start gap-4'
+                variant='outline'
+                size='sm'
+              >
+                <LogOut size='16px' />
+                <span className='text-xs font-medium'>SignOut</span>
+              </Button>
+            </PopoverContent>
+          </Popover>
+          <div>
+            <p className='text-sm font-medium'>{session?.user?.name || '-'}</p>
+            <p className='text-xs leading-3 font-medium text-zinc-600 dark:text-zinc-400'>
+              Test Org
+            </p>
+          </div>
+        </div>
+      </div>
     </nav>
   )
 }
