@@ -8,6 +8,8 @@ import ItemsInfo from './itemsInfo'
 import { formatAmount } from '@/lib/helpers'
 import { Button } from '@/components/ui/button'
 import { useInvoiceContext } from '@/context/invoice'
+import PreviewModal from './preview-modal'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 
 const createInvoice = () => {
   const {
@@ -64,12 +66,17 @@ const createInvoice = () => {
             </h1>
           </div>
           <div className='flex gap-4 items-center'>
-            <Button
-              variant='ghost'
-              className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50'
-            >
-              Preview
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  variant='ghost'
+                  className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50'
+                >
+                  Preview
+                </Button>
+              </DialogTrigger>
+              <PreviewModal />
+            </Dialog>
             <Button
               variant='outline'
               className='hover:bg-yellow-600 border-yellow-600 text-yellow-600 hover:text-white bg-transparent border-2'
