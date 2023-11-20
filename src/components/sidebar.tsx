@@ -10,12 +10,14 @@ import {
   CornerBottomLeftIcon
 } from '@radix-ui/react-icons'
 import { useState } from 'react'
+import { Theme, useTheme } from '@/context/theme'
 
 const Sidebar = ({
   onChangeThemeHandler
 }: {
   onChangeThemeHandler: () => void
 }) => {
+  const { theme } = useTheme()
   return (
     <nav className='border-r-2 dark:border-zinc-800/90 border-zinc-200/90 border-white bg-zinc-50 dark:bg-zinc-900 w-56 h-screen px-4 dark:text-white fixed left-0 top-0'>
       <div className='h-[calc(100%-112px)] pt-8'>
@@ -26,7 +28,10 @@ const Sidebar = ({
       </div>
       <div className='h-8 flex flex-col justify-between'>
         <div className=' flex items-center justify-center'>
-          <Switch onCheckedChange={onChangeThemeHandler} />
+          <Switch
+            checked={theme === Theme.Light}
+            onCheckedChange={onChangeThemeHandler}
+          />
         </div>
         <Separator className='dark:bg-zinc-700 bg-zinc-300 h-[0.5px]' />
       </div>

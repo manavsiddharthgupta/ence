@@ -3,13 +3,18 @@ import { Theme, ThemeProvider } from '@/context/theme'
 import { useState } from 'react'
 import Sidebar from './sidebar'
 
+const existedTheme =
+  localStorage.getItem('theme') === Theme.Light ? Theme.Light : Theme.Dark
+
 const Card = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setTheme] = useState<Theme>(Theme.Dark)
+  const [theme, setTheme] = useState<Theme>(existedTheme)
   const onSetTheme = () => {
     setTheme((prevState: Theme) => {
       if (prevState === Theme.Dark) {
+        localStorage.setItem('theme', Theme.Light)
         return Theme.Light
       }
+      localStorage.setItem('theme', Theme.Dark)
       return Theme.Dark
     })
   }
