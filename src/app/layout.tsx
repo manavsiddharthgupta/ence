@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Card from '@/components/card'
+import Provider from '@/components/provider'
 
 export const metadata: Metadata = {
   title: 'Ence',
@@ -14,7 +15,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <Card>{children}</Card>
+      <Provider>
+        <Card>{children}</Card>
+      </Provider>
     </html>
   )
 }
