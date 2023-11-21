@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/button'
 import { useInvoiceContext } from '@/context/invoice'
 import PreviewModal from './preview-modal'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import { toast } from 'react-toastify'
+import { useTheme } from '@/context/theme'
 
 const createInvoice = () => {
   const {
@@ -19,6 +21,7 @@ const createInvoice = () => {
     itemsInfoState,
     paymentInfoState
   } = useInvoiceContext()
+  const { theme } = useTheme()
   const separatorStyle = 'my-6 h-[0.5px] dark:bg-zinc-700 bg-zinc-300'
   return (
     <div className='relative w-full'>
@@ -78,6 +81,18 @@ const createInvoice = () => {
               <PreviewModal />
             </Dialog>
             <Button
+              onClick={() => {
+                toast.error('Database is not available', {
+                  position: 'top-center',
+                  autoClose: 2000,
+                  hideProgressBar: false,
+                  closeOnClick: false,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+                  theme: theme === 'Light' ? 'light' : 'dark'
+                })
+              }}
               variant='outline'
               className='hover:bg-yellow-600 border-yellow-600 text-yellow-600 hover:text-white bg-transparent border-2'
             >
@@ -87,6 +102,16 @@ const createInvoice = () => {
               variant='default'
               className='bg-emerald-600 text-white hover:bg-emerald-700'
               onClick={() => {
+                toast.error('Database is not available', {
+                  position: 'top-center',
+                  autoClose: 2000,
+                  hideProgressBar: false,
+                  closeOnClick: false,
+                  pauseOnHover: false,
+                  draggable: true,
+                  progress: undefined,
+                  theme: theme === 'Light' ? 'light' : 'dark'
+                })
                 const invoiceData = {
                   customerInfoState,
                   customerLegalName,

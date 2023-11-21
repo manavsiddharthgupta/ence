@@ -3,6 +3,9 @@ import { Theme, ThemeProvider } from '@/context/theme'
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Sidebar from './sidebar'
+import { ToastContainer } from 'react-toastify'
+
+import 'react-toastify/dist/ReactToastify.css'
 
 const Card = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(Theme.Dark)
@@ -45,6 +48,7 @@ const Card = ({ children }: { children: React.ReactNode }) => {
         <main className='ml-56 px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
           {children}
         </main>
+        <ToastContainer />
       </body>
     </ThemeProvider>
   )
