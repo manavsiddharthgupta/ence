@@ -1,6 +1,15 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { Badge } from '@/components/ui/badge'
 import { sampleInvoices } from '@/lib/sample'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
 
 const InvoiceTable = () => {
   return (
@@ -21,6 +30,7 @@ const InvoiceTable = () => {
           // Todo: sample data
           return (
             <tr
+              key={ind}
               className={`text-xs ${
                 ind !== sampleInvoices.length - 1
                   ? 'border-b-[1px] border-zinc-200 dark:border-zinc-700/40'
@@ -36,9 +46,24 @@ const InvoiceTable = () => {
               </td>
               <td className='p-2'>{invoice.due}</td>
               <td className=''>
-                <div className='hover:dark:bg-zinc-700/20 hover:bg-zinc-300/30 transition-all duration-100 ease-in-out cursor-pointer w-fit py-1 px-2 rounded-sm'>
-                  <DotsHorizontalIcon />
-                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant='ghost'
+                      className='flex h-8 w-8 p-0 data-[state=open]:bg-zinc-600/20 hover:bg-zinc-600/10'
+                    >
+                      <DotsHorizontalIcon />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className='dark:border-zinc-700/60 border-zinc-300/60 bg-white dark:bg-zinc-900'>
+                    <DropdownMenuLabel>Invoice Action</DropdownMenuLabel>
+                    <DropdownMenuSeparator className='bg-zinc-600/20' />
+                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <DropdownMenuItem>Make a Copy</DropdownMenuItem>
+                    <DropdownMenuSeparator className='bg-zinc-600/20' />
+                    <DropdownMenuItem>Delete</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </td>
             </tr>
           )

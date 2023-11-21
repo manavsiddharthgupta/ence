@@ -5,7 +5,7 @@ export const sampleInvoices = [
     date: '22-02-2023',
     dueDate: '22-03-2023',
     status: 'Paid',
-    due: '₹ 1879.00'
+    due: '₹ 0.00'
   },
   {
     invoiceNumber: 'Inv-7982',
@@ -13,7 +13,7 @@ export const sampleInvoices = [
     date: '02-06-2023',
     dueDate: '02-07-2023',
     status: 'Paid',
-    due: '₹ 542.00'
+    due: '₹ 0.00'
   },
   {
     invoiceNumber: 'Inv-8172',
@@ -29,7 +29,7 @@ export const sampleInvoices = [
     date: '10-06-2023',
     dueDate: '02-07-2023',
     status: 'Paid',
-    due: '₹ 762.00'
+    due: '₹ 0.00'
   },
   {
     invoiceNumber: 'Inv-1176',
@@ -45,7 +45,7 @@ export const sampleInvoices = [
     date: '10-06-2023',
     dueDate: '02-07-2023',
     status: 'Paid',
-    due: '₹ 9082.00'
+    due: '₹ 0.00'
   },
   {
     invoiceNumber: 'Inv-1076',
@@ -78,5 +78,13 @@ export const sampleInvoices = [
     dueDate: '02-07-2023',
     status: 'Partially',
     due: '₹ 4561.00'
+  },
+  {
+    invoiceNumber: 'Inv-1246',
+    customerName: 'Customer Name 11',
+    date: '10-06-2023',
+    dueDate: '02-07-2023',
+    status: 'Partially',
+    due: '₹ 212.00'
   }
 ]

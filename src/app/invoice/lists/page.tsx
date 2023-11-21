@@ -1,11 +1,19 @@
+'use client'
 import {
   ArrowDownRightFromCircleIcon,
   ArrowUpRightFromCircleIcon
 } from 'lucide-react'
 import InvoiceTable from './paid'
 import { DatePickerWithRange } from '@/components/ui/datepicker-with-range'
+import { useState } from 'react'
+import { DateRange } from 'react-day-picker'
+import { addDays } from 'date-fns'
 
 const Lists = () => {
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: new Date(2022, 0, 20),
+    to: addDays(new Date(2022, 0, 20), 20)
+  })
   return (
     <div className='w-full max-w-4xl mx-auto'>
       <p className='text-xs leading-3 text-zinc-600/80 dark:text-zinc-300/80 font-medium'>
@@ -48,7 +56,7 @@ const Lists = () => {
           <h1 className='text-lg font-medium text-zinc-600 dark:text-zinc-400'>
             Invoices
           </h1>
-          <DatePickerWithRange />
+          <DatePickerWithRange date={date} setDate={setDate} />
         </div>
         <InvoiceCard>
           <InvoiceTable />
@@ -112,7 +120,7 @@ const InvoiceTypeOverview = ({
 
 const InvoiceCard = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className='dark:bg-zinc-600/5 bg-zinc-300/20 border-[1.5px] dark:border-zinc-700/60 border-zinc-300/60 px-4 py-2 rounded-sm'>
+    <div className='dark:bg-zinc-600/5 bg-zinc-300/20 border-[1.5px] dark:border-zinc-700/60 border-zinc-300/60 px-4 py-2 rounded-lg'>
       {children}
     </div>
   )
