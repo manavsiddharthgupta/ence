@@ -106,7 +106,10 @@ const SideItems = () => {
       icon: <FileTextIcon />,
       subType: {
         status: true,
-        values: [{ label: 'Create', to: '/invoice/create' }]
+        values: [
+          { label: 'Lists', to: '/invoice/lists' },
+          { label: 'Create', to: '/invoice/create' }
+        ]
       }
     }
     // {
