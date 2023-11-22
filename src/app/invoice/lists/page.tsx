@@ -3,7 +3,7 @@ import {
   ArrowDownRightFromCircleIcon,
   ArrowUpRightFromCircleIcon
 } from 'lucide-react'
-import InvoiceTable from './paid'
+import InvoiceTable from './invoices-table'
 import { DatePickerWithRange } from '@/components/ui/datepicker-with-range'
 import { useState } from 'react'
 import { DateRange } from 'react-day-picker'
@@ -14,6 +14,7 @@ const Lists = () => {
     from: new Date(2022, 0, 20),
     to: addDays(new Date(2022, 0, 20), 20)
   })
+  // will have to revamp code
   return (
     <div className='w-full max-w-4xl mx-auto'>
       <p className='text-xs leading-3 text-zinc-600/80 dark:text-zinc-300/80 font-medium'>

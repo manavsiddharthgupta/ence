@@ -1,5 +1,4 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
-import { Badge } from '@/components/ui/badge'
 import { sampleInvoices } from '@/lib/sample'
 import {
   DropdownMenu,
@@ -10,10 +9,12 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
+import { StatusBadge } from '@/components/status-badge'
 
 const InvoiceTable = () => {
+  // revamp code
   return (
-    <table className='w-full'>
+    <table className='w-full text-black dark:text-white'>
       <thead>
         <tr className='text-sm font-medium text-zinc-600/60 dark:text-zinc-400/70 border-b-[1px] border-zinc-200 dark:border-zinc-700/40'>
           <td className='p-3 w-[12%]'># Invoice</td>
@@ -74,24 +75,3 @@ const InvoiceTable = () => {
 }
 
 export default InvoiceTable
-
-const StatusBadge = ({ status }: { status: string }) => {
-  let className = ''
-  switch (status) {
-    case 'Paid':
-      className = 'bg-emerald-600 hover:bg-emerald-700'
-      break
-    case 'Pending':
-      className = 'bg-yellow-600 hover:bg-yellow-700'
-      break
-    case 'Unpaid':
-      className = 'bg-red-600 hover:bg-red-700'
-      break
-    case 'Partially':
-      className = 'bg-blue-600 hover:bg-blue-700'
-      break
-    default:
-      break
-  }
-  return <Badge className={'text-white ' + className}>{status}</Badge>
-}

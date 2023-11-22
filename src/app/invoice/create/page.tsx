@@ -100,7 +100,7 @@ const createInvoice = () => {
             </Button>
             <Button
               variant='default'
-              className='bg-emerald-600 text-white hover:bg-emerald-700'
+              className='bg-sky-600 text-white hover:bg-sky-700'
               onClick={() => {
                 toast.error('Database is not available', {
                   position: 'top-center',
@@ -122,7 +122,7 @@ const createInvoice = () => {
                 console.log(invoiceData)
               }}
             >
-              Save
+              Send
             </Button>
           </div>
         </div>
