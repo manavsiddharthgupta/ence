@@ -48,7 +48,7 @@ const PreviewModal = () => {
                   DUE ON : <span className='ml-1'>AUG 01, 2023</span>
                 </p>
               </div>
-              <Separator className='my-3 bg-black/20 dark:bg-white/20 ' />
+              <Separator className='my-3 bg-black/20 dark:bg-white/20 h-[0.5px]' />
               <div className='flex flex-col gap-3 w-full'>
                 <div className='flex text-sm'>
                   <p className='text-zinc-800/60 dark:text-zinc-200/60 w-[10%]'>
