@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button'
 import {
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -14,43 +13,136 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/ui/tooltip'
-import { Mail, Download, MessageCircle } from 'lucide-react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ChevronDown, Info } from 'lucide-react'
+import { formatAmount } from '@/lib/helpers'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { StatusBadge } from '@/components/status-badge'
 
 const PreviewModal = () => {
+  // Todo: Will have to revamp the code structure
   return (
     <DialogContent className='bg-white dark:bg-zinc-900 dark:border-zinc-700 border-zinc-200 max-w-3xl'>
       <DialogHeader>
-        <DialogTitle className='flex items-center justify-between pb-4'>
+        <DialogTitle className='flex items-center justify-between pb-1 pr-6'>
           <p className='font-bold text-3xl'>
             Invoice
-            <span className='text-lg font-medium ml-2'>#inv-25725</span>
+            <span className='text-lg font-medium ml-2 dark:text-sky-300 text-sky-600'>
+              <span className='dark:text-white/50 text-black/50 mr-1'>#</span>
+              INV-25725
+            </span>
           </p>
-          <div className='mr-6 flex gap-3'>
-            <IconCard tipMessage='Download Invoice'>
-              <Download className='w-3.5 h-3.5' />
-            </IconCard>
-            <IconCard tipMessage='Send Mail'>
-              <Mail className='w-3.5 h-3.5' />
-            </IconCard>
-            <IconCard tipMessage='Send Whatsapp'>
-              <MessageCircle className='w-3.5 h-3.5' />
-            </IconCard>
-          </div>
+          <StatusBadge status='Pending' />
         </DialogTitle>
-        <div className='overflow-y-auto h-80'>
-          <InvoiceFormat />
-        </div>
+        <Tabs defaultValue='digital' className='w-full'>
+          <TabsList className='grid w-full grid-cols-2'>
+            <TabsTrigger value='digital'>Digital</TabsTrigger>
+            <TabsTrigger value='paper'>Paper</TabsTrigger>
+          </TabsList>
+          <TabsContent value='digital'>
+            <div className='overflow-y-auto h-80 font-medium px-4'>
+              <div className='flex gap-4 items-end text-zinc-800/60 dark:text-zinc-200/60 text-sm mt-2 font-semibold'>
+                <span className=''>INVOICE TYPE</span>
+                <p className='w-[1.5px] h-3.5 mb-0.5 bg-zinc-800/40 dark:bg-zinc-200/50'></p>
+                <p>
+                  DUE ON : <span className='ml-1'>AUG 01, 2023</span>
+                </p>
+              </div>
+              <Separator className='my-3 bg-black/20 dark:bg-white/20 h-[0.5px]' />
+              <div className='flex flex-col gap-3 w-full'>
+                <div className='flex text-sm'>
+                  <p className='text-zinc-800/60 dark:text-zinc-200/60 w-[10%]'>
+                    To
+                  </p>
+                  <p className='w-[90%]'>Some Fancy Agency, Some City, IN</p>
+                </div>
+                <div className='flex text-sm'>
+                  <p className='text-zinc-800/60 dark:text-zinc-200/60 w-[10%]'>
+                    From
+                  </p>
+                  <p className='w-[90%'>Some Fancy Agency, Some City, IN</p>
+                </div>
+                <div className='flex text-sm'>
+                  <p className='text-zinc-800/60 dark:text-zinc-200/60 w-[10%]'>
+                    Note
+                  </p>
+                  <p className='w-[90%'>
+                    Please review this correctly, I think i may have overcharged
+                    you.
+                  </p>
+                </div>
+              </div>
+              <div className='flex justify-center'>
+                <Button
+                  variant='link'
+                  className='text-center flex gap-2 items-center dark:text-sky-300 text-sky-600 hover:no-underline'
+                >
+                  View Invoice Details
+                  <ChevronDown className='mt-1' />
+                </Button>
+              </div>
+              <Separator className='mt-1 mb-3 bg-black/20 dark:bg-white/20 h-[0.5px]' />
+              <div className='w-full flex justify-between mb-3'>
+                <div className='w-1/2'>
+                  {/* <div className='w-24 h-24 rounded-full border-[1.5px] border-black p-1'>
+                    <div className='rounded-full border-[1px] border-black border-dashed h-full flex justify-center items-center'>
+                      <h1 className='text-xl font-bold -rotate-12'>Unpaid</h1>
+                    </div>
+                  </div> */}
+                </div>
+                <div className='w-2/6'>
+                  <div className='w-full flex justify-between items-center'>
+                    <span className='text-zinc-800/60 dark:text-zinc-200/60 text-sm'>
+                      Amount Payable
+                    </span>
+                    <span className='text-xl font-bold'>
+                      {formatAmount(5273)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <Alert variant='warning'>
+                <Info className='h-4 w-4' />
+                <AlertDescription>
+                  Your client will get a hosted payment field to make payment
+                  with any credit card, debit card, upi and bank transfer
+                </AlertDescription>
+              </Alert>
+            </div>
+          </TabsContent>
+          <TabsContent value='paper'>
+            <div className='overflow-y-auto h-80'>
+              <InvoiceFormat />
+            </div>
+          </TabsContent>
+        </Tabs>
       </DialogHeader>
       <DialogFooter>
-        <DialogClose asChild>
+        <div className='flex justify-between w-full'>
           <Button
-            type='button'
-            variant='secondary'
-            className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50 dark:border-zinc-700 border-zinc-200 border cursor-pointer hover:bg-zinc-100'
+            variant='ghost'
+            className='dark:hover:bg-zinc-800/50 cursor-pointer hover:bg-zinc-100 min-w-[150px]'
           >
-            Close
+            Save as draft
           </Button>
-        </DialogClose>
+          <div className='flex gap-4'>
+            <DialogClose asChild>
+              <Button
+                type='button'
+                variant='secondary'
+                className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50 dark:border-zinc-700 border-zinc-200 border cursor-pointer hover:bg-zinc-100 min-w-[150px]'
+              >
+                Close
+              </Button>
+            </DialogClose>
+            <Button
+              variant='default'
+              className='bg-sky-600 text-white hover:bg-sky-700 min-w-[150px]'
+            >
+              Send
+            </Button>
+          </div>
+        </div>
       </DialogFooter>
     </DialogContent>
   )
@@ -58,7 +150,7 @@ const PreviewModal = () => {
 
 export default PreviewModal
 
-const IconCard = ({
+export const IconCard = ({
   children,
   tipMessage
 }: {
@@ -193,7 +285,7 @@ export const InvoiceFormat = () => {
           </div>
           <div className='w-24 h-24 rounded-full border-[1.5px] border-black p-1'>
             <div className='rounded-full border-[1px] border-black border-dashed h-full flex justify-center items-center'>
-              <h1 className='text-xl font-bold -rotate-12'>Paid</h1>
+              <h1 className='text-xl font-bold -rotate-12'>Unpaid</h1>
             </div>
           </div>
         </div>
