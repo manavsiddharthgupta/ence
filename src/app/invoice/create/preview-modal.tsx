@@ -14,10 +14,11 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ChevronDown, Info } from 'lucide-react'
+import { Info } from 'lucide-react'
 import { formatAmount } from '@/lib/helpers'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { StatusBadge } from '@/components/status-badge'
+import CollapsiblePurchasedItems from './purchased-items'
 
 const PreviewModal = () => {
   // Todo: Will have to revamp the code structure
@@ -72,24 +73,10 @@ const PreviewModal = () => {
                   </p>
                 </div>
               </div>
-              <div className='flex justify-center'>
-                <Button
-                  variant='link'
-                  className='text-center flex gap-2 items-center dark:text-sky-300 text-sky-600 hover:no-underline'
-                >
-                  View Invoice Details
-                  <ChevronDown className='mt-1' />
-                </Button>
-              </div>
+              <CollapsiblePurchasedItems />
               <Separator className='mt-1 mb-3 bg-black/20 dark:bg-white/20 h-[0.5px]' />
               <div className='w-full flex justify-between mb-3'>
-                <div className='w-1/2'>
-                  {/* <div className='w-24 h-24 rounded-full border-[1.5px] border-black p-1'>
-                    <div className='rounded-full border-[1px] border-black border-dashed h-full flex justify-center items-center'>
-                      <h1 className='text-xl font-bold -rotate-12'>Unpaid</h1>
-                    </div>
-                  </div> */}
-                </div>
+                <div className='w-1/2'>{/* notes */}</div>
                 <div className='w-2/6'>
                   <div className='w-full flex justify-between items-center'>
                     <span className='text-zinc-800/60 dark:text-zinc-200/60 text-sm'>
