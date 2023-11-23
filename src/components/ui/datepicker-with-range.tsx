@@ -31,7 +31,7 @@ export function DatePickerWithRange({
             variant={'outline'}
             size='sm'
             className={cn(
-              'w-fit justify-start text-left font-normal text-xs bg-zinc-300/20 dark:bg-zinc-600/5 dark:border-zinc-700 border-zinc-300/60 dark:hover:bg-zinc-800/40',
+              'w-fit justify-start text-left font-normal text-xs bg-transparent dark:border-zinc-700 border-zinc-300/60 dark:hover:bg-zinc-800/40',
               !date && 'text-muted-foreground'
             )}
           >

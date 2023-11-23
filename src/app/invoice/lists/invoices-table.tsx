@@ -47,7 +47,7 @@ const InvoiceTable = () => {
                   <Avatar className='w-6 h-6'>
                     <AvatarImage />
                     <AvatarFallback>
-                      <User2Icon size='16px' />
+                      <User2Icon size='16px' strokeWidth='1px' />
                     </AvatarFallback>
                   </Avatar>
                   <span className='w-[calc(100%-6)]'>
