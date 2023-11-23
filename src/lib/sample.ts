@@ -5,14 +5,16 @@ export const sampleInvoices = [
     date: '22-02-2023',
     dueDate: '22-03-2023',
     status: 'Paid',
+    total: '₹ 2300.00',
     due: '₹ 0.00'
   },
   {
     invoiceNumber: 'Inv-7982',
-    customerName: 'Customer Name 2',
+    customerName: 'Customer Legal',
     date: '02-06-2023',
     dueDate: '02-07-2023',
     status: 'Paid',
+    total: '₹ 1920.00',
     due: '₹ 0.00'
   },
   {
@@ -21,6 +23,7 @@ export const sampleInvoices = [
     date: '15-04-2023',
     dueDate: '15-07-2023',
     status: 'Unpaid',
+    total: '₹ 5242.00',
     due: '₹ 5242.00'
   },
   {
@@ -29,6 +32,7 @@ export const sampleInvoices = [
     date: '10-06-2023',
     dueDate: '02-07-2023',
     status: 'Paid',
+    total: '₹ 3032.00',
     due: '₹ 0.00'
   },
   {
@@ -37,6 +41,7 @@ export const sampleInvoices = [
     date: '10-06-2023',
     dueDate: '02-07-2023',
     status: 'Partially',
+    total: '₹ 3100.00',
     due: '₹ 1721.00'
   },
   {
@@ -45,6 +50,7 @@ export const sampleInvoices = [
     date: '10-06-2023',
     dueDate: '02-07-2023',
     status: 'Paid',
+    total: '₹ 120.00',
     due: '₹ 0.00'
   },
   {
@@ -53,6 +59,7 @@ export const sampleInvoices = [
     date: '01-09-2023',
     dueDate: '02-10-2023',
     status: 'Pending',
+    total: '₹ 2340.00',
     due: '₹ 2340.00'
   },
   {
@@ -61,6 +68,7 @@ export const sampleInvoices = [
     date: '29-02-2023',
     dueDate: '20-04-2023',
     status: 'Pending',
+    total: '₹ 6722.00',
     due: '₹ 6722.00'
   },
   {
@@ -69,6 +77,7 @@ export const sampleInvoices = [
     date: '29-07-2023',
     dueDate: '20-08-2023',
     status: 'Pending',
+    total: '₹ 1022.00',
     due: '₹ 1022.00'
   },
   {
@@ -77,7 +86,8 @@ export const sampleInvoices = [
     date: '10-06-2023',
     dueDate: '02-07-2023',
     status: 'Partially',
-    due: '₹ 4561.00'
+    total: '₹ 4561.00',
+    due: '₹ 1561.00'
   },
   {
     invoiceNumber: 'Inv-1246',
@@ -85,6 +95,7 @@ export const sampleInvoices = [
     date: '10-06-2023',
     dueDate: '02-07-2023',
     status: 'Partially',
+    total: '₹ 4561.00',
     due: '₹ 212.00'
   }
 ]
