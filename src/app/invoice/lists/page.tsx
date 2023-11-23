@@ -1,20 +1,11 @@
-'use client'
 import {
   ArrowDownRightFromCircleIcon,
   ArrowUpRightFromCircleIcon
 } from 'lucide-react'
 import InvoiceTable from './invoices-table'
-import { DatePickerWithRange } from '@/components/ui/datepicker-with-range'
-import { useState } from 'react'
-import { DateRange } from 'react-day-picker'
-import { addDays } from 'date-fns'
-import { Input } from '@/components/ui/input'
+import Filter from './filter'
 
 const Lists = () => {
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20)
-  })
   // will have to revamp code
   return (
     <div className='w-full max-w-4xl mx-auto'>
@@ -54,14 +45,7 @@ const Lists = () => {
         />
       </div>
       <div className='my-8'>
-        <div className='flex justify-between items-end mb-2'>
-          <Input
-            placeholder='Filter Invoices ...'
-            type='text'
-            className='h-9 max-w-xs bg-zinc-300/20 dark:bg-zinc-600/5 dark:border-zinc-700 border-zinc-200'
-          />
-          <DatePickerWithRange date={date} setDate={setDate} />
-        </div>
+        <Filter />
         <InvoiceCard>
           <InvoiceTable />
         </InvoiceCard>

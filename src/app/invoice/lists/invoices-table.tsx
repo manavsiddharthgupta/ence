@@ -10,6 +10,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
 import { StatusBadge } from '@/components/status-badge'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { User2Icon } from 'lucide-react'
 
 const InvoiceTable = () => {
   // revamp code
@@ -18,11 +20,12 @@ const InvoiceTable = () => {
       <thead>
         <tr className='text-sm font-medium text-zinc-600/60 dark:text-zinc-400/70 border-b-[1px] border-zinc-200 dark:border-zinc-700/40'>
           <td className='p-3 w-[12%]'># Invoice</td>
-          <td className='p-2 w-[33%]'>To</td>
-          <td className='p-2 w-[15%]'>Date</td>
-          <td className='p-2 w-[15%]'>Due Date</td>
+          <td className='p-2 w-[25%]'>To</td>
+          <td className='p-2 w-[13%]'>Date</td>
+          <td className='p-2 w-[13%]'>Due Date</td>
           <td className='p-2 w-[10%]'>Status</td>
-          <td className='p-2 w-[10%]'>Due</td>
+          <td className='p-2 w-[11%]'>Total</td>
+          <td className='p-2 w-[11%]'>Due</td>
           <td className='p-2 w-[5%]'></td>
         </tr>
       </thead>
@@ -32,19 +35,32 @@ const InvoiceTable = () => {
           return (
             <tr
               key={ind}
-              className={`text-xs ${
+              className={`text-sm ${
                 ind !== sampleInvoices.length - 1
                   ? 'border-b-[1px] border-zinc-200 dark:border-zinc-700/40'
                   : ''
               }`}
             >
               <td className='p-3'>{invoice.invoiceNumber}</td>
-              <td className='p-2'>{invoice.customerName}</td>
+              <td className='p-2'>
+                <div className='flex items-center gap-2'>
+                  <Avatar className='w-6 h-6'>
+                    <AvatarImage />
+                    <AvatarFallback>
+                      <User2Icon size='16px' strokeWidth='1px' />
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className='w-[calc(100%-6)]'>
+                    {invoice.customerName}
+                  </span>
+                </div>
+              </td>
               <td className='p-2'>{invoice.date}</td>
               <td className='p-2'>{invoice.dueDate}</td>
               <td className='p-2'>
                 <StatusBadge status={invoice.status} />
               </td>
+              <td className='p-2'>{invoice.total}</td>
               <td className='p-2'>{invoice.due}</td>
               <td className=''>
                 <DropdownMenu>
