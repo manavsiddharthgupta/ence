@@ -29,7 +29,7 @@ export default function CreateInvoiceLayout({
   )
   const [itemsInfoState, itemsInfoDispatch] = useReducer(
     itemsInfoReducers,
-    ItemsInfoInitialState
+    JSON.parse(JSON.stringify(ItemsInfoInitialState))
   )
   const [paymentInfoState, paymentInfoDispatch] = useReducer(
     paymentInfoReducers,
