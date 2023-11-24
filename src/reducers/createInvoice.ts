@@ -11,19 +11,19 @@ import {
 import { v4 as uuidv4 } from 'uuid'
 
 export const CustomerInfoInitialState: CustomerInfoState = {
-  email: '',
-  whatsappNumber: '',
-  city: '',
-  pincode: '',
-  state: '',
-  country: ''
+  email: null,
+  whatsappNumber: null,
+  city: null,
+  pincode: null,
+  state: null,
+  country: null
 }
 
 export const InvoiceInfoInitialState: InvoiceInfoState = {
-  invoiceNumber: '',
+  invoiceNumber: null,
   dateIssue: undefined,
   dueDate: undefined,
-  sendingMethod: ''
+  sendingMethod: 'mail'
 }
 
 export const ItemsInfoInitialState: ItemsInfoState = [
@@ -37,9 +37,9 @@ export const ItemsInfoInitialState: ItemsInfoState = [
 ]
 
 export const PaymentInfoInitailState: PaymentInfoState = {
-  terms: '',
-  status: '',
-  method: '',
+  terms: 'immediate',
+  status: 'pending',
+  method: 'cash',
   gst: '0',
   notes: '',
   tax: 0,

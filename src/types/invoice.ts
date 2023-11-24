@@ -4,12 +4,12 @@ export type Option = {
 }
 
 export interface CustomerInfoState {
-  email: string
-  whatsappNumber: string | number
-  city: string
-  pincode: string | number
-  state: string
-  country: string
+  email: string | null
+  whatsappNumber: string | number | null
+  city: string | null
+  pincode: string | number | null
+  state: string | null
+  country: string | null
 }
 
 export interface CustomerInfoAction {
@@ -34,7 +34,7 @@ export type ItemsInfoAction = {
 }
 
 export type InvoiceInfoState = {
-  invoiceNumber: string
+  invoiceNumber: string | null
   dateIssue: Date | undefined
   dueDate: Date | undefined
   sendingMethod: string

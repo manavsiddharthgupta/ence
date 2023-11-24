@@ -8,7 +8,7 @@ const InputPullback = ({
   type = 'text',
   readonly = false
 }: {
-  value: string | number
+  value: string | number | null
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   placeholder: string
   type: string
@@ -16,11 +16,14 @@ const InputPullback = ({
 }) => {
   const [focused, setIfFocused] = useState(false)
 
-  const checkVal = (value: string | number) => {
+  const checkVal = (value: string | number | null) => {
     if (typeof value === 'number') {
       return true
     }
-    return value !== ''
+    if (value && value !== '') {
+      return true
+    }
+    return false
   }
 
   const focusedInput =
@@ -34,7 +37,7 @@ const InputPullback = ({
         className='w-full h-full border-[1px] dark:border-zinc-600 border-zinc-400 bg-transparent outline-none text-xs z-10 absolute left-0 top-0 px-2.5 pt-1.5 rounded-md remove-arrow'
         type={type}
         onFocus={() => setIfFocused(true)}
-        value={value}
+        value={value === null ? '' : value}
         onBlur={(e) => {
           if (e.target.value.trim() === '') {
             setIfFocused(false)

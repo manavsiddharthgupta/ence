@@ -14,7 +14,11 @@ const CustomerInfo = () => {
 
   useEffect(() => {
     // set Customer Info using Id
-    if (customerLegalName) {
+    // searching for db will be from db
+    const ifCustomerExist = people.find((each) => {
+      return JSON.stringify(each) === JSON.stringify(customerLegalName)
+    })
+    if (ifCustomerExist) {
       customerInfoDispatch({
         type: 'CUSTOMER_SET_ALL',
         payload: {
@@ -24,6 +28,18 @@ const CustomerInfo = () => {
           pincode: '101010',
           state: 'Mumbai',
           country: 'India'
+        }
+      }) // adding sample Data
+    } else {
+      customerInfoDispatch({
+        type: 'CUSTOMER_SET_ALL',
+        payload: {
+          email: null,
+          whatsappNumber: null,
+          city: null,
+          pincode: null,
+          state: null,
+          country: null
         }
       })
     }
