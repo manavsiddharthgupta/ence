@@ -112,3 +112,14 @@ export const sampleCustomerDetails = [
     country: 'India'
   }
 ]
+
+export const sampleBusinessDetails = {
+  id: 0,
+  name: 'Test Name',
+  email: 'business@test.com',
+  whatsappNumber: 9876543210,
+  city: 'Some City',
+  pincode: '909090',
+  state: 'Some State',
+  country: 'India'
+}
