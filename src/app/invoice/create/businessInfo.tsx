@@ -45,7 +45,7 @@ const BusinessInfo = () => {
       <div className='w-full flex mt-4 justify-between'>
         <div className='w-[48%]'>
           <InputPullback
-            value={'Sample City'}
+            value={'Sample State'}
             type='text'
             placeholder='State'
             readonly={true}

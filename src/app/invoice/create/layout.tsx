@@ -18,6 +18,7 @@ export default function CreateInvoiceLayout({
   children: React.ReactNode
 }) {
   const [customerLegalName, setCustomerLegalName] = useState('')
+  const [subTotal, setSubTotal] = useState(0)
   const [customerInfoState, customerInfoDispatch] = useReducer(
     customerInfoReducers,
     CustomerInfoInitialState
@@ -46,7 +47,9 @@ export default function CreateInvoiceLayout({
         paymentInfoDispatch,
         paymentInfoState,
         customerLegalName,
-        setCustomerLegalName
+        setCustomerLegalName,
+        subTotal,
+        setSubTotal
       }}
     >
       {children}

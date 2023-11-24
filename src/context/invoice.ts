@@ -23,11 +23,13 @@ type InvoiceContextType = {
   itemsInfoState: ItemsInfoState
   paymentInfoState: PaymentInfoState
   customerLegalName: string
+  subTotal: number
   customerInfoDispatch: Dispatch<CustomerInfoAction>
   invoiceInfoDispatch: Dispatch<InvoiceInfoAction>
   itemsInfoDispatch: Dispatch<ItemsInfoAction>
   paymentInfoDispatch: Dispatch<PaymentInfoAction>
   setCustomerLegalName: Dispatch<SetStateAction<string>>
+  setSubTotal: Dispatch<SetStateAction<number>>
 }
 
 const InvoiceContext = createContext<InvoiceContextType>({
@@ -36,11 +38,13 @@ const InvoiceContext = createContext<InvoiceContextType>({
   itemsInfoState: ItemsInfoInitialState,
   paymentInfoState: PaymentInfoInitailState,
   customerLegalName: '',
+  subTotal: 0,
   customerInfoDispatch: () => {},
   invoiceInfoDispatch: () => {},
   itemsInfoDispatch: () => {},
   paymentInfoDispatch: () => {},
-  setCustomerLegalName: () => {}
+  setCustomerLegalName: () => {},
+  setSubTotal: () => {}
 })
 
 export const useInvoiceContext = () => useContext(InvoiceContext)

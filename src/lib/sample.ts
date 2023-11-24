@@ -99,3 +99,16 @@ export const sampleInvoices = [
     due: '₹ 212.00'
   }
 ]
+
+export const sampleCustomerDetails = [
+  {
+    id: 0,
+    name: 'Test Customer',
+    email: 'customer@test.com',
+    whatsappNumber: 9876543210,
+    city: 'Some City',
+    pincode: '101010',
+    state: 'Some State',
+    country: 'India'
+  }
+]

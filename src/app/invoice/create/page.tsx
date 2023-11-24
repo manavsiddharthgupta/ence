@@ -12,6 +12,7 @@ import PreviewModal from './preview-modal'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { toast } from 'react-toastify'
 import { useTheme } from '@/context/theme'
+import { useEffect } from 'react'
 
 const createInvoice = () => {
   const {
@@ -19,9 +20,18 @@ const createInvoice = () => {
     customerLegalName,
     invoiceInfoState,
     itemsInfoState,
-    paymentInfoState
+    paymentInfoState,
+    subTotal,
+    setSubTotal
   } = useInvoiceContext()
   const { theme } = useTheme()
+  useEffect(() => {
+    const sum = itemsInfoState.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue.total
+    }, 0)
+    setSubTotal(sum)
+  }, [itemsInfoState])
+
   const separatorStyle = 'my-6 h-[0.5px] dark:bg-zinc-700 bg-zinc-300'
   return (
     <div className='relative w-full'>
@@ -65,7 +75,7 @@ const createInvoice = () => {
           <div>
             <p className='text-xs text-zinc-400'>Net Payable Amount</p>
             <h1 className='text-2xl font-semibold'>
-              {formatAmount(75004.543)}
+              {formatAmount(subTotal + +paymentInfoState.shippingCharge)}
             </h1>
           </div>
           <div className='flex gap-4 items-center'>

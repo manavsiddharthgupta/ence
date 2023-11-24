@@ -2,10 +2,11 @@ import { SelectMenu } from '@/components/selectMenu'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useInvoiceContext } from '@/context/invoice'
-import { formatAmount } from '@/lib/helpers'
+import { callInfoToast, formatAmount } from '@/lib/helpers'
 
 const PaymentDetails = () => {
-  const { paymentInfoState, paymentInfoDispatch } = useInvoiceContext()
+  const { paymentInfoState, paymentInfoDispatch, subTotal } =
+    useInvoiceContext()
   const paymentTermsOptions = [
     {
       value: 'immediate',
@@ -70,6 +71,14 @@ const PaymentDetails = () => {
   }
 
   const onSetPaymentTerm = (value: any) => {
+    if (!value) {
+      return
+    }
+
+    if (value !== 'immediate') {
+      callInfoToast('This feature is currently unavailable in Beta.')
+      return
+    } // For Beta
     paymentInfoDispatch({
       type: 'PAYMENT_TERMS',
       payload: {
@@ -79,6 +88,14 @@ const PaymentDetails = () => {
   }
 
   const onSetPaymentMethod = (value: any) => {
+    if (!value) {
+      return
+    }
+
+    if (value === 'rtgs' || value === 'digital wallets') {
+      callInfoToast('This feature is currently unavailable in Beta.')
+      return
+    } // For Beta
     paymentInfoDispatch({
       type: 'PAYMENT_METHOD',
       payload: {
@@ -88,6 +105,14 @@ const PaymentDetails = () => {
   }
 
   const onSetPaymentStatus = (value: any) => {
+    if (!value) {
+      return
+    }
+
+    if (value === 'partially paid') {
+      callInfoToast('This feature is currently unavailable in Beta.')
+      return
+    } // For Beta
     paymentInfoDispatch({
       type: 'PAYMENT_STATUS',
       payload: {
@@ -142,16 +167,17 @@ const PaymentDetails = () => {
             Notes/Memo
           </Label>
           <Textarea
-            className='bg-transparent dark:border-zinc-600 border-zinc-400 placeholder:dark:text-zinc-300/80 placeholder:text-zinc-700/80'
+            className='bg-transparent dark:border-zinc-600 border-zinc-400 placeholder:dark:text-zinc-300/80 placeholder:text-zinc-700/80 text-xs'
             placeholder='Type your message here.'
             id='message'
             onChange={onChangeNotes}
+            value={paymentInfoState.notes}
           />
         </div>
         <div className='max-w-xs w-full p-1'>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
             <p>Subtotal</p>
-            <p>{formatAmount(73700.543)}</p>
+            <p>{formatAmount(subTotal)}</p>
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5 dark:bg-zinc-800/10 bg-zinc-200/40 rounded-sm'>
             <p>GST(%)</p>
@@ -160,11 +186,12 @@ const PaymentDetails = () => {
               type='number'
               className='outline-none border-none w-1/3 bg-transparent text-right remove-arrow'
               onChange={onChangeGstPercent}
+              readOnly // For Beta
             />
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
             <p>Tax</p>
-            <p>{formatAmount(1300)}</p>
+            <p>{formatAmount(0)}</p>
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5 dark:bg-zinc-800/10 bg-zinc-200/40 rounded-sm'>
             <p>Shipping Charges(₹)</p>
@@ -177,7 +204,7 @@ const PaymentDetails = () => {
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
             <p>Total</p>
-            <p>{formatAmount(75004.543)}</p>
+            <p>{formatAmount(subTotal + +paymentInfoState.shippingCharge)}</p>
           </div>
         </div>
       </div>

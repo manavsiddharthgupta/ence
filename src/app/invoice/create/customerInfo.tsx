@@ -2,6 +2,7 @@
 import InputCombobox from '@/components/combobox'
 import InputPullback from '@/components/inputPullback'
 import { useInvoiceContext } from '@/context/invoice'
+import { sampleCustomerDetails } from '@/lib/sample'
 import { useEffect } from 'react'
 
 const CustomerInfo = () => {
@@ -22,12 +23,12 @@ const CustomerInfo = () => {
       customerInfoDispatch({
         type: 'CUSTOMER_SET_ALL',
         payload: {
-          email: 'customer@test.com',
-          whatsappNumber: 9876543210,
-          city: 'City',
-          pincode: '101010',
-          state: 'Mumbai',
-          country: 'India'
+          email: sampleCustomerDetails[0].email,
+          whatsappNumber: sampleCustomerDetails[0].whatsappNumber,
+          city: sampleCustomerDetails[0].city,
+          pincode: sampleCustomerDetails[0].pincode,
+          state: sampleCustomerDetails[0].state,
+          country: sampleCustomerDetails[0].country
         }
       }) // adding sample Data
     } else {
@@ -44,15 +45,7 @@ const CustomerInfo = () => {
       })
     }
   }, [customerLegalName])
-  const people = [
-    { id: 0, value: 'Test Customer' },
-    { id: 1, value: 'Wade Cooper' },
-    { id: 2, value: 'Arlene Mccoy' },
-    { id: 3, value: 'Devon Webb' },
-    { id: 4, value: 'Tom Cook' },
-    { id: 5, value: 'Tanya Fox' },
-    { id: 6, value: 'Hellen Schmidt' }
-  ] // Todo: Remove / testing
+  const people = [{ id: 0, value: 'Test Customer' }] // Todo: Remove / testing
 
   const onChangeCustomerWhatsapp = (e: React.ChangeEvent<HTMLInputElement>) => {
     customerInfoDispatch({

@@ -8,8 +8,7 @@ const InvoiceInfo = () => {
   const { invoiceInfoState, invoiceInfoDispatch } = useInvoiceContext()
   const sendingInvoiceOptions = [
     { value: 'mail', label: 'Mail' },
-    { value: 'whatsapp', label: 'Whatsapp' },
-    { value: 'inhand', label: 'In-hand' }
+    { value: 'whatsapp', label: 'Whatsapp' }
   ] // Todo: CONSTANTS or BACKEND
 
   const onChangeInvoiceNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,6 +40,7 @@ const InvoiceInfo = () => {
       payload: { sendingMethod: value }
     })
   }
+
   return (
     <>
       <h3 className='text-lg'>Invoice info</h3>

@@ -21,7 +21,7 @@ export const CustomerInfoInitialState: CustomerInfoState = {
 
 export const InvoiceInfoInitialState: InvoiceInfoState = {
   invoiceNumber: null,
-  dateIssue: undefined,
+  dateIssue: new Date(),
   dueDate: undefined,
   sendingMethod: 'mail'
 }
@@ -41,7 +41,7 @@ export const PaymentInfoInitailState: PaymentInfoState = {
   status: 'pending',
   method: 'cash',
   gst: '0',
-  notes: '',
+  notes: 'Thank you for your business! We appreciate your trust.',
   tax: 0,
   shippingCharge: '0'
 }
