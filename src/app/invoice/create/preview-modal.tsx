@@ -15,7 +15,12 @@ import {
 } from '@/components/ui/tooltip'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Info } from 'lucide-react'
-import { callErrorToast, formatAmount, formatDate } from '@/lib/helpers'
+import {
+  callErrorToast,
+  formatAmount,
+  formatDate,
+  numTowords
+} from '@/lib/helpers'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { StatusBadge } from '@/components/status-badge'
 import CollapsiblePurchasedItems from './purchased-items'
@@ -86,7 +91,7 @@ const PreviewModal = () => {
                   <p className='text-zinc-800/60 dark:text-zinc-200/60 w-[10%]'>
                     Note
                   </p>
-                  <p className='w-[90%'>{paymentInfoState.notes}</p>
+                  <p className='w-[90%]'>{paymentInfoState.notes}</p>
                 </div>
               </div>
               <CollapsiblePurchasedItems />
@@ -294,7 +299,10 @@ export const InvoiceFormat = () => {
           </div>
         </div>
         <p className='text-[8px] text-right'>
-          SubTotal (in words) : One Hundred Fourteen Rupees Only.
+          SubTotal (in words) :{' '}
+          {numTowords.convert(subTotal + +paymentInfoState.shippingCharge, {
+            currency: true
+          })}
         </p>
         <Separator className='h-[0.5px] bg-slate-300' />
         <p className='text-xs font-semibold text-right'>
