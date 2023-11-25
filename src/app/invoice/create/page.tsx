@@ -5,12 +5,11 @@ import BusinessInfo from './businessInfo'
 import PaymentDetails from './paymentDetails'
 import InvoiceInfo from './invoiceInfo'
 import ItemsInfo from './itemsInfo'
-import { formatAmount } from '@/lib/helpers'
+import { callErrorToast, formatAmount } from '@/lib/helpers'
 import { Button } from '@/components/ui/button'
 import { useInvoiceContext } from '@/context/invoice'
 import PreviewModal from './preview-modal'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
-import { toast } from 'react-toastify'
 import { useTheme } from '@/context/theme'
 import { useEffect } from 'react'
 
@@ -92,16 +91,8 @@ const createInvoice = () => {
             </Dialog>
             <Button
               onClick={() => {
-                toast.error('Database is not available', {
-                  position: 'top-center',
-                  autoClose: 2000,
-                  hideProgressBar: false,
-                  closeOnClick: false,
-                  pauseOnHover: false,
-                  draggable: true,
-                  progress: undefined,
-                  theme: theme === 'Light' ? 'light' : 'dark'
-                })
+                callErrorToast('Database is not available')
+                // save as draft logic
               }}
               variant='outline'
               className='hover:bg-yellow-600 border-yellow-600 text-yellow-600 hover:text-white bg-transparent border-2'
@@ -112,16 +103,7 @@ const createInvoice = () => {
               variant='default'
               className='bg-sky-600 text-white hover:bg-sky-700'
               onClick={() => {
-                toast.error('Database is not available', {
-                  position: 'top-center',
-                  autoClose: 2000,
-                  hideProgressBar: false,
-                  closeOnClick: false,
-                  pauseOnHover: false,
-                  draggable: true,
-                  progress: undefined,
-                  theme: theme === 'Light' ? 'light' : 'dark'
-                })
+                callErrorToast('Database is not available')
                 const invoiceData = {
                   customerInfoState,
                   customerLegalName,
@@ -130,6 +112,7 @@ const createInvoice = () => {
                   paymentInfoState
                 }
                 console.log(invoiceData)
+                // saving invoice details
               }}
             >
               Send
