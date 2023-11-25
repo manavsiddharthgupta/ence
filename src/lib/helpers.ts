@@ -20,6 +20,19 @@ export const callInfoToast = (info: string) => {
   })
 }
 
+export const callErrorToast = (info: string) => {
+  toast.error(info, {
+    position: 'top-center',
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: false,
+    pauseOnHover: false,
+    draggable: true,
+    progress: undefined,
+    theme: localStorage.getItem('theme') === 'Light' ? 'light' : 'dark'
+  })
+}
+
 export const formatTexttoCaps = (text: string) => {
   const firstChar = text[0].toLocaleUpperCase()
   const splittedText = text.slice(1)

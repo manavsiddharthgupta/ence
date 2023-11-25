@@ -38,7 +38,7 @@ export const ItemsInfoInitialState: ItemsInfoState = [
 
 export const PaymentInfoInitailState: PaymentInfoState = {
   terms: 'immediate',
-  status: 'pending',
+  status: 'paid',
   method: 'cash',
   gst: '0',
   notes: 'Thank you for your business! We appreciate your trust.',

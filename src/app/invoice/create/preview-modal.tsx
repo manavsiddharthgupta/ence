@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/tooltip'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Info } from 'lucide-react'
-import { formatAmount, formatDate } from '@/lib/helpers'
+import { callErrorToast, formatAmount, formatDate } from '@/lib/helpers'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { StatusBadge } from '@/components/status-badge'
 import CollapsiblePurchasedItems from './purchased-items'
@@ -125,8 +125,9 @@ const PreviewModal = () => {
       <DialogFooter>
         <div className='flex justify-between w-full'>
           <Button
+            onClick={() => callErrorToast('Database is not available.')}
             variant='ghost'
-            className='dark:hover:bg-zinc-800/50 cursor-pointer hover:bg-zinc-100 min-w-[150px]'
+            className='dark:hover:bg-zinc-800/50 hover:bg-zinc-100 min-w-[150px]'
           >
             Save as draft
           </Button>
@@ -135,12 +136,13 @@ const PreviewModal = () => {
               <Button
                 type='button'
                 variant='secondary'
-                className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50 dark:border-zinc-700 border-zinc-200 border cursor-pointer hover:bg-zinc-100 min-w-[150px]'
+                className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50 dark:border-zinc-700 border-zinc-200 border hover:bg-zinc-100 min-w-[150px]'
               >
                 Close
               </Button>
             </DialogClose>
             <Button
+              onClick={() => callErrorToast('Database is not available.')}
               variant='default'
               className='bg-sky-600 text-white hover:bg-sky-700 min-w-[150px]'
             >

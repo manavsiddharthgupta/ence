@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/popover'
 import { Button } from './ui/button'
 import { LogOut, Settings } from 'lucide-react'
+import { Beta } from './beta-badge'
 
 const Sidebar = ({
   onChangeThemeHandler
@@ -132,8 +133,8 @@ const SideItems = () => {
         if (item.subType?.status) {
           return (
             <li key={item.label}>
-              <button
-                className='text-sm font-medium w-full text-left px-3 py-2 rounded-md flex items-center justify-between hover:dark:bg-zinc-600/20 hover:bg-zinc-200/50'
+              <div
+                className='text-sm font-medium w-full text-left px-3 py-2 rounded-md flex items-center justify-between hover:dark:bg-zinc-600/20 hover:bg-zinc-200/50 cursor-pointer'
                 onClick={() => {
                   if (item.to === collapse) {
                     setCollapse(null)
@@ -147,7 +148,7 @@ const SideItems = () => {
                   <span>{item.label}</span>
                 </div>
                 {item.to === collapse ? <MinusIcon /> : <PlusIcon />}
-              </button>
+              </div>
               {item.to === collapse &&
                 item.subType.values.map((subItem) => {
                   return (
@@ -156,16 +157,17 @@ const SideItems = () => {
                       className='flex gap-4 items-center px-3 text-sm mt-2'
                     >
                       <CornerBottomLeftIcon />
-                      <button
-                        className={`w-[calc(100%-31px)] text-left px-3 py-2 rounded-md font-medium ${
+                      <div
+                        className={`w-[calc(100%-31px)] text-left px-3 py-2 cursor-pointer rounded-md font-medium flex items-center gap-2 ${
                           pathname === subItem.to
                             ? 'dark:bg-white dark:text-black bg-black text-white'
                             : 'hover:dark:bg-zinc-600/20 hover:bg-zinc-200/50'
                         }`}
                         onClick={() => router.push(subItem.to)}
                       >
-                        {subItem.label}
-                      </button>
+                        <span>{subItem.label}</span>
+                        {subItem.to === '/invoice/lists' && <Beta />}
+                      </div>
                     </div>
                   )
                 })}
@@ -174,8 +176,8 @@ const SideItems = () => {
         }
         return (
           <li key={item.label}>
-            <button
-              className={`text-sm font-medium w-full text-left px-3 py-2 rounded-md flex items-center gap-2 ${
+            <div
+              className={`text-sm font-medium w-full text-left px-3 py-2 rounded-md flex items-center gap-2 cursor-pointer ${
                 pathname === item.to
                   ? 'dark:bg-white dark:text-black bg-black text-white'
                   : 'hover:dark:bg-zinc-600/20 hover:bg-zinc-200/50'
@@ -184,7 +186,8 @@ const SideItems = () => {
             >
               {item.icon}
               <span>{item.label}</span>
-            </button>
+              {item.to === '/home' && <Beta />}
+            </div>
           </li>
         )
       })}
