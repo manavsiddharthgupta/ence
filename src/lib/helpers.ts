@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify'
+import { ToWords } from 'to-words'
 
 export const formatAmount = (amount: number) => {
   const formattedNumber = amount.toLocaleString('en-IN', {
@@ -68,3 +69,26 @@ export const formatDate = (inputDate: Date | undefined) => {
     .padStart(2, '0')}`
   return formattedDate
 }
+
+const toWords = new ToWords({
+  localeCode: 'en-IN',
+  converterOptions: {
+    currency: true,
+    ignoreDecimal: false,
+    ignoreZeroCurrency: false,
+    doNotAddOnly: false,
+    currencyOptions: {
+      // can be used to override defaults for the selected locale
+      name: 'Rupee',
+      plural: 'Rupees',
+      symbol: '₹',
+      fractionalUnit: {
+        name: 'Paisa',
+        plural: 'Paise',
+        symbol: ''
+      }
+    }
+  }
+})
+
+export const numTowords = new ToWords()

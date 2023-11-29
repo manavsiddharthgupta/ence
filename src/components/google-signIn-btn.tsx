@@ -6,7 +6,9 @@ import { signIn } from 'next-auth/react'
 const GoogleSignInBtn = () => {
   return (
     <Button
-      onClick={() => signIn('google', { redirect: true, callbackUrl: '/home' })}
+      onClick={() =>
+        signIn('google', { redirect: true, callbackUrl: '/onboarding?scn=1' })
+      }
       variant='secondary'
       className='mt-4'
     >

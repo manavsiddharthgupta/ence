@@ -27,6 +27,14 @@ const Card = ({ children }: { children: React.ReactNode }) => {
     )
   }
 
+  if (pathname.startsWith('/onboarding')) {
+    return (
+      <body>
+        <main className='min-h-screen bg-zinc-900 text-white'>{children}</main>
+      </body>
+    )
+  }
+
   const onSetTheme = () => {
     setTheme((prevState: Theme) => {
       if (prevState === Theme.Dark) {
