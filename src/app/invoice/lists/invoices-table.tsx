@@ -35,7 +35,7 @@ const InvoiceTable = () => {
           return (
             <tr
               key={ind}
-              className={`text-sm ${
+              className={`text-xs ${
                 ind !== sampleInvoices.length - 1
                   ? 'border-b-[1px] border-zinc-200 dark:border-zinc-700/40'
                   : ''
