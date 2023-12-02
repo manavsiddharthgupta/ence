@@ -14,12 +14,20 @@ import { useRouter } from 'next/navigation'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { useState, useEffect } from 'react'
+import { callErrorToast } from '@/lib/helpers'
 
 const OnBoarding = () => {
   const [currTab, setTabIndex] = useState(1)
 
   useEffect(() => {
-    // check if they already onboarded
+    const getOrganization = async () => {
+      const response = await fetch('/api/organization')
+      const orgs = await response.json()
+      if (orgs.ok) {
+        router.push('/')
+      }
+    }
+    getOrganization()
   })
   const tabs = [1, 2, 3, 4]
   const search = useSearchParams()
@@ -29,8 +37,17 @@ const OnBoarding = () => {
     router.replace('/')
   }
 
-  const onSubmitBusinessData = () => {
-    // save on database
+  const onSubmitBusinessData = async () => {
+    // set body
+    const response = await fetch('/api/organization', {
+      method: 'POST',
+      body: JSON.stringify({ orgName: 'Test Name' })
+    })
+    const orgRes = await response.json()
+    if (!orgRes.ok) {
+      callErrorToast('Organization Not Created')
+      return
+    }
     router.replace('/')
   }
   return (
