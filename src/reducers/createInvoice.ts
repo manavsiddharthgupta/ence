@@ -22,7 +22,7 @@ export const CustomerInfoInitialState: CustomerInfoState = {
 export const InvoiceInfoInitialState: InvoiceInfoState = {
   invoiceNumber: null,
   dateIssue: new Date(),
-  dueDate: undefined,
+  dueDate: new Date(),
   sendingMethod: 'mail'
 }
 
