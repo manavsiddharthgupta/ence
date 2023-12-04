@@ -14,7 +14,7 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Info } from 'lucide-react'
+import { Info, Loader2Icon } from 'lucide-react'
 import {
   callErrorToast,
   formatAmount,
@@ -28,7 +28,13 @@ import { useInvoiceContext } from '@/context/invoice'
 import { sampleBusinessDetails } from '@/lib/sample'
 import { formatTexttoCaps } from '@/lib/helpers'
 
-const PreviewModal = () => {
+const PreviewModal = ({
+  isLoadingState,
+  onCreateInvoice
+}: {
+  isLoadingState: string | null
+  onCreateInvoice: () => {}
+}) => {
   // Todo: Will have to revamp the code structure
   const { invoiceInfoState, subTotal, customerInfoState, paymentInfoState } =
     useInvoiceContext()
@@ -130,11 +136,18 @@ const PreviewModal = () => {
       <DialogFooter>
         <div className='flex justify-between w-full'>
           <Button
-            onClick={() => callErrorToast('Database is not available.')}
+            onClick={() =>
+              callErrorToast('This feature is currently unavailable in Beta.')
+            }
             variant='ghost'
             className='dark:hover:bg-zinc-800/50 hover:bg-zinc-100 min-w-[150px]'
+            disabled={isLoadingState !== null}
           >
-            Save as draft
+            {isLoadingState === 'drafting' ? (
+              <Loader2Icon className='animate-spin' />
+            ) : (
+              'Save as draft'
+            )}
           </Button>
           <div className='flex gap-4'>
             <DialogClose asChild>
@@ -147,11 +160,16 @@ const PreviewModal = () => {
               </Button>
             </DialogClose>
             <Button
-              onClick={() => callErrorToast('Database is not available.')}
+              onClick={onCreateInvoice}
               variant='default'
               className='bg-sky-600 text-white hover:bg-sky-700 min-w-[150px]'
+              disabled={isLoadingState !== null}
             >
-              Send
+              {isLoadingState === 'sending' ? (
+                <Loader2Icon className='animate-spin' />
+              ) : (
+                'Send'
+              )}
             </Button>
           </div>
         </div>

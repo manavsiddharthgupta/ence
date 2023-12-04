@@ -22,19 +22,11 @@ export const CustomerInfoInitialState: CustomerInfoState = {
 export const InvoiceInfoInitialState: InvoiceInfoState = {
   invoiceNumber: null,
   dateIssue: new Date(),
-  dueDate: undefined,
+  dueDate: new Date(),
   sendingMethod: 'mail'
 }
 
-export const ItemsInfoInitialState: ItemsInfoState = [
-  {
-    id: uuidv4(),
-    name: '',
-    price: '',
-    quantity: '',
-    total: 0
-  }
-]
+export const ItemsInfoInitialState: ItemsInfoState = []
 
 export const PaymentInfoInitailState: PaymentInfoState = {
   terms: 'immediate',

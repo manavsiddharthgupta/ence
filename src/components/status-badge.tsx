@@ -7,10 +7,10 @@ export const StatusBadge = ({ status }: { status: string }) => {
     case 'Paid':
       className = 'bg-emerald-600 hover:bg-emerald-700'
       break
-    case 'Pending':
+    case 'Due':
       className = 'bg-yellow-600 hover:bg-yellow-700'
       break
-    case 'Unpaid':
+    case 'Overdue':
       className = 'bg-red-600 hover:bg-red-700'
       break
     case 'Partially':

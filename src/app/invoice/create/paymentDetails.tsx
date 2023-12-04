@@ -5,8 +5,12 @@ import { useInvoiceContext } from '@/context/invoice'
 import { callInfoToast, formatAmount } from '@/lib/helpers'
 
 const PaymentDetails = () => {
-  const { paymentInfoState, paymentInfoDispatch, subTotal } =
-    useInvoiceContext()
+  const {
+    paymentInfoState,
+    paymentInfoDispatch,
+    invoiceInfoDispatch,
+    subTotal
+  } = useInvoiceContext()
   const paymentTermsOptions = [
     {
       value: 'immediate',
@@ -27,20 +31,24 @@ const PaymentDetails = () => {
     {
       value: 'net 90',
       label: 'NET 90'
+    },
+    {
+      value: 'custom',
+      label: 'Custom'
     }
   ] // Will Removed From Here
 
   const paymentMethodOptions = [
     { value: 'cash', label: 'Cash' },
-    { value: 'digital wallets', label: 'Digital Wallets' },
-    { value: 'rtgs', label: 'RTGS' }
+    { value: 'digital wallets', label: 'Digital Wallets' }
+    // { value: 'rtgs', label: 'RTGS' }
   ] // Will Removed From Here
 
   const paymentStatusOptions = [
     { value: 'paid', label: 'Paid' },
-    { value: 'pending', label: 'Pending' },
+    { value: 'due', label: 'Due' },
     { value: 'partially paid', label: 'Partially Paid' },
-    { value: 'unpaid', label: 'Unpaid' }
+    { value: 'overdue', label: 'Overdue' }
   ] // Will Removed From Here
 
   const onChangeNotes = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -75,7 +83,7 @@ const PaymentDetails = () => {
       return
     }
 
-    if (value !== 'immediate') {
+    if (value !== 'immediate' && value !== 'custom') {
       callInfoToast('This feature is currently unavailable in Beta.')
       return
     } // For Beta
@@ -85,6 +93,15 @@ const PaymentDetails = () => {
         terms: value
       }
     })
+
+    if (value === 'immediate') {
+      invoiceInfoDispatch({
+        type: 'INVOICE_DUE_DATE',
+        payload: { dueDate: new Date() }
+      })
+    }
+
+    // Todo: change to switch case
   }
 
   const onSetPaymentMethod = (value: any) => {

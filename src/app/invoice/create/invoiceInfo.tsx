@@ -5,7 +5,8 @@ import { useInvoiceContext } from '@/context/invoice'
 import { SetStateAction } from 'react'
 
 const InvoiceInfo = () => {
-  const { invoiceInfoState, invoiceInfoDispatch } = useInvoiceContext()
+  const { invoiceInfoState, invoiceInfoDispatch, paymentInfoDispatch } =
+    useInvoiceContext()
   const sendingInvoiceOptions = [
     { value: 'mail', label: 'Mail' },
     { value: 'whatsapp', label: 'Whatsapp' }
@@ -22,6 +23,10 @@ const InvoiceInfo = () => {
     invoiceInfoDispatch({
       type: 'INVOICE_DUE_DATE',
       payload: { dueDate: value }
+    })
+    paymentInfoDispatch({
+      type: 'PAYMENT_TERMS',
+      payload: { terms: 'custom' }
     })
   }
 

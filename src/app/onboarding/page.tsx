@@ -24,7 +24,7 @@ const OnBoarding = () => {
       const response = await fetch('/api/organization')
       const orgs = await response.json()
       if (orgs.ok) {
-        router.push('/')
+        router.push('/home')
       }
     }
     getOrganization()
@@ -34,7 +34,7 @@ const OnBoarding = () => {
   const router = useRouter()
   const screen = search.get('scn')
   if (!screen) {
-    router.replace('/')
+    router.replace('/home')
   }
 
   const onSubmitBusinessData = async () => {
@@ -48,7 +48,7 @@ const OnBoarding = () => {
       callErrorToast('Organization Not Created')
       return
     }
-    router.replace('/')
+    router.replace('/home')
   }
   return (
     <div className='flex justify-between min-h-screen h-full p-8 max-w-6xl w-full mx-auto'>

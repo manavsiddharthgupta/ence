@@ -5,15 +5,24 @@ import BusinessInfo from './businessInfo'
 import PaymentDetails from './paymentDetails'
 import InvoiceInfo from './invoiceInfo'
 import ItemsInfo from './itemsInfo'
-import { callErrorToast, formatAmount } from '@/lib/helpers'
+import {
+  callErrorToast,
+  callLoadingToast,
+  callSuccessToast,
+  dismissToast,
+  formatAmount,
+  formatInvoiceData
+} from '@/lib/helpers'
 import { Button } from '@/components/ui/button'
 import { useInvoiceContext } from '@/context/invoice'
 import PreviewModal from './preview-modal'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
-import { useTheme } from '@/context/theme'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Loader2Icon } from 'lucide-react'
 
 const createInvoice = () => {
+  const [isLoading, setLoading] = useState<string | null>(null)
   const {
     customerInfoState,
     customerLegalName,
@@ -23,13 +32,40 @@ const createInvoice = () => {
     subTotal,
     setSubTotal
   } = useInvoiceContext()
-  const { theme } = useTheme()
+  const router = useRouter()
   useEffect(() => {
     const sum = itemsInfoState.reduce((accumulator, currentValue) => {
       return accumulator + currentValue.total
     }, 0)
     setSubTotal(sum)
   }, [itemsInfoState])
+
+  const onCreateInvoice = async () => {
+    const formattedData = formatInvoiceData(
+      customerInfoState,
+      customerLegalName,
+      invoiceInfoState,
+      paymentInfoState,
+      itemsInfoState,
+      subTotal
+    )
+    // saving invoice Details
+    setLoading('sending')
+    const loadingToastId = callLoadingToast('Creating invoice...')
+    const response = await fetch('/api/invoice', {
+      method: 'POST',
+      body: JSON.stringify(formattedData)
+    })
+    const invRes = await response.json()
+    dismissToast(loadingToastId)
+    if (invRes.ok) {
+      callSuccessToast('Invoice created successfully!')
+      router.push('/invoice/lists')
+    } else {
+      setLoading(null)
+      callErrorToast('Database is not available')
+    }
+  }
 
   const separatorStyle = 'my-6 h-[0.5px] dark:bg-zinc-700 bg-zinc-300'
   return (
@@ -87,35 +123,37 @@ const createInvoice = () => {
                   Preview
                 </Button>
               </DialogTrigger>
-              <PreviewModal />
+              <PreviewModal
+                onCreateInvoice={onCreateInvoice}
+                isLoadingState={isLoading}
+              />
             </Dialog>
             <Button
               onClick={() => {
-                callErrorToast('Database is not available')
+                callErrorToast('This feature is currently unavailable in Beta.')
                 // save as draft logic
               }}
               variant='outline'
-              className='hover:bg-yellow-600 border-yellow-600 text-yellow-600 hover:text-white bg-transparent border-2'
+              className='hover:bg-yellow-600 border-yellow-600 text-yellow-600 hover:text-white bg-transparent border-2 min-w-[150px]'
+              disabled={isLoading !== null}
             >
-              Save as draft
+              {isLoading === 'drafting' ? (
+                <Loader2Icon className='animate-spin' />
+              ) : (
+                'Save as draft'
+              )}
             </Button>
             <Button
               variant='default'
-              className='bg-sky-600 text-white hover:bg-sky-700'
-              onClick={() => {
-                callErrorToast('Database is not available')
-                const invoiceData = {
-                  customerInfoState,
-                  customerLegalName,
-                  invoiceInfoState,
-                  itemsInfoState,
-                  paymentInfoState
-                }
-                console.log(invoiceData)
-                // saving invoice details
-              }}
+              className='bg-sky-600 text-white hover:bg-sky-700 min-w-[150px]'
+              disabled={isLoading !== null}
+              onClick={onCreateInvoice}
             >
-              Send
+              {isLoading === 'sending' ? (
+                <Loader2Icon className='animate-spin' />
+              ) : (
+                'Send'
+              )}
             </Button>
           </div>
         </div>

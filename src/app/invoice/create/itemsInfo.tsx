@@ -1,12 +1,22 @@
 import InputPullback from '@/components/inputPullback'
 import { ItemsInfoAction } from '@/types/invoice'
-import { Dispatch } from 'react'
+import { Dispatch, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { PlusIcon, TrashIcon } from '@radix-ui/react-icons'
 import { useInvoiceContext } from '@/context/invoice'
 
 const ItemsInfo = () => {
   const { itemsInfoState, itemsInfoDispatch } = useInvoiceContext()
+
+  useEffect(() => {
+    itemsInfoDispatch({
+      type: 'ADD_NEW_ITEM',
+      payload: {
+        index: itemsInfoState.length,
+        value: ''
+      }
+    })
+  }, [])
 
   const onAddNewItem = () => {
     itemsInfoDispatch({
