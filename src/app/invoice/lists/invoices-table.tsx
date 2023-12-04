@@ -1,3 +1,4 @@
+'use client'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { sampleInvoices } from '@/lib/sample'
 import {
@@ -12,8 +13,17 @@ import { Button } from '@/components/ui/button'
 import { StatusBadge } from '@/components/status-badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { User2Icon } from 'lucide-react'
+import { useEffect } from 'react'
 
 const InvoiceTable = () => {
+  useEffect(() => {
+    const getInvoices = async () => {
+      const response = await fetch('/api/invoice')
+      const invoices = await response.json()
+      console.log(invoices)
+    }
+    getInvoices()
+  }, [])
   // revamp code
   return (
     <table className='w-full text-black dark:text-white'>

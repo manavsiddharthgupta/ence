@@ -64,3 +64,53 @@ export type MenuOptions = {
   value: string
   label: string
 }
+
+export type InvoiceBody = {
+  customerInfo: string
+  dateIssue: Date
+  dueDate: Date
+  invoiceNumber: number
+  notes: string
+  shippingCharge: number
+  sendingMethod: SendMethods
+  paymentMethod: PaymentMethods
+  paymentStatus: PaymentStatus
+  paymentTerms: PaymentTerms
+  totalAmount: number
+  dueAmount: number
+  items: InvoiceItemBody[] // Todo: methods, status .. types will be enum
+}
+
+export type InvoiceItemBody = {
+  id: string
+  name: string
+  quantity: number
+  price: number
+  total: number
+}
+
+export enum SendMethods {
+  MAIL = 'MAIL',
+  WHATSAPP = 'WHATSAPP'
+}
+
+export enum PaymentStatus {
+  PAID = 'PAID',
+  DUE = 'DUE',
+  PARTIALLY_PAID = 'PARTIALLY_PAID',
+  OVERDUE = 'OVERDUE'
+}
+
+export enum PaymentMethods {
+  CASH = 'CASH',
+  DIGITAL_WALLET = 'DIGITAL_WALLET'
+}
+
+export enum PaymentTerms {
+  IMMEDIATE = 'IMMEDIATE',
+  NET_15 = 'NET_15',
+  NET_30 = 'NET_30',
+  NET_60 = 'NET_60',
+  NET_90 = 'NET_90',
+  CUSTOM = 'CUSTOM'
+}

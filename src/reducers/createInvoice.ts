@@ -26,15 +26,7 @@ export const InvoiceInfoInitialState: InvoiceInfoState = {
   sendingMethod: 'mail'
 }
 
-export const ItemsInfoInitialState: ItemsInfoState = [
-  {
-    id: uuidv4(),
-    name: '',
-    price: '',
-    quantity: '',
-    total: 0
-  }
-]
+export const ItemsInfoInitialState: ItemsInfoState = []
 
 export const PaymentInfoInitailState: PaymentInfoState = {
   terms: 'immediate',

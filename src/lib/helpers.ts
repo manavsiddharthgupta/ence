@@ -1,4 +1,15 @@
-import { toast } from 'react-toastify'
+import {
+  CustomerInfoState,
+  InvoiceBody,
+  InvoiceInfoState,
+  ItemsInfoState,
+  PaymentInfoState,
+  PaymentMethods,
+  PaymentStatus,
+  PaymentTerms,
+  SendMethods
+} from '@/types/invoice'
+import { Id, toast } from 'react-toastify'
 import { ToWords } from 'to-words'
 
 export const formatAmount = (amount: number) => {
@@ -32,6 +43,32 @@ export const callErrorToast = (info: string) => {
     progress: undefined,
     theme: localStorage.getItem('theme') === 'Light' ? 'light' : 'dark'
   })
+}
+
+export const callLoadingToast = (info: string) => {
+  const loadingToastId = toast.loading(info, {
+    position: 'top-center',
+    autoClose: false,
+    theme: localStorage.getItem('theme') === 'Light' ? 'light' : 'dark'
+  })
+  return loadingToastId
+}
+
+export const callSuccessToast = (info: string) => {
+  toast.success(info, {
+    position: 'top-center',
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: false,
+    pauseOnHover: false,
+    draggable: true,
+    progress: undefined,
+    theme: localStorage.getItem('theme') === 'Light' ? 'light' : 'dark'
+  })
+}
+
+export const dismissToast = (id: Id) => {
+  toast.dismiss(id)
 }
 
 export const formatTexttoCaps = (text: string) => {
@@ -92,3 +129,68 @@ const toWords = new ToWords({
 })
 
 export const numTowords = new ToWords()
+
+export const formatInvoiceData = (
+  customerInfoState: CustomerInfoState,
+  customerLegalName: string,
+  invoiceInfoState: InvoiceInfoState,
+  paymentInfoState: PaymentInfoState,
+  itemsInfoState: ItemsInfoState,
+  subTotal: number
+) => {
+  const formattedIvoiceItems = itemsInfoState.map((item) => {
+    return {
+      id: item.id,
+      name: item.name,
+      quantity: +item.quantity,
+      price: +item.price,
+      total: item.total
+    }
+  })
+  const formattedData: InvoiceBody = {
+    customerInfo: JSON.stringify({
+      ...customerInfoState,
+      customerLegalName
+    }),
+    dateIssue: invoiceInfoState.dateIssue!,
+    dueDate: invoiceInfoState.dueDate!,
+    invoiceNumber: +invoiceInfoState.invoiceNumber!,
+    notes: paymentInfoState.notes,
+    shippingCharge: +paymentInfoState.shippingCharge,
+    sendingMethod:
+      invoiceInfoState.sendingMethod === 'mail'
+        ? SendMethods.MAIL
+        : SendMethods.WHATSAPP,
+    paymentMethod:
+      paymentInfoState.method === 'cash'
+        ? PaymentMethods.CASH
+        : PaymentMethods.DIGITAL_WALLET,
+    paymentStatus:
+      paymentInfoState.status === 'paid'
+        ? PaymentStatus.PAID
+        : paymentInfoState.status === 'due'
+        ? PaymentStatus.DUE
+        : paymentInfoState.status === 'overdue'
+        ? PaymentStatus.OVERDUE
+        : PaymentStatus.PARTIALLY_PAID,
+    paymentTerms:
+      paymentInfoState.terms === 'immediate'
+        ? PaymentTerms.IMMEDIATE
+        : paymentInfoState.terms === 'net 15'
+        ? PaymentTerms.NET_15
+        : paymentInfoState.terms === 'net 30'
+        ? PaymentTerms.NET_30
+        : paymentInfoState.terms === 'net 60'
+        ? PaymentTerms.NET_60
+        : paymentInfoState.terms === 'net 90'
+        ? PaymentTerms.NET_90
+        : PaymentTerms.CUSTOM,
+    totalAmount: subTotal + +paymentInfoState.shippingCharge,
+    dueAmount:
+      paymentInfoState.status === 'paid'
+        ? 0
+        : subTotal + +paymentInfoState.shippingCharge,
+    items: formattedIvoiceItems
+  }
+  return formattedData
+}

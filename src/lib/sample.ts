@@ -22,7 +22,7 @@ export const sampleInvoices = [
     customerName: 'Customer Name 3',
     date: '15-04-2023',
     dueDate: '15-07-2023',
-    status: 'Unpaid',
+    status: 'Overdue',
     total: '₹ 5242.00',
     due: '₹ 5242.00'
   },
@@ -58,7 +58,7 @@ export const sampleInvoices = [
     customerName: 'Customer Name 5',
     date: '01-09-2023',
     dueDate: '02-10-2023',
-    status: 'Pending',
+    status: 'Due',
     total: '₹ 2340.00',
     due: '₹ 2340.00'
   },
@@ -67,7 +67,7 @@ export const sampleInvoices = [
     customerName: 'Customer Name 6',
     date: '29-02-2023',
     dueDate: '20-04-2023',
-    status: 'Pending',
+    status: 'Due',
     total: '₹ 6722.00',
     due: '₹ 6722.00'
   },
@@ -76,7 +76,7 @@ export const sampleInvoices = [
     customerName: 'Customer Name 7',
     date: '29-07-2023',
     dueDate: '20-08-2023',
-    status: 'Pending',
+    status: 'Due',
     total: '₹ 1022.00',
     due: '₹ 1022.00'
   },
