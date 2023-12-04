@@ -194,3 +194,8 @@ export const formatInvoiceData = (
   }
   return formattedData
 }
+
+export const formatCustomerInfo = (customerInfo: string) => {
+  const info = JSON.parse(customerInfo)
+  return info?.customerLegalName?.value || '-'
+}

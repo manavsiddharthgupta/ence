@@ -48,7 +48,7 @@ const Filter = () => {
         <Input
           placeholder='Filter Invoices ...'
           type='text'
-          className='h-9 max-w-xs bg-transparent dark:border-zinc-700 border-zinc-200 hover:bg-zinc-100/80 hover:dark:bg-zinc-800/50'
+          className='h-9 max-w-xs bg-transparent dark:border-zinc-700 border-zinc-200 hover:bg-zinc-100/80 hover:dark:bg-zinc-800/50 min-w-[300px]'
         />
         <Popover>
           <PopoverTrigger asChild>

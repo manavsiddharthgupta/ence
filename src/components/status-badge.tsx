@@ -2,8 +2,10 @@ import { Badge } from './ui/badge'
 
 export const StatusBadge = ({ status }: { status: string }) => {
   // will have to revamp the logic
+  const formattedStatus =
+    status.toLowerCase().charAt(0).toUpperCase() + status.slice(1).toLowerCase()
   let className = ''
-  switch (status) {
+  switch (formattedStatus) {
     case 'Paid':
       className = 'bg-emerald-600 hover:bg-emerald-700'
       break
@@ -19,5 +21,5 @@ export const StatusBadge = ({ status }: { status: string }) => {
     default:
       break
   }
-  return <Badge className={'text-white ' + className}>{status}</Badge>
+  return <Badge className={'text-white ' + className}>{formattedStatus}</Badge>
 }
