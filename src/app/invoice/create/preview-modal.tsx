@@ -168,7 +168,7 @@ const PreviewModal = ({
               {isLoadingState === 'sending' ? (
                 <Loader2Icon className='animate-spin' />
               ) : (
-                'Send'
+                'Create' // todo: chnage to send when send functionality is implemented
               )}
             </Button>
           </div>

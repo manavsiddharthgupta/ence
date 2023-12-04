@@ -3,7 +3,6 @@ import {
   ArrowUpRightFromCircleIcon
 } from 'lucide-react'
 import InvoiceTable from './invoices-table'
-import Filter from './filter'
 
 const Lists = () => {
   // will have to revamp code
@@ -44,12 +43,7 @@ const Lists = () => {
           isLast={true}
         />
       </div>
-      <div className='my-8'>
-        <Filter />
-        <InvoiceCard>
-          <InvoiceTable />
-        </InvoiceCard>
-      </div>
+      <InvoiceTable />
     </div>
   )
 }
@@ -102,14 +96,6 @@ const InvoiceTypeOverview = ({
           />
         )}
       </div>
-    </div>
-  )
-}
-
-const InvoiceCard = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className='dark:bg-zinc-600/5 bg-zinc-300/20 border-[1.5px] dark:border-zinc-700/60 border-zinc-300/60 px-4 py-2 rounded-lg'>
-      {children}
     </div>
   )
 }

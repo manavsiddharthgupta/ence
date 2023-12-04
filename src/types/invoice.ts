@@ -114,3 +114,14 @@ export enum PaymentTerms {
   NET_90 = 'NET_90',
   CUSTOM = 'CUSTOM'
 }
+
+export type InvoicesResponse = {
+  customerInfo: string
+  dateIssue: Date
+  dueAmount: number
+  dueDate: Date
+  id: string
+  invoiceNumber: number
+  paymentStatus: 'PAID' | 'DUE' | 'PARTIALLY_PAID' | 'OVERDUE'
+  totalAmount: number
+}

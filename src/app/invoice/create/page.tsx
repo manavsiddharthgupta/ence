@@ -41,6 +41,25 @@ const createInvoice = () => {
   }, [itemsInfoState])
 
   const onCreateInvoice = async () => {
+    const customerCommunicationValid =
+      invoiceInfoState.sendingMethod === 'whatsapp'
+        ? customerInfoState.whatsappNumber
+        : customerInfoState.email
+    if (!invoiceInfoState.invoiceNumber && !customerCommunicationValid) {
+      callErrorToast(
+        'Please provide invoice number and customer ' +
+          invoiceInfoState.sendingMethod
+      )
+      return
+    } else if (!invoiceInfoState.invoiceNumber) {
+      callErrorToast('Please provide invoice number')
+      return
+    } else if (!customerCommunicationValid) {
+      callErrorToast(
+        'Please provide customer ' + invoiceInfoState.sendingMethod
+      )
+      return
+    }
     const formattedData = formatInvoiceData(
       customerInfoState,
       customerLegalName,
@@ -152,7 +171,7 @@ const createInvoice = () => {
               {isLoading === 'sending' ? (
                 <Loader2Icon className='animate-spin' />
               ) : (
-                'Send'
+                'Create' // todo: chnage to send when send functionality is implemented
               )}
             </Button>
           </div>
