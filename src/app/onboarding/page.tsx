@@ -6,6 +6,7 @@ import {
   BarChart2Icon,
   BookUserIcon,
   ChevronRightCircleIcon,
+  InfoIcon,
   ReceiptIcon,
   ServerIcon
 } from 'lucide-react'
@@ -13,12 +14,21 @@ import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
-import { useState, useEffect } from 'react'
-import { callErrorToast } from '@/lib/helpers'
+import { useState, useEffect, useReducer, Dispatch } from 'react'
+import { callErrorToast, formatOrgData } from '@/lib/helpers'
+import {
+  OrganizationInitialState,
+  organizationReducers
+} from '@/reducers/createOrganization'
+import { OrganizationAction, OrganizationState } from '@/types/organization'
 
 const OnBoarding = () => {
   const [currTab, setTabIndex] = useState(1)
-
+  const [orgState, orgDispatch] = useReducer(
+    organizationReducers,
+    OrganizationInitialState
+  )
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     const getOrganization = async () => {
       const response = await fetch('/api/organization')
@@ -38,12 +48,14 @@ const OnBoarding = () => {
   }
 
   const onSubmitBusinessData = async () => {
-    // set body
+    const formattedOrganization = formatOrgData(orgState)
+    setLoading(true)
     const response = await fetch('/api/organization', {
       method: 'POST',
-      body: JSON.stringify({ orgName: 'Test Name' })
+      body: JSON.stringify({ ...formattedOrganization })
     })
     const orgRes = await response.json()
+    setLoading(false)
     if (!orgRes.ok) {
       callErrorToast('Organization Not Created')
       return
@@ -60,13 +72,13 @@ const OnBoarding = () => {
         </h2>
         <TabsBar tabs={tabs} currTab={currTab} />
         {currTab === 1 ? (
-          <ScreenOne />
+          <ScreenOne orgState={orgState} orgDispatch={orgDispatch} />
         ) : currTab === 2 ? (
-          <ScreenTwo />
+          <ScreenTwo orgState={orgState} orgDispatch={orgDispatch} />
         ) : currTab === 3 ? (
-          <ScreenThree />
+          <ScreenThree orgState={orgState} orgDispatch={orgDispatch} />
         ) : (
-          <ScreenFour />
+          <ScreenFour orgState={orgState} orgDispatch={orgDispatch} />
         )}
         <div className='flex justify-end gap-4 mt-4'>
           <Button
@@ -82,6 +94,9 @@ const OnBoarding = () => {
           </Button>
           <Button
             onClick={() => {
+              if (!orgState.orgName) {
+                return
+              }
               if (currTab === tabs.length) {
                 onSubmitBusinessData()
                 return
@@ -90,6 +105,7 @@ const OnBoarding = () => {
             }}
             variant='default'
             className='bg-white text-black hover:bg-white rounded-full'
+            disabled={loading}
           >
             Continue
             <ChevronRightCircleIcon className='ml-2' />
@@ -103,7 +119,13 @@ const OnBoarding = () => {
 
 export default OnBoarding
 
-const ScreenOne = () => {
+const ScreenOne = ({
+  orgState,
+  orgDispatch
+}: {
+  orgState: OrganizationState
+  orgDispatch: Dispatch<OrganizationAction>
+}) => {
   return (
     <div className='h-[260px] overflow-y-auto px-2'>
       <FeatureCard
@@ -117,29 +139,57 @@ const ScreenOne = () => {
       <div className='mb-1.5 mt-8 flex justify-between'>
         <div className='w-[56%]'>
           <Input
+            value={orgState.orgName || ''}
             type='text'
             placeholder='Business Name'
             className='bg-transparent border-zinc-700/60'
+            onChange={(e) => {
+              orgDispatch({
+                type: 'UPDATE_ORG_NAME',
+                payload: {
+                  orgName: e.target.value
+                }
+              })
+            }}
           />
           <p className='text-red-500 mt-0.5 ml-1.5 flex items-center gap-1 h-3'>
-            {/* <InfoIcon size='8px' />
-            <span className='text-[8px]'>Business field incomplete</span> */}
+            {!orgState.orgName && (
+              <>
+                <InfoIcon size='8px' />
+                <span className='text-[8px]'>Business field required</span>
+              </>
+            )}
           </p>
         </div>
         <div className='w-[42%]'>
           <Input
+            value={orgState.whatsApp || ''}
             type='text'
             placeholder='WhatsApp Number'
             className='bg-transparent border-zinc-700/60'
+            onChange={(e) => {
+              orgDispatch({
+                type: 'UPDATE_WHATSAPP',
+                payload: {
+                  whatsApp: e.target.value
+                }
+              })
+            }}
           />
         </div>
       </div>
-      <BusinessType />
+      <BusinessType orgState={orgState} orgDispatch={orgDispatch} />
     </div>
   )
 }
 
-const ScreenTwo = () => {
+const ScreenTwo = ({
+  orgState,
+  orgDispatch
+}: {
+  orgState: OrganizationState
+  orgDispatch: Dispatch<OrganizationAction>
+}) => {
   return (
     <div className='h-[260px] overflow-y-auto px-2'>
       <div className='flex gap-3'>
@@ -157,16 +207,34 @@ const ScreenTwo = () => {
       <div className='mb-4 mt-8 flex justify-between'>
         <div className='w-[56%]'>
           <Input
+            value={orgState.email || ''}
             type='email'
             placeholder='Business Email'
             className='bg-transparent border-zinc-700/60'
+            onChange={(e) => {
+              orgDispatch({
+                type: 'UPDATE_EMAIL',
+                payload: {
+                  email: e.target.value
+                }
+              })
+            }}
           />
         </div>
         <div className='w-[42%]'>
           <Input
+            value={orgState.website || ''}
             type='text'
             placeholder='Website Link'
             className='bg-transparent border-zinc-700/60'
+            onChange={(e) => {
+              orgDispatch({
+                type: 'UPDATE_WEBSITE',
+                payload: {
+                  website: e.target.value
+                }
+              })
+            }}
           />
         </div>
       </div>
@@ -174,7 +242,13 @@ const ScreenTwo = () => {
   )
 }
 
-const ScreenThree = () => {
+const ScreenThree = ({
+  orgState,
+  orgDispatch
+}: {
+  orgState: OrganizationState
+  orgDispatch: Dispatch<OrganizationAction>
+}) => {
   return (
     <div className='h-[260px] overflow-y-auto px-2'>
       <FeatureCard
@@ -185,31 +259,64 @@ const ScreenThree = () => {
       <div className='mb-4 mt-8 flex justify-between'>
         <div className='w-[56%]'>
           <Input
-            type='email'
+            value={orgState.pan || ''}
+            type='text'
             placeholder='Business PAN'
             className='bg-transparent border-zinc-700/60'
+            onChange={(e) => {
+              orgDispatch({
+                type: 'UPDATE_PAN',
+                payload: {
+                  pan: e.target.value
+                }
+              })
+            }}
           />
         </div>
         <div className='w-[42%]'>
           <Input
+            value={orgState.gstin || ''}
             type='text'
             placeholder='Business GSTIN'
             className='bg-transparent border-zinc-700/60'
+            onChange={(e) => {
+              orgDispatch({
+                type: 'UPDATE_GSTIN',
+                payload: {
+                  gstin: e.target.value
+                }
+              })
+            }}
           />
         </div>
       </div>
       <div className='w-[56%]'>
         <Input
+          value={orgState.businessRegistrationNumber || ''}
           type='text'
-          placeholder='Business GSTIN'
+          placeholder='Business Reg. No.'
           className='bg-transparent border-zinc-700/60'
+          onChange={(e) => {
+            orgDispatch({
+              type: 'UPDATE_BUSINESS_REGISTRATION_NUMBER',
+              payload: {
+                businessRegistrationNumber: e.target.value
+              }
+            })
+          }}
         />
       </div>
     </div>
   )
 }
 
-const ScreenFour = () => {
+const ScreenFour = ({
+  orgState,
+  orgDispatch
+}: {
+  orgState: OrganizationState
+  orgDispatch: Dispatch<OrganizationAction>
+}) => {
   return (
     <div className='h-[260px] overflow-y-auto px-2'>
       <FeatureCard
@@ -220,32 +327,68 @@ const ScreenFour = () => {
       <div className='mb-4 mt-8 flex justify-between'>
         <div className='w-[49%]'>
           <Input
-            type='email'
+            value={orgState.city || ''}
+            type='text'
             placeholder='City'
             className='bg-transparent border-zinc-700/60'
+            onChange={(e) => {
+              orgDispatch({
+                type: 'UPDATE_CITY',
+                payload: {
+                  city: e.target.value
+                }
+              })
+            }}
           />
         </div>
         <div className='w-[49%]'>
           <Input
+            value={orgState.pincode || ''}
             type='number'
             placeholder='Pincode'
             className='bg-transparent border-zinc-700/60 remove-arrow'
+            onChange={(e) => {
+              orgDispatch({
+                type: 'UPDATE_PINCODE',
+                payload: {
+                  pincode: e.target.value
+                }
+              })
+            }}
           />
         </div>
       </div>
       <div className='mb-4 flex justify-between'>
         <div className='w-[49%]'>
           <Input
-            type='email'
+            value={orgState.state || ''}
+            type='text'
             placeholder='State'
             className='bg-transparent border-zinc-700/60'
+            onChange={(e) => {
+              orgDispatch({
+                type: 'UPDATE_STATE',
+                payload: {
+                  state: e.target.value
+                }
+              })
+            }}
           />
         </div>
         <div className='w-[49%]'>
           <Input
+            value={orgState.country || ''}
             type='text'
             placeholder='Country'
             className='bg-transparent border-zinc-700/60'
+            onChange={(e) => {
+              orgDispatch({
+                type: 'UPDATE_COUNTRY',
+                payload: {
+                  country: e.target.value
+                }
+              })
+            }}
           />
         </div>
       </div>
@@ -276,19 +419,52 @@ const TabsBar = ({
   )
 }
 
-const BusinessType = () => {
+const BusinessType = ({
+  orgState,
+  orgDispatch
+}: {
+  orgState: OrganizationState
+  orgDispatch: Dispatch<OrganizationAction>
+}) => {
   const className =
     'flex flex-col items-center justify-between rounded-md border border-zinc-700/60 bg-zinc-900 p-3 hover:bg-zinc-600/5 text-zinc-400 hover:text-zinc-400 peer-data-[state=checked]:border-zinc-100 [&:has([data-state=checked])]:border-zinc-100 peer-data-[state=checked]:text-zinc-100 [&:has([data-state=checked])]:text-zinc-100'
   return (
-    <RadioGroup className='grid grid-cols-3 gap-4'>
+    <RadioGroup
+      value={orgState.businessType!}
+      className='grid grid-cols-3 gap-4'
+    >
       <div>
-        <RadioGroupItem value='RETAIL' id='card' className='peer sr-only' />
+        <RadioGroupItem
+          value='RETAIL'
+          id='card'
+          className='peer sr-only'
+          onClick={(e: any) => {
+            orgDispatch({
+              type: 'UPDATE_BUSINESS_TYPE',
+              payload: {
+                businessType: e.target.value
+              }
+            })
+          }}
+        />
         <Label htmlFor='card' className={className}>
           Retail
         </Label>
       </div>
       <div>
-        <RadioGroupItem value='SERVICE' id='paypal' className='peer sr-only' />
+        <RadioGroupItem
+          value='SERVICE'
+          id='paypal'
+          className='peer sr-only'
+          onClick={(e: any) => {
+            orgDispatch({
+              type: 'UPDATE_BUSINESS_TYPE',
+              payload: {
+                businessType: e.target.value
+              }
+            })
+          }}
+        />
         <Label htmlFor='paypal' className={className}>
           Service
         </Label>
@@ -298,6 +474,14 @@ const BusinessType = () => {
           value='MANUFACTURING'
           id='apple'
           className='peer sr-only'
+          onClick={(e: any) => {
+            orgDispatch({
+              type: 'UPDATE_BUSINESS_TYPE',
+              payload: {
+                businessType: e.target.value
+              }
+            })
+          }}
         />
         <Label htmlFor='apple' className={className}>
           Manufacturing

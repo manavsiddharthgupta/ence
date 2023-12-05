@@ -4,49 +4,54 @@ import { db } from '@/lib/db'
 import { InvoiceBody } from '@/types/invoice'
 
 export async function GET() {
-  const session = await getServerSession(authOptions)
-  const email = session?.user?.email
-  if (!email) {
-    console.error('Error:', 'Not Authorized')
-    return Response.json({ ok: false, data: null, status: 401 })
-  }
-  const org = await db.user.findUnique({
-    where: {
-      email: email
-    },
-    select: {
-      email: true,
-      organizations: {
-        select: {
-          id: true,
-          orgName: true
+  try {
+    const session = await getServerSession(authOptions)
+    const email = session?.user?.email
+    if (!email) {
+      console.error('Error:', 'Not Authorized')
+      return Response.json({ ok: false, data: null, status: 401 })
+    }
+    const org = await db.user.findUnique({
+      where: {
+        email: email
+      },
+      select: {
+        email: true,
+        organizations: {
+          select: {
+            id: true,
+            orgName: true
+          }
         }
       }
-    }
-  })
+    })
 
-  if (!org?.organizations?.id) {
-    console.error('Error:', 'Organization Not Found')
-    return Response.json({ ok: false, data: null, status: 404 })
+    if (!org?.organizations?.id) {
+      console.error('Error:', 'Organization Not Found')
+      return Response.json({ ok: false, data: null, status: 404 })
+    }
+
+    const response = await db.invoice.findMany({
+      where: {
+        organizationId: org.organizations.id
+      },
+      select: {
+        id: true,
+        invoiceNumber: true,
+        customerInfo: true,
+        dateIssue: true,
+        dueDate: true,
+        paymentStatus: true,
+        dueAmount: true,
+        totalAmount: true
+      }
+    })
+
+    return Response.json({ ok: true, data: response, status: 200 })
+  } catch (error) {
+    console.error('Error:', error)
+    return Response.json({ ok: false, data: null, status: 500 })
   }
-
-  const response = await db.invoice.findMany({
-    where: {
-      organizationId: org.organizations.id
-    },
-    select: {
-      id: true,
-      invoiceNumber: true,
-      customerInfo: true,
-      dateIssue: true,
-      dueDate: true,
-      paymentStatus: true,
-      dueAmount: true,
-      totalAmount: true
-    }
-  })
-
-  return Response.json({ ok: true, data: response, status: 200 })
 }
 
 export async function POST(request: Request) {
