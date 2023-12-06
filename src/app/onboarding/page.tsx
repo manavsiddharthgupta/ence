@@ -163,7 +163,7 @@ const ScreenOne = ({
         </div>
         <div className='w-[42%]'>
           <Input
-            value={orgState.whatsApp || ''}
+            value={orgState.whatsApp?.toString() || ''}
             type='text'
             placeholder='WhatsApp Number'
             className='bg-transparent border-zinc-700/60'

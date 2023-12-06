@@ -36,7 +36,7 @@ const InputPullback = ({
       <input
         className='w-full h-full border-[1px] dark:border-zinc-600 border-zinc-400 bg-transparent outline-none text-xs z-10 absolute left-0 top-0 px-2.5 pt-1.5 rounded-md remove-arrow'
         type={type}
-        onFocus={() => setIfFocused(true)}
+        onFocus={() => (readonly ? setIfFocused(false) : setIfFocused(true))}
         value={value === null ? '' : value}
         onBlur={(e) => {
           if (e.target.value.trim() === '') {
