@@ -51,7 +51,7 @@ const BusinessInfo = () => {
           readonly={true}
         />
         <InputPullback
-          value={organizationDetails?.email || '-'}
+          value={organizationDetails?.email || ''}
           type='text'
           placeholder='Email'
           readonly={true}
@@ -68,7 +68,7 @@ const BusinessInfo = () => {
         </div>
         <div className='w-[48%]'>
           <InputPullback
-            value={orgsAddress?.city || '-'}
+            value={orgsAddress?.city || ''}
             type='text'
             placeholder='City'
             readonly={true}
@@ -78,7 +78,7 @@ const BusinessInfo = () => {
       <div className='w-full flex mt-4 justify-between'>
         <div className='w-[48%]'>
           <InputPullback
-            value={orgsAddress?.state || '-'}
+            value={orgsAddress?.state || ''}
             type='text'
             placeholder='State'
             readonly={true}
@@ -86,7 +86,7 @@ const BusinessInfo = () => {
         </div>
         <div className='w-[48%]'>
           <InputPullback
-            value={orgsAddress?.country || '-'}
+            value={orgsAddress?.country || ''}
             type='text'
             placeholder='Country'
             readonly={true}
