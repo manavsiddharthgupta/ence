@@ -9,6 +9,7 @@ import {
   PaymentTerms,
   SendMethods
 } from '@/types/invoice'
+import { OrganizationBody, OrganizationState } from '@/types/organization'
 import { Id, toast } from 'react-toastify'
 import { ToWords } from 'to-words'
 
@@ -198,4 +199,25 @@ export const formatInvoiceData = (
 export const formatCustomerInfo = (customerInfo: string) => {
   const info = JSON.parse(customerInfo)
   return info?.customerLegalName?.value || '-'
+}
+
+export const formatOrgData = (orgInfo: OrganizationState) => {
+  const whatsappNumber = orgInfo.whatsApp === null ? null : +orgInfo.whatsApp
+  const formattedData: OrganizationBody = {
+    orgName: orgInfo.orgName!,
+    whatsApp: whatsappNumber,
+    email: orgInfo.email,
+    businessType: orgInfo.businessType,
+    website: orgInfo.website,
+    pan: orgInfo.pan,
+    gstin: orgInfo.gstin,
+    businessRegistrationNumber: orgInfo.businessRegistrationNumber,
+    address: JSON.stringify({
+      city: orgInfo.city,
+      pincode: orgInfo.pincode,
+      state: orgInfo.state,
+      country: orgInfo.state
+    })
+  }
+  return formattedData
 }

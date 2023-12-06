@@ -23,14 +23,14 @@ export const InvoiceInfoInitialState: InvoiceInfoState = {
   invoiceNumber: null,
   dateIssue: new Date(),
   dueDate: new Date(),
-  sendingMethod: 'mail'
+  sendingMethod: 'whatsapp'
 }
 
 export const ItemsInfoInitialState: ItemsInfoState = []
 
 export const PaymentInfoInitailState: PaymentInfoState = {
   terms: 'immediate',
-  status: 'paid',
+  status: 'due',
   method: 'cash',
   gst: '0',
   notes: 'Thank you for your business! We appreciate your trust.',
