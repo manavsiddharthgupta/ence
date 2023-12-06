@@ -31,7 +31,11 @@ export async function GET() {
       console.error('Error:', 'Organization Not Found')
       return Response.json({ ok: false, data: null, status: 404 })
     }
-    return Response.json({ ok: true, data: organization, staus: 200 })
+    const sanitizedOrganization = {
+      ...organization,
+      whatsappNumber: Number(organization.whatsappNumber)
+    }
+    return Response.json({ ok: true, data: sanitizedOrganization, staus: 200 })
   } catch (error) {
     console.error('Error:', error)
     return Response.json({ ok: false, data: null, status: 500 })

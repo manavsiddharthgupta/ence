@@ -1,5 +1,6 @@
 import InputPullback from '@/components/inputPullback'
 import { Skeleton } from '@/components/ui/skeleton'
+import { OrganizationAddress } from '@/types/organization'
 import { Organization } from '@prisma/client'
 import { useEffect, useState } from 'react'
 // Todo: remove sampleDetails
@@ -7,10 +8,9 @@ const BusinessInfo = () => {
   const [organizationDetails, setOrganizationDetails] = useState<Organization>()
   const [loading, setLoading] = useState(false)
 
-  const orgsAddress = organizationDetails?.address
+  const orgsAddress: OrganizationAddress = organizationDetails?.address
     ? JSON.parse(organizationDetails?.address.toString())
     : null
-  console.log(orgsAddress)
   useEffect(() => {
     const getOrgDetails = async () => {
       setLoading(true)
@@ -41,7 +41,11 @@ const BusinessInfo = () => {
           readonly={true}
         />
         <InputPullback
-          value={organizationDetails?.whatsappNumber || '-'}
+          value={
+            organizationDetails?.whatsappNumber?.toString() === '0'
+              ? ''
+              : organizationDetails?.whatsappNumber?.toString() || ''
+          }
           type='number'
           placeholder='Whatsapp Number'
           readonly={true}
@@ -56,7 +60,7 @@ const BusinessInfo = () => {
       <div className='w-full flex mt-4 justify-between'>
         <div className='w-[48%]'>
           <InputPullback
-            value={'-'}
+            value={orgsAddress?.pincode || ''}
             type='number'
             placeholder='Pincode'
             readonly={true}
@@ -64,7 +68,7 @@ const BusinessInfo = () => {
         </div>
         <div className='w-[48%]'>
           <InputPullback
-            value={'-'}
+            value={orgsAddress?.city || '-'}
             type='text'
             placeholder='City'
             readonly={true}
@@ -74,7 +78,7 @@ const BusinessInfo = () => {
       <div className='w-full flex mt-4 justify-between'>
         <div className='w-[48%]'>
           <InputPullback
-            value={'-'}
+            value={orgsAddress?.state || '-'}
             type='text'
             placeholder='State'
             readonly={true}
@@ -82,7 +86,7 @@ const BusinessInfo = () => {
         </div>
         <div className='w-[48%]'>
           <InputPullback
-            value={'-'}
+            value={orgsAddress?.country || '-'}
             type='text'
             placeholder='Country'
             readonly={true}

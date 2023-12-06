@@ -202,10 +202,9 @@ export const formatCustomerInfo = (customerInfo: string) => {
 }
 
 export const formatOrgData = (orgInfo: OrganizationState) => {
-  const whatsappNumber = orgInfo.whatsApp === null ? null : +orgInfo.whatsApp
   const formattedData: OrganizationBody = {
     orgName: orgInfo.orgName!,
-    whatsApp: whatsappNumber,
+    whatsApp: orgInfo.whatsApp,
     email: orgInfo.email,
     businessType: orgInfo.businessType,
     website: orgInfo.website,

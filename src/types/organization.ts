@@ -1,6 +1,6 @@
 export type OrganizationState = {
   orgName: string | null
-  whatsApp: string | null
+  whatsApp: bigint | null
   website: string | null
   businessRegistrationNumber: string | null
   email: string | null
@@ -20,7 +20,7 @@ export interface OrganizationAction {
 
 export type OrganizationBody = {
   orgName: string
-  whatsApp: number | null
+  whatsApp: bigint | null
   website: string | null
   businessRegistrationNumber: string | null
   email: string | null
@@ -28,4 +28,11 @@ export type OrganizationBody = {
   pan: string | null
   businessType: 'MANUFACTURING' | 'RETAIL' | 'SERVICE' | null
   address: string
+}
+
+export type OrganizationAddress = {
+  city: string | null
+  pincode: string | number | null
+  state: string | null
+  country: string | null
 }
