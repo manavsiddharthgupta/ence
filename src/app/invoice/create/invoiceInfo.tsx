@@ -2,11 +2,22 @@ import InputDate from '@/components/input-date'
 import InputPullback from '@/components/inputPullback'
 import { SelectMenu } from '@/components/selectMenu'
 import { useInvoiceContext } from '@/context/invoice'
-import { SetStateAction } from 'react'
+import { SetStateAction, useEffect } from 'react'
 
 const InvoiceInfo = () => {
   const { invoiceInfoState, invoiceInfoDispatch, paymentInfoDispatch } =
     useInvoiceContext()
+
+  useEffect(() => {
+    invoiceInfoDispatch({
+      type: 'INVOICE_DUE_DATE',
+      payload: { dueDate: new Date() }
+    })
+    invoiceInfoDispatch({
+      type: 'INVOICE_DATE_ISSUE',
+      payload: { dateIssue: new Date() }
+    })
+  }, [])
   const sendingInvoiceOptions = [
     { value: 'mail', label: 'Mail' },
     { value: 'whatsapp', label: 'Whatsapp' }
