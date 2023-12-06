@@ -215,7 +215,7 @@ export const formatOrgData = (orgInfo: OrganizationState) => {
       city: orgInfo.city,
       pincode: orgInfo.pincode,
       state: orgInfo.state,
-      country: orgInfo.state
+      country: orgInfo.country
     })
   }
   return formattedData

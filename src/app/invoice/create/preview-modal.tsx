@@ -25,19 +25,28 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { StatusBadge } from '@/components/status-badge'
 import CollapsiblePurchasedItems from './purchased-items'
 import { useInvoiceContext } from '@/context/invoice'
-import { sampleBusinessDetails } from '@/lib/sample'
 import { formatTexttoCaps } from '@/lib/helpers'
+import { Organization } from '@prisma/client'
+import { OrganizationAddress } from '@/types/organization'
 
 const PreviewModal = ({
   isLoadingState,
-  onCreateInvoice
+  onCreateInvoice,
+  organizationDetails,
+  loading
 }: {
   isLoadingState: string | null
   onCreateInvoice: () => {}
+  organizationDetails: Organization | undefined
+  loading: boolean
 }) => {
   // Todo: Will have to revamp the code structure
   const { invoiceInfoState, subTotal, customerInfoState, paymentInfoState } =
     useInvoiceContext()
+
+  const orgsAddress: OrganizationAddress = organizationDetails?.address
+    ? JSON.parse(organizationDetails?.address.toString())
+    : null
   return (
     <DialogContent className='bg-white dark:bg-zinc-900 dark:border-zinc-700 border-zinc-200 max-w-3xl'>
       <DialogHeader>
@@ -82,7 +91,9 @@ const PreviewModal = ({
                     To
                   </p>
                   <p className='w-[90%]'>
-                    {customerInfoState.email
+                    {customerInfoState.email &&
+                    customerInfoState.state &&
+                    customerInfoState.country
                       ? `Test Customer, ${customerInfoState.state}, ${customerInfoState.country}`
                       : '-'}
                   </p>
@@ -91,7 +102,11 @@ const PreviewModal = ({
                   <p className='text-zinc-800/60 dark:text-zinc-200/60 w-[10%]'>
                     From
                   </p>
-                  <p className='w-[90%]'>{`${sampleBusinessDetails.name}, ${sampleBusinessDetails.state}, ${sampleBusinessDetails.country}`}</p>
+                  <p className='w-[90%]'>
+                    {loading
+                      ? '-'
+                      : `${organizationDetails?.orgName}, ${orgsAddress?.state}, ${orgsAddress?.country}`}
+                  </p>
                 </div>
                 <div className='flex text-sm'>
                   <p className='text-zinc-800/60 dark:text-zinc-200/60 w-[10%]'>

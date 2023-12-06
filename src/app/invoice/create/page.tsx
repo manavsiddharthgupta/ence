@@ -20,9 +20,13 @@ import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Loader2Icon } from 'lucide-react'
+import { Organization } from '@prisma/client'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const createInvoice = () => {
   const [isLoading, setLoading] = useState<string | null>(null)
+  const [organizationDetails, setOrganizationDetails] = useState<Organization>()
+  const [loadingOrganization, setLoadingOrganization] = useState(false)
   const {
     customerInfoState,
     customerLegalName,
@@ -33,6 +37,23 @@ const createInvoice = () => {
     setSubTotal
   } = useInvoiceContext()
   const router = useRouter()
+
+  useEffect(() => {
+    const getOrgDetails = async () => {
+      setLoadingOrganization(true)
+      const response = await fetch('/api/organization')
+      const organizationRes = await response.json()
+      if (!organizationRes.ok) {
+        setOrganizationDetails(undefined)
+        setLoadingOrganization(false)
+        return
+      }
+      setOrganizationDetails(organizationRes.data)
+      setLoadingOrganization(false)
+    }
+    getOrgDetails()
+  }, [])
+
   useEffect(() => {
     const sum = itemsInfoState.reduce((accumulator, currentValue) => {
       return accumulator + currentValue.total
@@ -85,6 +106,16 @@ const createInvoice = () => {
       callErrorToast('Database is not available')
     }
   }
+  let organizationName = loadingOrganization ? (
+    <Skeleton className='rounded-md h-12 w-full bg-gray-500/10' />
+  ) : (
+    <>
+      <h2 className='text-3xl font-medium'>
+        {organizationDetails?.orgName || '-'}
+      </h2>
+      <h1 className='text-5xl font-bold'>E</h1>
+    </>
+  )
 
   const separatorStyle = 'my-6 h-[0.5px] dark:bg-zinc-700 bg-zinc-300'
   return (
@@ -98,13 +129,15 @@ const createInvoice = () => {
           </p>
         </div>
         <div className='w-full flex justify-between items-center'>
-          <h2 className='text-3xl font-medium'>Ence Interprises</h2>
-          <h1 className='text-5xl font-bold'>E</h1>
+          {organizationName}
         </div>
         <Separator className='my-4 dark:bg-zinc-700 bg-zinc-300' />
         <div className='flex justify-between'>
           <div className='w-[45%]'>
-            <BusinessInfo />
+            <BusinessInfo
+              organizationDetails={organizationDetails}
+              loading={loadingOrganization}
+            />
           </div>
           <div className='w-[45%]'>
             <CustomerInfo />
@@ -145,6 +178,8 @@ const createInvoice = () => {
               <PreviewModal
                 onCreateInvoice={onCreateInvoice}
                 isLoadingState={isLoading}
+                organizationDetails={organizationDetails}
+                loading={loadingOrganization}
               />
             </Dialog>
             <Button
