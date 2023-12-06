@@ -1,25 +1,53 @@
 import InputPullback from '@/components/inputPullback'
-import { sampleBusinessDetails } from '@/lib/sample'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Organization } from '@prisma/client'
+import { useEffect, useState } from 'react'
 // Todo: remove sampleDetails
 const BusinessInfo = () => {
+  const [organizationDetails, setOrganizationDetails] = useState<Organization>()
+  const [loading, setLoading] = useState(false)
+
+  const orgsAddress = organizationDetails?.address
+    ? JSON.parse(organizationDetails?.address.toString())
+    : null
+  console.log(orgsAddress)
+  useEffect(() => {
+    const getOrgDetails = async () => {
+      setLoading(true)
+      const response = await fetch('/api/organization')
+      const organizationRes = await response.json()
+      if (!organizationRes.ok) {
+        setOrganizationDetails(undefined)
+        setLoading(false)
+        return
+      }
+      setOrganizationDetails(organizationRes.data)
+      setLoading(false)
+    }
+    getOrgDetails()
+  }, [])
+
+  if (loading) {
+    return <BusinessSkeleton />
+  }
   return (
     <>
       <h3 className='text-lg'>Business info</h3>
       <div className='mt-2 flex flex-col gap-4'>
         <InputPullback
-          value={sampleBusinessDetails.name}
+          value={organizationDetails?.orgName || '-'}
           type='text'
           placeholder='Legal Name'
           readonly={true}
         />
         <InputPullback
-          value={sampleBusinessDetails.whatsappNumber}
+          value={organizationDetails?.whatsappNumber || '-'}
           type='number'
           placeholder='Whatsapp Number'
           readonly={true}
         />
         <InputPullback
-          value={sampleBusinessDetails.email}
+          value={organizationDetails?.email || '-'}
           type='text'
           placeholder='Email'
           readonly={true}
@@ -28,7 +56,7 @@ const BusinessInfo = () => {
       <div className='w-full flex mt-4 justify-between'>
         <div className='w-[48%]'>
           <InputPullback
-            value={sampleBusinessDetails.pincode}
+            value={'-'}
             type='number'
             placeholder='Pincode'
             readonly={true}
@@ -36,7 +64,7 @@ const BusinessInfo = () => {
         </div>
         <div className='w-[48%]'>
           <InputPullback
-            value={sampleBusinessDetails.city}
+            value={'-'}
             type='text'
             placeholder='City'
             readonly={true}
@@ -46,7 +74,7 @@ const BusinessInfo = () => {
       <div className='w-full flex mt-4 justify-between'>
         <div className='w-[48%]'>
           <InputPullback
-            value={sampleBusinessDetails.state}
+            value={'-'}
             type='text'
             placeholder='State'
             readonly={true}
@@ -54,7 +82,7 @@ const BusinessInfo = () => {
         </div>
         <div className='w-[48%]'>
           <InputPullback
-            value={sampleBusinessDetails.country}
+            value={'-'}
             type='text'
             placeholder='Country'
             readonly={true}
@@ -66,3 +94,18 @@ const BusinessInfo = () => {
 }
 
 export default BusinessInfo
+
+const BusinessSkeleton = () => {
+  return (
+    <>
+      <h3 className='text-lg'>Business info</h3>
+      <div className='mt-2 flex flex-col gap-4'>
+        <Skeleton className='rounded-md h-10 bg-gray-500/10' />
+        <Skeleton className='rounded-md h-10 bg-gray-500/10' />
+        <Skeleton className='rounded-md h-10 bg-gray-500/10' />
+        <Skeleton className='rounded-md h-10 bg-gray-500/10' />
+        <Skeleton className='rounded-md h-10 bg-gray-500/10' />
+      </div>
+    </>
+  )
+}

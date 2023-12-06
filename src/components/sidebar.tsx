@@ -9,7 +9,7 @@ import {
   MinusIcon,
   CornerBottomLeftIcon
 } from '@radix-ui/react-icons'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Theme, useTheme } from '@/context/theme'
 import { signOut, useSession } from 'next-auth/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -21,12 +21,31 @@ import {
 import { Button } from './ui/button'
 import { LogOut, Settings } from 'lucide-react'
 import { Beta } from './beta-badge'
+import { Skeleton } from './ui/skeleton'
 
 const Sidebar = ({
   onChangeThemeHandler
 }: {
   onChangeThemeHandler: () => void
 }) => {
+  const [orgName, setOrgName] = useState('-')
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const getOrgDetails = async () => {
+      setLoading(true)
+      const response = await fetch('/api/organization')
+      const organizationRes = await response.json()
+      if (!organizationRes.ok) {
+        setOrgName('-')
+        setLoading(false)
+        return
+      }
+      setOrgName(organizationRes.data?.orgName)
+      setLoading(false)
+    }
+    getOrgDetails()
+  }, [])
   const { theme } = useTheme()
   const { data: session } = useSession()
   console.log(session) //Todo : remove
@@ -80,9 +99,13 @@ const Sidebar = ({
           </Popover>
           <div>
             <p className='text-sm font-medium'>{session?.user?.name || '-'}</p>
-            <p className='text-xs leading-3 font-medium text-zinc-600 dark:text-zinc-400'>
-              Test Org
-            </p>
+            {loading ? (
+              <Skeleton className='rounded-md h-3 bg-gray-500/10' />
+            ) : (
+              <p className='text-xs leading-3 font-medium text-zinc-600 dark:text-zinc-400'>
+                {orgName}
+              </p>
+            )}
           </div>
         </div>
       </div>
