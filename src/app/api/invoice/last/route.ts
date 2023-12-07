@@ -1,6 +1,7 @@
 import { getServerSession } from 'next-auth'
 import { db } from '@/lib/db'
 import { authOptions } from '../../auth/[...nextauth]/route'
+import { error } from 'console'
 
 export async function GET() {
   try {
@@ -27,7 +28,7 @@ export async function GET() {
 
     if (!org?.organizations?.id) {
       console.error('Error:', 'Organization Not Found')
-      return Response.json({ ok: false, data: null, status: 404 })
+      return Response.json({ ok: false, data: error, status: 404 })
     }
 
     const response = await db.invoice.findFirst({
