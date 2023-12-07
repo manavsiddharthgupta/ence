@@ -110,7 +110,7 @@ export async function GET() {
     })
   } catch (error) {
     console.error('Error retrieving invoice statistics:', error)
-    return Response.json({ ok: false, data: null, status: 500 })
+    return Response.json({ ok: false, data: error, status: 500 })
   }
 
   function calculatePercentageChange(
