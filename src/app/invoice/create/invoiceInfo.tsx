@@ -9,6 +9,21 @@ const InvoiceInfo = () => {
     useInvoiceContext()
 
   useEffect(() => {
+    const getLastInvoiceNumber = async () => {
+      const response = await fetch('/api/invoice/last')
+      const lastInvNumber = await response.json()
+      if (!lastInvNumber.ok) {
+        return
+      }
+      invoiceInfoDispatch({
+        type: 'INVOICE_NUMBER',
+        payload: { invoiceNumber: lastInvNumber?.data?.invoiceNumber + 1 || 1 }
+      })
+    }
+    getLastInvoiceNumber()
+  }, [])
+
+  useEffect(() => {
     invoiceInfoDispatch({
       type: 'INVOICE_DUE_DATE',
       payload: { dueDate: new Date() }

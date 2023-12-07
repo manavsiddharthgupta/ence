@@ -125,3 +125,30 @@ export type InvoicesResponse = {
   paymentStatus: 'PAID' | 'DUE' | 'PARTIALLY_PAID' | 'OVERDUE'
   totalAmount: number
 }
+
+export type InvoicesOverview = {
+  totalCountAllTime: {
+    paid: number | null
+    due: number | null
+    overdue: number | null
+    partiallyPaid: number | null
+  }
+  totalCountCurrentWeek: {
+    paid: number | null
+    due: number | null
+    overdue: number | null
+    partiallyPaid: number | null
+  }
+  totalCountPreviousWeek: {
+    paid: number | null
+    due: number | null
+    overdue: number | null
+    partiallyPaid: number | null
+  }
+  percentageChange: {
+    paid: number | null
+    due: number | null
+    overdue: number | null
+    partiallyPaid: number | null
+  }
+}

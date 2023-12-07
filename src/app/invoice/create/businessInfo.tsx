@@ -2,30 +2,17 @@ import InputPullback from '@/components/inputPullback'
 import { Skeleton } from '@/components/ui/skeleton'
 import { OrganizationAddress } from '@/types/organization'
 import { Organization } from '@prisma/client'
-import { useEffect, useState } from 'react'
 // Todo: remove sampleDetails
-const BusinessInfo = () => {
-  const [organizationDetails, setOrganizationDetails] = useState<Organization>()
-  const [loading, setLoading] = useState(false)
-
+const BusinessInfo = ({
+  organizationDetails,
+  loading
+}: {
+  organizationDetails: Organization | undefined
+  loading: boolean
+}) => {
   const orgsAddress: OrganizationAddress = organizationDetails?.address
     ? JSON.parse(organizationDetails?.address.toString())
     : null
-  useEffect(() => {
-    const getOrgDetails = async () => {
-      setLoading(true)
-      const response = await fetch('/api/organization')
-      const organizationRes = await response.json()
-      if (!organizationRes.ok) {
-        setOrganizationDetails(undefined)
-        setLoading(false)
-        return
-      }
-      setOrganizationDetails(organizationRes.data)
-      setLoading(false)
-    }
-    getOrgDetails()
-  }, [])
 
   if (loading) {
     return <BusinessSkeleton />
