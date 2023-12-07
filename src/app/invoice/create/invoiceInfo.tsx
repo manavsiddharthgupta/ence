@@ -17,7 +17,7 @@ const InvoiceInfo = () => {
       }
       invoiceInfoDispatch({
         type: 'INVOICE_NUMBER',
-        payload: { invoiceNumber: lastInvNumber?.data?.invoiceNumber + 1 || 0 }
+        payload: { invoiceNumber: lastInvNumber?.data?.invoiceNumber + 1 || 1 }
       })
     }
     getLastInvoiceNumber()
