@@ -63,6 +63,10 @@ const InvoiceInfo = () => {
       type: 'INVOICE_DATE_ISSUE',
       payload: { dateIssue: value }
     })
+    paymentInfoDispatch({
+      type: 'PAYMENT_TERMS',
+      payload: { terms: 'custom' }
+    })
   }
 
   const onSetMethod = (value: any) => {

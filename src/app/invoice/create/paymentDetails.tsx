@@ -1,9 +1,9 @@
 import { SelectMenu } from '@/components/selectMenu'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import UploadFile from '@/components/upload-files'
 import { useInvoiceContext } from '@/context/invoice'
 import { callInfoToast, formatAmount } from '@/lib/helpers'
-
 const PaymentDetails = () => {
   const {
     paymentInfoState,
@@ -190,8 +190,11 @@ const PaymentDetails = () => {
             onChange={onChangeNotes}
             value={paymentInfoState.notes}
           />
+          <div className='mt-4'>
+            <UploadFile />
+          </div>
         </div>
-        <div className='max-w-xs w-full p-1'>
+        <div className='max-w-xs w-full p-1 mt-2'>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
             <p>Subtotal</p>
             <p>{formatAmount(subTotal)}</p>
@@ -203,11 +206,11 @@ const PaymentDetails = () => {
               type='number'
               className='outline-none border-none w-1/3 bg-transparent text-right remove-arrow'
               onChange={onChangeGstPercent}
-              readOnly // For Beta
+              readOnly // For Beta, will change later
             />
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
-            <p>Tax</p>
+            <p>Extra fee</p>
             <p>{formatAmount(0)}</p>
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5 dark:bg-zinc-800/10 bg-zinc-200/40 rounded-sm'>
