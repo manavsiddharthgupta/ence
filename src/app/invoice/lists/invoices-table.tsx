@@ -19,10 +19,11 @@ import { formatAmount, formatCustomerInfo, formatDate } from '@/lib/helpers'
 import TableSkeleton from './table-skeleton'
 import Image from 'next/image'
 import Filter from './filter'
+import createInv from '@/svgs/create-inv.svg'
 
 const InvoiceTable = () => {
   const [invoices, setInvoices] = useState<InvoicesResponse[]>([])
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   useEffect(() => {
     const getInvoices = async () => {
@@ -134,6 +135,7 @@ const InvoiceTable = () => {
             )}
           </tbody>
         </table>
+        {!loading && invoices?.length === 0 && <InvoiceEmptyState />}
       </InvoiceCard>
     </div>
   )
@@ -145,6 +147,23 @@ const InvoiceCard = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className='dark:bg-zinc-600/5 bg-zinc-300/20 border-[1.5px] dark:border-zinc-700/60 border-zinc-300/60 px-4 py-2 rounded-lg'>
       {children}
+    </div>
+  )
+}
+
+const InvoiceEmptyState = () => {
+  return (
+    <div className='mt-4 mb-8 text-center w-full'>
+      <Image
+        src={createInv}
+        className='mx-auto'
+        alt='empty-inv'
+        width={256}
+        height={232}
+      />
+      <p className='text-xs font-light text-black dark:text-white max-w-[200px] mx-auto '>
+        There are no invoices to display at the moment. You're all caught up!
+      </p>
     </div>
   )
 }
