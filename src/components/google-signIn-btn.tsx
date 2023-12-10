@@ -13,7 +13,7 @@ const GoogleSignInBtn = () => {
       className='mt-4'
     >
       <Image src={google} alt='google' width={24} height={24} />
-      <span className='ml-2'>Sign With Google</span>
+      <span className='ml-2'>Continue With Google</span>
     </Button>
   )
 }

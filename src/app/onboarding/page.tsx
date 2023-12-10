@@ -21,6 +21,8 @@ import {
   organizationReducers
 } from '@/reducers/createOrganization'
 import { OrganizationAction, OrganizationState } from '@/types/organization'
+import Image from 'next/image'
+import bizCon from '@/svgs/biz-con.svg'
 
 const OnBoarding = () => {
   const [currTab, setTabIndex] = useState(1)
@@ -64,7 +66,7 @@ const OnBoarding = () => {
   }
   return (
     <div className='flex justify-between min-h-screen h-full p-8 max-w-6xl w-full mx-auto'>
-      <div className='w-3/5'>
+      <div className='w-[57%]'>
         <h1 className='font-bold text-xl'>ENCE</h1>
         <h2 className='font-bold text-3xl mt-2'>
           Manage your cashflow, receivable, payable and digitalizing your
@@ -112,7 +114,9 @@ const OnBoarding = () => {
           </Button>
         </div>
       </div>
-      <div className='w-2/6 bg-zinc-400 rounded-3xl'></div>
+      <div className='w-2/5 rounded-3xl flex items-end'>
+        <Image src={bizCon} alt='biz-con' width={450} priority />
+      </div>
     </div>
   )
 }
