@@ -28,6 +28,7 @@ import { useInvoiceContext } from '@/context/invoice'
 import { formatTexttoCaps } from '@/lib/helpers'
 import { Organization } from '@prisma/client'
 import { OrganizationAddress } from '@/types/organization'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const PreviewModal = ({
   isLoadingState,
@@ -47,6 +48,16 @@ const PreviewModal = ({
   const orgsAddress: OrganizationAddress = organizationDetails?.address
     ? JSON.parse(organizationDetails?.address.toString())
     : null
+
+  const fromAddress =
+    (organizationDetails?.orgName ? organizationDetails?.orgName : '') +
+    (orgsAddress?.state ? ', ' + orgsAddress?.state : '') +
+    (orgsAddress?.country ? ', ' + orgsAddress?.country : '')
+
+  const toAddress =
+    (customerInfoState?.state ? ', ' + customerInfoState?.state : '') +
+    (customerInfoState?.country ? ', ' + customerInfoState?.country : '')
+
   return (
     <DialogContent className='bg-white dark:bg-zinc-900 dark:border-zinc-700 border-zinc-200 max-w-3xl'>
       <DialogHeader>
@@ -90,23 +101,17 @@ const PreviewModal = ({
                   <p className='text-zinc-800/60 dark:text-zinc-200/60 w-[10%]'>
                     To
                   </p>
-                  <p className='w-[90%]'>
-                    {customerInfoState.email &&
-                    customerInfoState.state &&
-                    customerInfoState.country
-                      ? `Test Customer, ${customerInfoState.state}, ${customerInfoState.country}`
-                      : '-'}
-                  </p>
+                  <p className='w-[90%]'>{'Test Name' + toAddress}</p>
                 </div>
                 <div className='flex text-sm'>
                   <p className='text-zinc-800/60 dark:text-zinc-200/60 w-[10%]'>
                     From
                   </p>
-                  <p className='w-[90%]'>
-                    {loading
-                      ? '-'
-                      : `${organizationDetails?.orgName}, ${orgsAddress?.state}, ${orgsAddress?.country}`}
-                  </p>
+                  {loading ? (
+                    <Skeleton className='h-5 w-1/2' />
+                  ) : (
+                    <p className='w-[90%]'>{fromAddress}</p>
+                  )}
                 </div>
                 <div className='flex text-sm'>
                   <p className='text-zinc-800/60 dark:text-zinc-200/60 w-[10%]'>
