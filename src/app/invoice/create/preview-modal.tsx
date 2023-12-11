@@ -148,7 +148,10 @@ const PreviewModal = ({
           </TabsContent>
           <TabsContent value='paper'>
             <div className='overflow-y-auto h-80'>
-              <InvoiceFormat />
+              <InvoiceFormat
+                toAddress={toAddress}
+                organizationDetails={organizationDetails}
+              />
             </div>
           </TabsContent>
         </Tabs>
@@ -223,7 +226,13 @@ export const IconCard = ({
   )
 } // Todo: change the location, not used till now
 
-export const InvoiceFormat = () => {
+export const InvoiceFormat = ({
+  organizationDetails,
+  toAddress
+}: {
+  organizationDetails: Organization | undefined
+  toAddress: string
+}) => {
   const {
     invoiceInfoState,
     subTotal,
@@ -238,7 +247,7 @@ export const InvoiceFormat = () => {
       </p>
       <div className='px-4'>
         <div className='flex justify-between items-center'>
-          <p className='font-medium text-xl'>Ence Interprises</p>
+          <p className='font-medium text-xl'>{organizationDetails?.orgName}</p>
           <h1 className='text-3xl font-bold'>E</h1>
         </div>
         <div className='flex justify-between items-start'>
@@ -272,11 +281,7 @@ export const InvoiceFormat = () => {
           </p>
           <p className='font-semibold'>
             Customer Address:{' '}
-            <span className='font-normal ml-2'>
-              {customerInfoState.email
-                ? `${customerInfoState.city}, ${customerInfoState.state}, ${customerInfoState.country}`
-                : '-'}
-            </span>
+            <span className='font-normal ml-2'>{'_ ' + toAddress}</span>
           </p>
         </div>
       </div>
