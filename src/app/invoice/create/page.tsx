@@ -8,7 +8,6 @@ import ItemsInfo from './itemsInfo'
 import {
   callErrorToast,
   callLoadingToast,
-  callSuccessToast,
   dismissToast,
   formatAmount,
   formatInvoiceData
@@ -22,6 +21,7 @@ import { useRouter } from 'next/navigation'
 import { Loader2Icon } from 'lucide-react'
 import { Organization } from '@prisma/client'
 import { Skeleton } from '@/components/ui/skeleton'
+import { toast } from 'react-toastify'
 
 const createInvoice = () => {
   const [isLoading, setLoading] = useState<string | null>(null)
@@ -99,11 +99,19 @@ const createInvoice = () => {
     const invRes = await response.json()
     dismissToast(loadingToastId)
     if (invRes.ok) {
-      callSuccessToast('Invoice created successfully!')
+      toast.update(loadingToastId, {
+        render: 'Invoice created successfully!',
+        type: 'success',
+        isLoading: false
+      })
       router.push('/invoice/lists')
     } else {
       setLoading(null)
-      callErrorToast('Database is not available')
+      toast.update(loadingToastId, {
+        render: 'Database is not available',
+        type: 'success',
+        isLoading: false
+      })
     }
   }
   let organizationName = loadingOrganization ? (
