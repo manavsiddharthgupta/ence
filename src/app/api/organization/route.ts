@@ -2,6 +2,7 @@ import { db } from '@/lib/db'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../auth/[...nextauth]/route'
 import { OrganizationBody } from '@/types/organization'
+import { redis } from '@/lib/redis'
 
 export async function GET() {
   try {
@@ -88,6 +89,13 @@ export async function POST(request: Request) {
         currencyType: 'INR'
       }
     })
+
+    if (orgResponse.orgName) {
+      const res = await redis.set(
+        `user_organization:${email}`,
+        orgResponse.orgName
+      )
+    }
 
     return Response.json({
       ok: true,
