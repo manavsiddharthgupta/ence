@@ -6,6 +6,8 @@ import { redirect } from 'next/navigation'
 import { authOptions } from '../api/auth/[...nextauth]/route'
 import { getServerSession } from 'next-auth'
 
+export const dynamic = 'force-dynamic'
+
 const checkIfOrganizationExist = async () => {
   try {
     const session = await getServerSession(authOptions)
