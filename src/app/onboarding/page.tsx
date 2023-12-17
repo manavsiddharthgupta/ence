@@ -6,20 +6,21 @@ import { redirect } from 'next/navigation'
 import { authOptions } from '../api/auth/[...nextauth]/route'
 import { getServerSession } from 'next-auth'
 
-const OnBoarding = async () => {
-  const checkIfOrganizationExist = async () => {
-    try {
-      const session = await getServerSession(authOptions)
-      if (!session || !session.user?.email) {
-        redirect('/auth/signin')
-      }
-      const key = `user_organization:${session?.user?.email}`
-      const organizationExist = await redis.get(key)
-      return organizationExist
-    } catch (error) {
-      console.error('Error while checking if Organization exist', error)
+const checkIfOrganizationExist = async () => {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session || !session.user?.email) {
+      redirect('/auth/signin')
     }
+    const key = `user_organization:${session?.user?.email}`
+    const organizationExist = await redis.get(key)
+    return organizationExist
+  } catch (error) {
+    console.error('Error while checking if Organization exist', error)
   }
+}
+
+const OnBoarding = async () => {
   const orgsExist = await checkIfOrganizationExist()
   if (orgsExist) {
     redirect('/home')
