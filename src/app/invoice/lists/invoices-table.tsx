@@ -171,10 +171,10 @@ const InvoiceBody = ({
                   <DropdownMenuContent className='dark:border-zinc-700/60 border-zinc-300/60 bg-white dark:bg-zinc-900'>
                     <DropdownMenuLabel>Invoice Action</DropdownMenuLabel>
                     <DropdownMenuSeparator className='bg-zinc-600/20' />
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                    <DropdownMenuItem>Make a Copy</DropdownMenuItem>
+                    <DropdownMenuItem>Update</DropdownMenuItem>
+                    <DropdownMenuItem>View</DropdownMenuItem>
                     <DropdownMenuSeparator className='bg-zinc-600/20' />
-                    <DropdownMenuItem>Delete</DropdownMenuItem>
+                    <DropdownMenuItem>Download</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </td>

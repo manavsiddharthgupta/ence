@@ -42,8 +42,19 @@ const PreviewModal = ({
   loading: boolean
 }) => {
   // Todo: Will have to revamp the code structure
-  const { invoiceInfoState, subTotal, customerInfoState, paymentInfoState } =
-    useInvoiceContext()
+  const {
+    invoiceInfoState,
+    subTotal,
+    customerInfoState,
+    paymentInfoState,
+    customerLegalName
+  } = useInvoiceContext()
+
+  const stringifiedCustomerName = JSON.stringify(customerLegalName)
+  const customerName: {
+    id: null | number
+    value: string
+  } = JSON.parse(stringifiedCustomerName)
 
   const orgsAddress: OrganizationAddress = organizationDetails?.address
     ? JSON.parse(organizationDetails?.address.toString())
@@ -55,6 +66,7 @@ const PreviewModal = ({
     (orgsAddress?.country ? ', ' + orgsAddress?.country : '')
 
   const toAddress =
+    (customerName?.value ? customerName?.value : '-') +
     (customerInfoState?.state ? ', ' + customerInfoState?.state : '') +
     (customerInfoState?.country ? ', ' + customerInfoState?.country : '')
 
@@ -101,7 +113,7 @@ const PreviewModal = ({
                   <p className='text-zinc-800/60 dark:text-zinc-200/60 w-[10%]'>
                     To
                   </p>
-                  <p className='w-[90%]'>{'Test Name' + toAddress}</p>
+                  <p className='w-[90%]'>{toAddress}</p>
                 </div>
                 <div className='flex text-sm'>
                   <p className='text-zinc-800/60 dark:text-zinc-200/60 w-[10%]'>
@@ -149,7 +161,7 @@ const PreviewModal = ({
           <TabsContent value='paper'>
             <div className='overflow-y-auto h-80'>
               <InvoiceFormat
-                toAddress={toAddress}
+                customerName={customerName.value}
                 organizationDetails={organizationDetails}
               />
             </div>
@@ -228,10 +240,10 @@ export const IconCard = ({
 
 export const InvoiceFormat = ({
   organizationDetails,
-  toAddress
+  customerName
 }: {
   organizationDetails: Organization | undefined
-  toAddress: string
+  customerName: string
 }) => {
   const {
     invoiceInfoState,
@@ -240,6 +252,12 @@ export const InvoiceFormat = ({
     paymentInfoState,
     itemsInfoState
   } = useInvoiceContext()
+
+  const customerAddress =
+    (customerInfoState?.city ? customerInfoState?.city : '-') +
+    (customerInfoState?.state ? ', ' + customerInfoState?.state : '') +
+    (customerInfoState?.country ? ', ' + customerInfoState?.country : '')
+
   return (
     <div className='border border-black max-w-xl mx-auto min-h-[320px] bg-white text-black py-4 relative'>
       <p className='font-semibold text-[9px] absolute top-1 right-2'>
@@ -277,11 +295,11 @@ export const InvoiceFormat = ({
         <div className='w-full truncate text-[10px]'>
           <p className='font-semibold'>
             Customer Name:{' '}
-            <span className='font-normal ml-2'>Test Customer</span>
+            <span className='font-normal ml-2'>{customerName}</span>
           </p>
           <p className='font-semibold'>
             Customer Address:{' '}
-            <span className='font-normal ml-2'>{'_ ' + toAddress}</span>
+            <span className='font-normal ml-2'>{customerAddress}</span>
           </p>
         </div>
       </div>
