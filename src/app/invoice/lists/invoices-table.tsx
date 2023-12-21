@@ -20,9 +20,12 @@ import TableSkeleton from './table-skeleton'
 import Image from 'next/image'
 import Filter from './filter'
 import createInv from '@/svgs/create-inv.svg'
+import { Sheet } from '@/components/ui/sheet'
+import Invoice from './invoice'
 
 const InvoiceTable = () => {
   const [invoices, setInvoices] = useState<InvoicesResponse[]>([])
+  const [selectedInvoice, setInvoiceView] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [currentPage, setPageNumber] = useState(1)
@@ -81,37 +84,52 @@ const InvoiceTable = () => {
       </div>
     )
   }
+
+  const onSelectInvoice = (invoiceNumber: number) => {
+    setInvoiceView(invoiceNumber)
+  }
+
+  const onCloseInvoiceView = () => {
+    setInvoiceView(null)
+  }
   // revamp code
   return (
-    <div className='my-8'>
-      <Filter />
-      <InvoiceCard>
-        <table className='w-full text-black dark:text-white'>
-          <thead>
-            <tr className='text-sm font-medium text-zinc-600/60 dark:text-zinc-400/70 border-b-[1px] border-zinc-200 dark:border-zinc-700/40'>
-              <td className='p-3 w-[12%]'># Invoice</td>
-              <td className='p-2 w-[25%]'>To</td>
-              <td className='p-2 w-[13%]'>Issue Date</td>
-              <td className='p-2 w-[13%]'>Due Date</td>
-              <td className='p-2 w-[10%]'>Status</td>
-              <td className='p-2 w-[11%]'>Total</td>
-              <td className='p-2 w-[11%]'>Due</td>
-              <td className='p-2 w-[5%]'></td>
-            </tr>
-          </thead>
-          <InvoiceBody invoices={currentInvoices} loading={loading} />
-        </table>
-        {!loading && invoices?.length === 0 && <InvoiceEmptyState />}
-      </InvoiceCard>
-      {!loading && invoices?.length > 0 && (
-        <PaginationUI
-          currentPage={currentPage}
-          pageCount={pageCount}
-          onHandleNextButton={onHandleNextButton}
-          onHandlePreviousButton={onHandlePreviousButton}
-        />
-      )}
-    </div>
+    <Sheet open={selectedInvoice! !== null} onOpenChange={onCloseInvoiceView}>
+      <div className='my-8'>
+        <Filter />
+        <InvoiceCard>
+          <table className='w-full text-black dark:text-white'>
+            <thead>
+              <tr className='text-sm font-medium text-zinc-600/60 dark:text-zinc-400/70 border-b-[1px] border-zinc-200 dark:border-zinc-700/40'>
+                <td className='p-3 w-[12%]'># Invoice</td>
+                <td className='p-2 w-[25%]'>To</td>
+                <td className='p-2 w-[13%]'>Issue Date</td>
+                <td className='p-2 w-[13%]'>Due Date</td>
+                <td className='p-2 w-[10%]'>Status</td>
+                <td className='p-2 w-[11%]'>Total</td>
+                <td className='p-2 w-[11%]'>Due</td>
+                <td className='p-2 w-[5%]'></td>
+              </tr>
+            </thead>
+            <InvoiceBody
+              onSelectInvoice={onSelectInvoice}
+              invoices={currentInvoices}
+              loading={loading}
+            />
+          </table>
+          {!loading && invoices?.length === 0 && <InvoiceEmptyState />}
+        </InvoiceCard>
+        {!loading && invoices?.length > 0 && (
+          <PaginationUI
+            currentPage={currentPage}
+            pageCount={pageCount}
+            onHandleNextButton={onHandleNextButton}
+            onHandlePreviousButton={onHandlePreviousButton}
+          />
+        )}
+      </div>
+      <Invoice invoiceNumber={selectedInvoice} />
+    </Sheet>
   )
 }
 
@@ -119,10 +137,12 @@ export default InvoiceTable
 
 const InvoiceBody = ({
   invoices,
-  loading
+  loading,
+  onSelectInvoice
 }: {
   invoices: InvoicesResponse[]
   loading: boolean
+  onSelectInvoice: (invoiceNumber: number) => void
 }) => {
   return (
     <tbody>
@@ -172,7 +192,13 @@ const InvoiceBody = ({
                     <DropdownMenuLabel>Invoice Action</DropdownMenuLabel>
                     <DropdownMenuSeparator className='bg-zinc-600/20' />
                     <DropdownMenuItem>Update</DropdownMenuItem>
-                    <DropdownMenuItem>View</DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        onSelectInvoice(invoice.invoiceNumber)
+                      }}
+                    >
+                      View
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator className='bg-zinc-600/20' />
                     <DropdownMenuItem>Download</DropdownMenuItem>
                   </DropdownMenuContent>
