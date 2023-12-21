@@ -18,25 +18,7 @@ export const authOptions = {
     maxAge: 24 * 60 * 60,
     strategy: 'jwt' as SessionStrategy
   },
-  callbacks: {
-    // async session({ session }: { session: Session }) {
-    //   if (!session || !session.user?.email) {
-    //     return session
-    //   }
-    //   console.log(session)
-    //   const userExist = await db.user.findUnique({
-    //     where: {
-    //       email: session.user?.email
-    //     }
-    //   })
-    //   if (!userExist) {
-    //     session.expires = Date.now().toString()
-    //     return session
-    //   }
-    //   return session
-    // }
-    // Todo: will update the functionality - will use jwt
-  }
+  callbacks: {}
 }
 
 const handler = NextAuth(authOptions)
