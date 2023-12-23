@@ -38,7 +38,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
       setLoading(false)
     }
     getInvoiceInfo()
-  }, [])
+  }, [invoiceId])
 
   if (error) {
     return (

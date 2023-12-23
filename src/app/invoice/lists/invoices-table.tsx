@@ -128,7 +128,7 @@ const InvoiceTable = () => {
           />
         )}
       </div>
-      {selectedInvoice !== null && <Invoice invoiceId={selectedInvoice} />}
+      <Invoice invoiceId={selectedInvoice} />
     </Sheet>
   )
 }
