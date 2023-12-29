@@ -197,7 +197,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
               <div className='flex justify-between'>
                 <div className='flex items-center gap-2 text-zinc-900/60 dark:text-white/50'>
                   <h3 className='text-xs font-medium'>Invoice Total</h3>
-                  <Tip info='Subtotal + GST - Discount'>
+                  <Tip info='Subtotal - Discount ± Adjustment'>
                     <Info size={10} strokeWidth={2.5} className='mt-0.5' />
                   </Tip>
                 </div>

@@ -142,9 +142,7 @@ const PreviewModal = ({
                       Amount Payable
                     </span>
                     <span className='text-xl font-bold'>
-                      {formatAmount(
-                        subTotal + +paymentInfoState.shippingCharge
-                      )}
+                      {formatAmount(subTotal + +paymentInfoState.adjustmentFee)}
                     </span>
                   </div>
                 </div>
@@ -258,6 +256,11 @@ export const InvoiceFormat = ({
     (customerInfoState?.state ? ', ' + customerInfoState?.state : '') +
     (customerInfoState?.country ? ', ' + customerInfoState?.country : '')
 
+  const adjustmentFee =
+    +paymentInfoState.adjustmentFee >= 0
+      ? +paymentInfoState.adjustmentFee
+      : -+paymentInfoState.adjustmentFee
+
   return (
     <div className='border border-black max-w-xl mx-auto min-h-[320px] bg-white text-black py-4 relative'>
       <p className='font-semibold text-[9px] absolute top-1 right-2'>
@@ -341,8 +344,15 @@ export const InvoiceFormat = ({
               <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
                 +
               </span>
-              <h1>Shipping + Tax</h1>
+              <h1>Shipping</h1>
               <h1>{formatAmount(+paymentInfoState.shippingCharge)}</h1>
+            </div>
+            <div className='flex justify-between text-[10px] relative'>
+              <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
+                {+paymentInfoState.adjustmentFee >= 0 ? '+' : '-'}
+              </span>
+              <h1>Adjustment</h1>
+              <h1>{formatAmount(adjustmentFee)}</h1>
             </div>
             <div className='flex justify-between text-[10px] relative'>
               <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
@@ -361,7 +371,7 @@ export const InvoiceFormat = ({
         </div>
         <p className='text-[8px] text-right'>
           SubTotal (in words) :{' '}
-          {numTowords.convert(subTotal + +paymentInfoState.shippingCharge, {
+          {numTowords.convert(subTotal + +paymentInfoState.adjustmentFee, {
             currency: true
           })}
         </p>
@@ -369,7 +379,7 @@ export const InvoiceFormat = ({
         <p className='text-xs font-semibold text-right'>
           Amount Payable{' '}
           <span className='ml-6'>
-            {formatAmount(subTotal + +paymentInfoState.shippingCharge)}
+            {formatAmount(subTotal + +paymentInfoState.adjustmentFee)}
           </span>
         </p>
         <div className='mt-6 flex justify-between'>

@@ -1,9 +1,11 @@
+import Tip from '@/components/component-tip'
 import { SelectMenu } from '@/components/selectMenu'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import UploadFile from '@/components/upload-files'
 import { useInvoiceContext } from '@/context/invoice'
 import { callInfoToast, formatAmount } from '@/lib/helpers'
+import { HelpCircle, HelpCircleIcon } from 'lucide-react'
 const PaymentDetails = () => {
   const {
     paymentInfoState,
@@ -60,20 +62,20 @@ const PaymentDetails = () => {
     })
   }
 
-  const onChangeGstPercent = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeDiscountPercent = (e: React.ChangeEvent<HTMLInputElement>) => {
     paymentInfoDispatch({
-      type: 'GST_PERCENT',
+      type: 'DISCOUNT_PERCENT',
       payload: {
-        gst: e.target.value
+        discount: e.target.value
       }
     })
   }
 
-  const onChangeShippingCharges = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeAdjustmentFee = (e: React.ChangeEvent<HTMLInputElement>) => {
     paymentInfoDispatch({
-      type: 'SHIPPING_CHARGES',
+      type: 'ADJUSTMENT_FEE',
       payload: {
-        shippingCharge: e.target.value
+        adjustmentFee: e.target.value
       }
     })
   }
@@ -200,31 +202,41 @@ const PaymentDetails = () => {
             <p>{formatAmount(subTotal)}</p>
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5 dark:bg-zinc-800/10 bg-zinc-200/40 rounded-sm'>
-            <p>GST(%)</p>
+            <p>Discount(%)</p>
             <input
-              value={paymentInfoState.gst}
+              value={paymentInfoState.discount}
               type='number'
               className='outline-none border-none w-1/3 bg-transparent text-right remove-arrow'
-              onChange={onChangeGstPercent}
+              onChange={onChangeDiscountPercent}
               readOnly // For Beta, will change later
             />
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
-            <p>Extra fee</p>
+            <div className='flex gap-1 items-center'>
+              <p>Additional Charges</p>
+              <Tip info='Packaging Charge + Shipping Charge'>
+                <HelpCircle size={10} strokeWidth={2.5} className='mt-0.5' />
+              </Tip>
+            </div>
             <p>{formatAmount(0)}</p>
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5 dark:bg-zinc-800/10 bg-zinc-200/40 rounded-sm'>
-            <p>Shipping Charges(₹)</p>
+            <div className='flex gap-1 items-center'>
+              <p>Adjustment(₹)</p>
+              <Tip info='Extra +ve or -ve charges applied to adjust the amount'>
+                <HelpCircle size={10} strokeWidth={2.5} className='mt-0.5' />
+              </Tip>
+            </div>
             <input
-              value={paymentInfoState.shippingCharge}
+              value={paymentInfoState.adjustmentFee}
               type='number'
               className='outline-none border-none w-1/3 bg-transparent text-right remove-arrow'
-              onChange={onChangeShippingCharges}
+              onChange={onChangeAdjustmentFee}
             />
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
             <p>Total</p>
-            <p>{formatAmount(subTotal + +paymentInfoState.shippingCharge)}</p>
+            <p>{formatAmount(subTotal + +paymentInfoState.adjustmentFee)}</p>
           </div>
         </div>
       </div>

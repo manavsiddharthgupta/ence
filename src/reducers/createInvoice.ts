@@ -32,10 +32,11 @@ export const PaymentInfoInitailState: PaymentInfoState = {
   terms: 'immediate',
   status: 'due',
   method: 'cash',
-  gst: '0',
+  discount: '0',
   notes: 'Thank you for your business! We appreciate your trust.',
   tax: 0,
-  shippingCharge: '0'
+  shippingCharge: '0',
+  adjustmentFee: '0'
 }
 
 export const customerInfoReducers = (
@@ -181,7 +182,7 @@ export const paymentInfoReducers = (
         ...state,
         ...action.payload
       }
-    case 'GST_PERCENT':
+    case 'DISCOUNT_PERCENT':
       return {
         ...state,
         ...action.payload
@@ -192,6 +193,11 @@ export const paymentInfoReducers = (
         ...action.payload
       }
     case 'SHIPPING_CHARGES':
+      return {
+        ...state,
+        ...action.payload
+      }
+    case 'ADJUSTMENT_FEE':
       return {
         ...state,
         ...action.payload
