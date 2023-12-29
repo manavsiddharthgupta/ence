@@ -23,7 +23,7 @@ export const InvoiceInfoInitialState: InvoiceInfoState = {
   invoiceNumber: null,
   dateIssue: undefined,
   dueDate: undefined,
-  sendingMethod: 'mail'
+  sendingMethod: 'whatsapp'
 }
 
 export const ItemsInfoInitialState: ItemsInfoState = []
