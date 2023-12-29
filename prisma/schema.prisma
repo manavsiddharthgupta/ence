@@ -113,6 +113,7 @@ model Invoice {
   dateIssue      DateTime
   dueDate        DateTime
   shippingCharge Int?
+  adjustmentFee  Int?
   paymentMethod  PaymentMethods @default(CASH)
   paymentStatus  PaymentStatus  @default(PAID)
   paymentTerms   PaymentTerms   @default(CUSTOM)

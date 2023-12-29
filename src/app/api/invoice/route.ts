@@ -98,6 +98,7 @@ export async function POST(request: Request) {
       shippingCharge,
       totalAmount,
       dueAmount,
+      adjustmentFee,
       items
     } = body as InvoiceBody
 
@@ -114,6 +115,7 @@ export async function POST(request: Request) {
         paymentStatus: paymentStatus,
         paymentTerms: paymentTerms,
         sendingMethod: sendingMethod,
+        adjustmentFee: adjustmentFee,
         notes: notes,
         shippingCharge,
         items: {
