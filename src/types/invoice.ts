@@ -78,6 +78,8 @@ export type InvoiceBody = {
   paymentMethod: PaymentMethods
   paymentStatus: PaymentStatus
   paymentTerms: PaymentTerms
+  subTotal: number
+  invoiceTotal: number
   totalAmount: number
   dueAmount: number
   items: InvoiceItemBody[] // Todo: methods, status .. types will be enum

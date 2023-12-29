@@ -52,6 +52,9 @@ export async function GET(
         sendingMethod: true,
         shippingCharge: true,
         dueAmount: true,
+        adjustmentFee: true,
+        invoiceTotal: true,
+        subTotal: true,
         totalAmount: true,
         items: true
       }
