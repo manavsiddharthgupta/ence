@@ -167,44 +167,28 @@ const PreviewModal = ({
         </Tabs>
       </DialogHeader>
       <DialogFooter>
-        <div className='flex justify-between w-full'>
+        <div className='flex justify-end gap-4 w-full'>
+          <DialogClose asChild>
+            <Button
+              type='button'
+              variant='secondary'
+              className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50 dark:border-zinc-700 border-zinc-200 border hover:bg-zinc-100 min-w-[150px]'
+            >
+              Close
+            </Button>
+          </DialogClose>
           <Button
-            onClick={() =>
-              callErrorToast('This feature is currently unavailable in Beta.')
-            }
-            variant='ghost'
-            className='dark:hover:bg-zinc-800/50 hover:bg-zinc-100 min-w-[150px]'
+            onClick={onCreateInvoice}
+            variant='default'
+            className='bg-sky-600 text-white hover:bg-sky-700 min-w-[150px]'
             disabled={isLoadingState !== null}
           >
-            {isLoadingState === 'drafting' ? (
+            {isLoadingState === 'sending' ? (
               <Loader2Icon className='animate-spin' />
             ) : (
-              'Save as draft'
+              'Save & Send' // todo: chnage to send when send functionality is implemented
             )}
           </Button>
-          <div className='flex gap-4'>
-            <DialogClose asChild>
-              <Button
-                type='button'
-                variant='secondary'
-                className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50 dark:border-zinc-700 border-zinc-200 border hover:bg-zinc-100 min-w-[150px]'
-              >
-                Close
-              </Button>
-            </DialogClose>
-            <Button
-              onClick={onCreateInvoice}
-              variant='default'
-              className='bg-sky-600 text-white hover:bg-sky-700 min-w-[150px]'
-              disabled={isLoadingState !== null}
-            >
-              {isLoadingState === 'sending' ? (
-                <Loader2Icon className='animate-spin' />
-              ) : (
-                'Create' // todo: chnage to send when send functionality is implemented
-              )}
-            </Button>
-          </div>
         </div>
       </DialogFooter>
     </DialogContent>

@@ -187,7 +187,9 @@ export const formatInvoiceData = (
         : paymentInfoState.terms === 'net 90'
         ? PaymentTerms.NET_90
         : PaymentTerms.CUSTOM,
-    totalAmount: subTotal + +paymentInfoState.adjustmentFee,
+    invoiceTotal: subTotal + +paymentInfoState.adjustmentFee, // Todo: add discount
+    subTotal: subTotal,
+    totalAmount: subTotal + +paymentInfoState.adjustmentFee, // Todo: add shipping charge, packaging charge and discount
     dueAmount:
       paymentInfoState.status === 'paid'
         ? 0
