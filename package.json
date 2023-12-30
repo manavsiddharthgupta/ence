@@ -43,6 +43,7 @@
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "to-words": "^3.6.1",
+    "twilio": "^4.20.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
