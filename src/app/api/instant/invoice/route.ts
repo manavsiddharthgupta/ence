@@ -1,6 +1,7 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../../auth/[...nextauth]/route'
 import { db } from '@/lib/db'
+import { put } from '@vercel/blob'
 
 export async function POST(request: Request) {
   try {
@@ -32,11 +33,25 @@ export async function POST(request: Request) {
       return Response.json({ ok: false, data: null, status: 404 })
     }
 
-    const blob = await request.blob()
+    const { searchParams } = new URL(request.url)
+    const filename = searchParams.get('filename')
+    if (!filename || !request.body) {
+      return Response.json({ ok: false, data: null, status: 500 })
+    }
+
+    console.log('File Name', filename)
+
+    const url = await put(filename, request.body, {
+      access: 'public'
+    })
+
+    console.log('URL', url)
+
+    return Response.json({ ok: true, data: url, status: 200 })
   } catch (error) {
     console.error('Error:', error)
     return Response.json({ ok: false, data: null, status: 500 })
   }
 }
 
-// user -> image -> S3 -> link -> ocr_service -> data_res -> validation -> data_return
+// user -> image -> Vercel -> link -> ocr_service -> data_res -> validation -> data_return
