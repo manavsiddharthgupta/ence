@@ -12,6 +12,12 @@ import { useState } from 'react'
 const CollapsiblePurchasedItems = () => {
   const [isopen, setIfOpen] = useState(false)
   const { subTotal, paymentInfoState, itemsInfoState } = useInvoiceContext()
+
+  const adjustmentFee =
+    +paymentInfoState.adjustmentFee >= 0
+      ? +paymentInfoState.adjustmentFee
+      : -+paymentInfoState.adjustmentFee
+
   return (
     <Collapsible open={isopen} onOpenChange={setIfOpen}>
       <div className='flex justify-center'>
@@ -71,9 +77,18 @@ const CollapsiblePurchasedItems = () => {
                 +
               </span>
               <span className='text-zinc-800/60 dark:text-zinc-200/60'>
-                Shipping + Tax
+                Shipping
               </span>
               <span>{formatAmount(+paymentInfoState.shippingCharge)}</span>
+            </div>
+            <div className='flex w-full justify-between relative mb-1'>
+              <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
+                {+paymentInfoState.adjustmentFee >= 0 ? '+' : '-'}
+              </span>
+              <span className='text-zinc-800/60 dark:text-zinc-200/60'>
+                Adjustment
+              </span>
+              <span>{formatAmount(adjustmentFee)}</span>
             </div>
             <div className='flex w-full justify-between relative mb-1'>
               <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>

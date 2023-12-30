@@ -170,7 +170,7 @@ const createInvoice = () => {
           <div>
             <p className='text-xs text-zinc-400'>Net Payable Amount</p>
             <h1 className='text-2xl font-semibold'>
-              {formatAmount(subTotal + +paymentInfoState.shippingCharge)}
+              {formatAmount(subTotal + +paymentInfoState.adjustmentFee)}
             </h1>
           </div>
           <div className='flex gap-4 items-center'>
@@ -191,21 +191,6 @@ const createInvoice = () => {
               />
             </Dialog>
             <Button
-              onClick={() => {
-                callErrorToast('This feature is currently unavailable in Beta.')
-                // save as draft logic
-              }}
-              variant='outline'
-              className='hover:bg-yellow-600 border-yellow-600 text-yellow-600 hover:text-white bg-transparent border-2 min-w-[150px]'
-              disabled={isLoading !== null}
-            >
-              {isLoading === 'drafting' ? (
-                <Loader2Icon className='animate-spin' />
-              ) : (
-                'Save as draft'
-              )}
-            </Button>
-            <Button
               variant='default'
               className='bg-sky-600 text-white hover:bg-sky-700 min-w-[150px]'
               disabled={isLoading !== null}
@@ -214,7 +199,7 @@ const createInvoice = () => {
               {isLoading === 'sending' ? (
                 <Loader2Icon className='animate-spin' />
               ) : (
-                'Create' // todo: chnage to send when send functionality is implemented
+                'Save & Send' // todo: chnage to send when send functionality is implemented
               )}
             </Button>
           </div>

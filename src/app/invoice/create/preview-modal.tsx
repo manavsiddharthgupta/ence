@@ -142,9 +142,7 @@ const PreviewModal = ({
                       Amount Payable
                     </span>
                     <span className='text-xl font-bold'>
-                      {formatAmount(
-                        subTotal + +paymentInfoState.shippingCharge
-                      )}
+                      {formatAmount(subTotal + +paymentInfoState.adjustmentFee)}
                     </span>
                   </div>
                 </div>
@@ -169,44 +167,28 @@ const PreviewModal = ({
         </Tabs>
       </DialogHeader>
       <DialogFooter>
-        <div className='flex justify-between w-full'>
+        <div className='flex justify-end gap-4 w-full'>
+          <DialogClose asChild>
+            <Button
+              type='button'
+              variant='secondary'
+              className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50 dark:border-zinc-700 border-zinc-200 border hover:bg-zinc-100 min-w-[150px]'
+            >
+              Close
+            </Button>
+          </DialogClose>
           <Button
-            onClick={() =>
-              callErrorToast('This feature is currently unavailable in Beta.')
-            }
-            variant='ghost'
-            className='dark:hover:bg-zinc-800/50 hover:bg-zinc-100 min-w-[150px]'
+            onClick={onCreateInvoice}
+            variant='default'
+            className='bg-sky-600 text-white hover:bg-sky-700 min-w-[150px]'
             disabled={isLoadingState !== null}
           >
-            {isLoadingState === 'drafting' ? (
+            {isLoadingState === 'sending' ? (
               <Loader2Icon className='animate-spin' />
             ) : (
-              'Save as draft'
+              'Save & Send' // todo: chnage to send when send functionality is implemented
             )}
           </Button>
-          <div className='flex gap-4'>
-            <DialogClose asChild>
-              <Button
-                type='button'
-                variant='secondary'
-                className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50 dark:border-zinc-700 border-zinc-200 border hover:bg-zinc-100 min-w-[150px]'
-              >
-                Close
-              </Button>
-            </DialogClose>
-            <Button
-              onClick={onCreateInvoice}
-              variant='default'
-              className='bg-sky-600 text-white hover:bg-sky-700 min-w-[150px]'
-              disabled={isLoadingState !== null}
-            >
-              {isLoadingState === 'sending' ? (
-                <Loader2Icon className='animate-spin' />
-              ) : (
-                'Create' // todo: chnage to send when send functionality is implemented
-              )}
-            </Button>
-          </div>
         </div>
       </DialogFooter>
     </DialogContent>
@@ -257,6 +239,11 @@ export const InvoiceFormat = ({
     (customerInfoState?.city ? customerInfoState?.city : '-') +
     (customerInfoState?.state ? ', ' + customerInfoState?.state : '') +
     (customerInfoState?.country ? ', ' + customerInfoState?.country : '')
+
+  const adjustmentFee =
+    +paymentInfoState.adjustmentFee >= 0
+      ? +paymentInfoState.adjustmentFee
+      : -+paymentInfoState.adjustmentFee
 
   return (
     <div className='border border-black max-w-xl mx-auto min-h-[320px] bg-white text-black py-4 relative'>
@@ -341,8 +328,15 @@ export const InvoiceFormat = ({
               <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
                 +
               </span>
-              <h1>Shipping + Tax</h1>
+              <h1>Shipping</h1>
               <h1>{formatAmount(+paymentInfoState.shippingCharge)}</h1>
+            </div>
+            <div className='flex justify-between text-[10px] relative'>
+              <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
+                {+paymentInfoState.adjustmentFee >= 0 ? '+' : '-'}
+              </span>
+              <h1>Adjustment</h1>
+              <h1>{formatAmount(adjustmentFee)}</h1>
             </div>
             <div className='flex justify-between text-[10px] relative'>
               <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
@@ -361,7 +355,7 @@ export const InvoiceFormat = ({
         </div>
         <p className='text-[8px] text-right'>
           SubTotal (in words) :{' '}
-          {numTowords.convert(subTotal + +paymentInfoState.shippingCharge, {
+          {numTowords.convert(subTotal + +paymentInfoState.adjustmentFee, {
             currency: true
           })}
         </p>
@@ -369,7 +363,7 @@ export const InvoiceFormat = ({
         <p className='text-xs font-semibold text-right'>
           Amount Payable{' '}
           <span className='ml-6'>
-            {formatAmount(subTotal + +paymentInfoState.shippingCharge)}
+            {formatAmount(subTotal + +paymentInfoState.adjustmentFee)}
           </span>
         </p>
         <div className='mt-6 flex justify-between'>

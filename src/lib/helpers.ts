@@ -158,6 +158,7 @@ export const formatInvoiceData = (
     invoiceNumber: +invoiceInfoState.invoiceNumber!,
     notes: paymentInfoState.notes,
     shippingCharge: +paymentInfoState.shippingCharge,
+    adjustmentFee: +paymentInfoState.adjustmentFee,
     sendingMethod:
       invoiceInfoState.sendingMethod === 'mail'
         ? SendMethods.MAIL
@@ -186,11 +187,13 @@ export const formatInvoiceData = (
         : paymentInfoState.terms === 'net 90'
         ? PaymentTerms.NET_90
         : PaymentTerms.CUSTOM,
-    totalAmount: subTotal + +paymentInfoState.shippingCharge,
+    invoiceTotal: subTotal + +paymentInfoState.adjustmentFee, // Todo: add discount
+    subTotal: subTotal,
+    totalAmount: subTotal + +paymentInfoState.adjustmentFee, // Todo: add shipping charge, packaging charge and discount
     dueAmount:
       paymentInfoState.status === 'paid'
         ? 0
-        : subTotal + +paymentInfoState.shippingCharge,
+        : subTotal + +paymentInfoState.adjustmentFee,
     items: formattedIvoiceItems
   }
   return formattedData

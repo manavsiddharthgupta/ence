@@ -113,11 +113,15 @@ model Invoice {
   dateIssue      DateTime
   dueDate        DateTime
   shippingCharge Int?
+  adjustmentFee  Int?
+  discount       Int?
   paymentMethod  PaymentMethods @default(CASH)
   paymentStatus  PaymentStatus  @default(PAID)
   paymentTerms   PaymentTerms   @default(CUSTOM)
   notes          String?
   items          InvoiceItem[]
+  subTotal       Float
+  invoiceTotal   Float
   totalAmount    Float
   dueAmount      Float
   organizationId String

@@ -50,9 +50,10 @@ export type PaymentInfoState = {
   method: string // May me change to obj
   status: string // May me change to obj
   notes: string
-  gst: number | string
+  discount: number | string
   tax: number // will calculate based on tax %(from db)
   shippingCharge: number | string
+  adjustmentFee: number | string
 }
 
 export type PaymentInfoAction = {
@@ -72,10 +73,13 @@ export type InvoiceBody = {
   invoiceNumber: number
   notes: string
   shippingCharge: number
+  adjustmentFee: number
   sendingMethod: SendMethods
   paymentMethod: PaymentMethods
   paymentStatus: PaymentStatus
   paymentTerms: PaymentTerms
+  subTotal: number
+  invoiceTotal: number
   totalAmount: number
   dueAmount: number
   items: InvoiceItemBody[] // Todo: methods, status .. types will be enum

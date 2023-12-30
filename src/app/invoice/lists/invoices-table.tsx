@@ -25,7 +25,7 @@ import Invoice from './invoice'
 
 const InvoiceTable = () => {
   const [invoices, setInvoices] = useState<InvoicesResponse[]>([])
-  const [selectedInvoice, setInvoiceView] = useState<number | null>(null)
+  const [selectedInvoice, setInvoiceView] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [currentPage, setPageNumber] = useState(1)
@@ -85,8 +85,8 @@ const InvoiceTable = () => {
     )
   }
 
-  const onSelectInvoice = (invoiceNumber: number) => {
-    setInvoiceView(invoiceNumber)
+  const onSelectInvoice = (invoiceId: string) => {
+    setInvoiceView(invoiceId)
   }
 
   const onCloseInvoiceView = () => {
@@ -128,7 +128,7 @@ const InvoiceTable = () => {
           />
         )}
       </div>
-      <Invoice invoiceNumber={selectedInvoice} />
+      <Invoice invoiceId={selectedInvoice} />
     </Sheet>
   )
 }
@@ -142,7 +142,7 @@ const InvoiceBody = ({
 }: {
   invoices: InvoicesResponse[]
   loading: boolean
-  onSelectInvoice: (invoiceNumber: number) => void
+  onSelectInvoice: (invoiceId: string) => void
 }) => {
   return (
     <tbody>
@@ -194,7 +194,7 @@ const InvoiceBody = ({
                     <DropdownMenuItem>Update</DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => {
-                        onSelectInvoice(invoice.invoiceNumber)
+                        onSelectInvoice(invoice.id)
                       }}
                     >
                       View
