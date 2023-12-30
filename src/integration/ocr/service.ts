@@ -17,8 +17,8 @@ export const tranformImageToJSON = () => {
   }
 
   fetch('https://api.edenai.run/v2/ocr/invoice_parser', options)
-    .then((response) => response.json())
-    .then((data) => {
+    .then(response => response.json())
+    .then(data => {
       const edenAiData = data['eden-ai']
 
       if (edenAiData.status === 'success') {
@@ -41,7 +41,7 @@ export const tranformImageToJSON = () => {
         console.error('Processing Failed')
       }
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error)
     })
 }
