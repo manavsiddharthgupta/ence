@@ -14,7 +14,7 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Info, Loader2Icon } from 'lucide-react'
+import { Banknote, Calendar, Info, Loader2Icon } from 'lucide-react'
 import {
   callErrorToast,
   formatAmount,
@@ -29,6 +29,7 @@ import { formatTexttoCaps } from '@/lib/helpers'
 import { Organization } from '@prisma/client'
 import { OrganizationAddress } from '@/types/organization'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Badge } from '@/components/ui/badge'
 
 const PreviewModal = ({
   isLoadingState,
@@ -71,11 +72,11 @@ const PreviewModal = ({
     (customerInfoState?.country ? ', ' + customerInfoState?.country : '')
 
   return (
-    <DialogContent className='bg-white dark:bg-zinc-900 dark:border-zinc-700 border-zinc-200 max-w-3xl'>
+    <DialogContent className='bg-white dark:bg-zinc-900 dark:border-zinc-800 border-zinc-200 max-w-2xl shadow-none'>
       <DialogHeader>
         <DialogTitle className='flex items-center justify-between pb-1 pr-6'>
           <p className='font-bold text-3xl'>
-            Invoice
+            Invoice Preview
             <span className='text-lg font-medium ml-2 dark:text-sky-300 text-sky-600'>
               <span className='dark:text-white/50 text-black/50 mr-1'>#</span>
               {invoiceInfoState.invoiceNumber
@@ -92,20 +93,22 @@ const PreviewModal = ({
           </TabsList>
           <TabsContent value='digital'>
             <div className='overflow-y-auto h-80 font-medium px-4'>
-              <div className='flex gap-4 items-end text-zinc-800/60 dark:text-zinc-200/60 text-sm mt-2 font-semibold'>
-                <span className=''>
-                  PAYMENT METHOD :{' '}
-                  <span className='ml-1'>
+              <div className='flex gap-4 items-end text-sm mt-2 font-semibold'>
+                <Badge className='flex gap-1.5 items-center bg-green-500 hover:bg-green-600'>
+                  <Banknote size={20} className='text-white' />
+                  <p className='text-xs font-semibold text-white'>
                     {formatTexttoCaps(paymentInfoState.method)}
-                  </span>
-                </span>
-                <p className='w-[1.5px] h-3.5 mb-0.5 bg-zinc-800/40 dark:bg-zinc-200/50'></p>
-                <p>
-                  DUE ON :{' '}
-                  <span className='ml-1'>
+                  </p>
+                </Badge>
+                <div className='flex gap-1.5 items-center py-0.5'>
+                  <Calendar
+                    size={18}
+                    className='text-zinc-500 dark:text-zinc-400'
+                  />
+                  <p className='text-xs leading-5 font-semibold text-black dark:text-white'>
                     {formatDate(invoiceInfoState.dueDate)}
-                  </span>
-                </p>
+                  </p>
+                </div>
               </div>
               <Separator className='my-3 bg-black/20 dark:bg-white/20 h-[0.5px]' />
               <div className='flex flex-col gap-3 w-full'>
@@ -134,24 +137,22 @@ const PreviewModal = ({
               </div>
               <CollapsiblePurchasedItems />
               <Separator className='mt-1 mb-3 bg-black/20 dark:bg-white/20 h-[0.5px]' />
-              <div className='w-full flex justify-between mb-3'>
-                <div className='w-1/2'>{/* notes */}</div>
-                <div className='w-2/6'>
-                  <div className='w-full flex justify-between items-center'>
-                    <span className='text-zinc-800/60 dark:text-zinc-200/60 text-sm'>
-                      Amount Payable
-                    </span>
-                    <span className='text-xl font-bold'>
-                      {formatAmount(subTotal + +paymentInfoState.adjustmentFee)}
-                    </span>
-                  </div>
+              <div className='w-full flex justify-end mb-3'>
+                <div className='w-full max-w-52 flex justify-between items-center'>
+                  <span className='text-zinc-800/60 dark:text-zinc-200/60 text-sm'>
+                    Amount Payable
+                  </span>
+                  <span className='text-xl font-bold'>
+                    {formatAmount(subTotal + +paymentInfoState.adjustmentFee)}
+                  </span>
                 </div>
               </div>
               <Alert variant='warning'>
                 <Info className='h-4 w-4' />
                 <AlertDescription>
-                  Your client will get a hosted payment field to make payment
-                  with any credit card, debit card, upi and bank transfer
+                  {paymentInfoState.method === 'cash'
+                    ? 'Kindly make sure payment is done specific location, and confirm the total amount due and ensuring adherence to any deadline.'
+                    : 'Your client will get a hosted payment field to make payment with any credit card, debit card, upi and bank transfer.'}
                 </AlertDescription>
               </Alert>
             </div>
