@@ -1,7 +1,17 @@
-import NextAuth, { SessionStrategy } from 'next-auth'
+import NextAuth, { SessionStrategy, User } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-import { PrismaAdapter } from '@auth/prisma-adapter'
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { db } from '@/lib/db'
+import { ALLOWED_USER } from '@/lib/constants'
+
+const isAllowedUser = (email: string | undefined | null) => {
+  if (!email) {
+    return null
+  }
+  const userEmailname = email.split('@')[0]
+  console.log('your username ->', userEmailname)
+  return ALLOWED_USER.includes(userEmailname)
+} // Todo: Currently in dev mode will be removed
 
 export const authOptions = {
   adapter: PrismaAdapter(db),
@@ -12,13 +22,21 @@ export const authOptions = {
     })
   ],
   pages: {
-    signIn: '/auth/signin'
+    signIn: '/auth/signin',
+    error: '/auth/error'
   },
   session: {
     maxAge: 24 * 60 * 60,
     strategy: 'jwt' as SessionStrategy
   },
-  callbacks: {}
+  callbacks: {
+    signIn({ user }: { user: User }) {
+      if (!isAllowedUser(user?.email)) {
+        return false
+      }
+      return true
+    } // Todo: Currently in dev mode will be removed
+  }
 }
 
 const handler = NextAuth(authOptions)
