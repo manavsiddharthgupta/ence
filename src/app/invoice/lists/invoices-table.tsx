@@ -166,7 +166,7 @@ const InvoiceBody = ({
                       <User2Icon size='16px' strokeWidth='1px' />
                     </AvatarFallback>
                   </Avatar>
-                  <span className='w-[calc(100%-6)]'>
+                  <span className='font-semibold w-[calc(100%-6)]'>
                     {formatCustomerInfo(invoice.customerInfo)}
                   </span>
                 </div>
@@ -177,7 +177,9 @@ const InvoiceBody = ({
                 <StatusBadge status={invoice.paymentStatus} />
               </td>
               <td className='p-2'>{formatAmount(invoice.totalAmount)}</td>
-              <td className='p-2'>{formatAmount(invoice.dueAmount)}</td>
+              <td className='p-2 font-semibold'>
+                {formatAmount(invoice.dueAmount)}
+              </td>
               <td className=''>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

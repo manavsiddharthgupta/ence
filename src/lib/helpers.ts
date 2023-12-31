@@ -10,9 +10,8 @@ import {
   SendMethods
 } from '@/types/invoice'
 import { OrganizationBody, OrganizationState } from '@/types/organization'
-import { Id, toast } from 'react-toastify'
 import { ToWords } from 'to-words'
-
+import { toast } from 'sonner'
 export const formatAmount = (amount: number) => {
   const formattedNumber = amount.toLocaleString('en-IN', {
     maximumFractionDigits: 2
@@ -22,53 +21,30 @@ export const formatAmount = (amount: number) => {
 
 export const callInfoToast = (info: string) => {
   toast.info(info, {
-    position: 'top-center',
-    autoClose: 2000,
-    hideProgressBar: false,
-    closeOnClick: false,
-    pauseOnHover: false,
-    draggable: true,
-    progress: undefined,
-    theme: localStorage.getItem('theme') === 'Light' ? 'light' : 'dark'
+    position: 'top-right'
   })
 }
 
 export const callErrorToast = (info: string) => {
   toast.error(info, {
-    position: 'top-center',
-    autoClose: 2000,
-    hideProgressBar: false,
-    closeOnClick: false,
-    pauseOnHover: false,
-    draggable: true,
-    progress: undefined,
-    theme: localStorage.getItem('theme') === 'Light' ? 'light' : 'dark'
+    position: 'top-right'
   })
 }
 
 export const callLoadingToast = (info: string) => {
   const loadingToastId = toast.loading(info, {
-    position: 'top-center',
-    autoClose: false,
-    theme: localStorage.getItem('theme') === 'Light' ? 'light' : 'dark'
+    position: 'top-right'
   })
   return loadingToastId
 }
 
 export const callSuccessToast = (info: string) => {
   toast.success(info, {
-    position: 'top-center',
-    autoClose: 2000,
-    hideProgressBar: false,
-    closeOnClick: false,
-    pauseOnHover: false,
-    draggable: true,
-    progress: undefined,
-    theme: localStorage.getItem('theme') === 'Light' ? 'light' : 'dark'
+    position: 'top-right'
   })
 }
 
-export const dismissToast = (id: Id) => {
+export const dismissToast = (id: string) => {
   toast.dismiss(id)
 }
 
@@ -102,7 +78,9 @@ export const formatDate = (inputDate: Date | undefined) => {
   const monthAbbreviation = months[date.getMonth()]
   const year = date.getFullYear() % 100 // Get last two digits of the year
 
-  const formattedDate = `${day} ${monthAbbreviation} '${year
+  const formattedDate = `${day
+    .toString()
+    .padStart(2, '0')} ${monthAbbreviation} '${year
     .toString()
     .padStart(2, '0')}`
   return formattedDate
