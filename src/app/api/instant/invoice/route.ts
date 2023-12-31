@@ -1,7 +1,9 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../../auth/[...nextauth]/route'
-import { db } from '@/lib/db'
-import { put } from '@vercel/blob'
+import { db } from '../../../../lib/db'
+import { instantInvoiceCreateService } from './service'
+import { uploadFilesToS3 } from '@/resources/s3'
+import { streamToBuffer } from '@/utils/buffer'
 
 export async function POST(request: Request) {
   try {
@@ -39,19 +41,19 @@ export async function POST(request: Request) {
       return Response.json({ ok: false, data: null, status: 500 })
     }
 
-    console.log('File Name', filename)
+    const bufferImageData = await streamToBuffer(request.body)
+    const fileUrl = await uploadFilesToS3(
+      'ence-invoice',
+      filename,
+      bufferImageData
+    )
+    console.log('fileurl', fileUrl)
+    const response = await instantInvoiceCreateService(fileUrl)
+    console.log('Invoice Data', response)
 
-    const url = await put(filename, request.body, {
-      access: 'public'
-    })
-
-    console.log('URL', url)
-
-    return Response.json({ ok: true, data: url, status: 200 })
+    return Response.json({ ok: true, data: '2', status: 200 })
   } catch (error) {
     console.error('Error:', error)
     return Response.json({ ok: false, data: null, status: 500 })
   }
 }
-
-// user -> image -> Vercel -> link -> ocr_service -> data_res -> validation -> data_return
