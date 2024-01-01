@@ -1,5 +1,4 @@
 'use client'
-import type { PutBlobResult } from '@vercel/blob'
 import { useState, useRef } from 'react'
 
 const dashboard = () => {
@@ -15,7 +14,8 @@ export default dashboard
 
 function AvatarUploadPage() {
   const inputFileRef = useRef<HTMLInputElement>(null)
-  const [blob, setBlob] = useState<PutBlobResult | null>(null)
+  const [blob, setBlob] = useState(null)
+  const [loading, setLoading] = useState(false)
   return (
     <>
       <h1>Upload Your Avatar</h1>
@@ -27,6 +27,8 @@ function AvatarUploadPage() {
           if (!inputFileRef.current?.files) {
             throw new Error('No file selected')
           }
+
+          setLoading(true)
 
           const file = inputFileRef.current.files[0]
 
@@ -41,17 +43,21 @@ function AvatarUploadPage() {
             }
           )
 
-          const newBlob = (await response.json()) as PutBlobResult
+          const newBlob = await response.json()
+          console.log(newBlob)
 
-          setBlob(newBlob)
+          setBlob(newBlob.data.url)
+          setLoading(false)
         }}
       >
         <input name='file' ref={inputFileRef} type='file' required />
-        <button type='submit'>Upload</button>
+        <button disabled={loading} type='submit'>
+          Upload
+        </button>
       </form>
       {blob && (
         <div>
-          Blob url: <a href={blob.url}>{blob.url}</a>
+          Blob url: <a href={blob}>{blob}</a>
         </div>
       )}
     </>

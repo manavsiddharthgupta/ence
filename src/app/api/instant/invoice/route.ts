@@ -1,7 +1,6 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../../auth/[...nextauth]/route'
 import { db } from '../../../../lib/db'
-import { instantInvoiceCreateService } from './service'
 import { uploadFilesToS3 } from '@/resources/s3'
 import { streamToBuffer } from '@/utils/buffer'
 
@@ -47,11 +46,14 @@ export async function POST(request: Request) {
       filename,
       bufferImageData
     )
-    console.log('fileurl', fileUrl)
-    const response = await instantInvoiceCreateService(fileUrl)
-    console.log('Invoice Data', response)
-
-    return Response.json({ ok: true, data: '2', status: 200 })
+    console.log(fileUrl)
+    return Response.json({
+      ok: true,
+      data: {
+        url: fileUrl
+      },
+      status: 200
+    })
   } catch (error) {
     console.error('Error:', error)
     return Response.json({ ok: false, data: null, status: 500 })
