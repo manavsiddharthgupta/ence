@@ -1,7 +1,7 @@
 import NextAuth, { SessionStrategy, User } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-import { PrismaAdapter } from '@auth/prisma-adapter'
-import { db } from '@/lib/db'
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
+import { db } from '../../../../lib/db'
 import { ALLOWED_USER } from '@/lib/constants'
 
 const isAllowedUser = (email: string | undefined | null) => {
