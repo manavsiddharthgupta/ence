@@ -19,9 +19,10 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover'
 import { Button } from './ui/button'
-import { LogOut, Settings } from 'lucide-react'
+import { LogOut, Settings, Zap } from 'lucide-react'
 import { Beta } from './beta-badge'
 import { Skeleton } from './ui/skeleton'
+import Link from 'next/link'
 
 const Sidebar = ({
   onChangeThemeHandler
@@ -58,11 +59,40 @@ const Sidebar = ({
         </div>
       </div>
       <div className='h-8 flex flex-col justify-between'>
-        <div className=' flex items-center justify-center'>
+        <div className=' flex items-center justify-center gap-1'>
           <Switch
             checked={theme === Theme.Light}
             onCheckedChange={onChangeThemeHandler}
           />
+          <Popover>
+            <PopoverTrigger asChild>
+              <div className='flex items-center gap-1 rounded-3xl py-1 px-2 border dark:border-zinc-700 border-zinc-200 cursor-pointer'>
+                <Zap size={14} strokeWidth={1} />
+                <p className='text-xs'>Instant</p>
+              </div>
+            </PopoverTrigger>
+            <PopoverContent
+              sideOffset={1}
+              className='w-fit flex gap-2 dark:border-zinc-700 border-zinc-300 dark:bg-zinc-900/30 bg-white/30 backdrop-blur-md'
+            >
+              <Button
+                asChild
+                className='w-fit bg-transparent border-none hover:bg-white hover:dark:bg-zinc-800 justify-start gap-4 text-xs font-medium'
+                variant='outline'
+                size='sm'
+              >
+                <Link href='/instant/invoice'>Create Invoice</Link>
+              </Button>
+              <Button
+                asChild
+                className='w-fit bg-transparent border-none hover:bg-white hover:dark:bg-zinc-800 justify-start gap-4 text-xs font-medium'
+                variant='outline'
+                size='sm'
+              >
+                <Link href='/instant/invoice'>Create Expense</Link>
+              </Button>
+            </PopoverContent>
+          </Popover>
         </div>
         <Separator className='dark:bg-zinc-700 bg-zinc-300 h-[0.5px]' />
       </div>

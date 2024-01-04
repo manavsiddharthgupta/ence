@@ -3,9 +3,7 @@ import { Theme, ThemeProvider } from '@/context/theme'
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Sidebar from './sidebar'
-import { ToastContainer } from 'react-toastify'
-
-import 'react-toastify/dist/ReactToastify.css'
+import { Toaster } from '@/components/ui/sonner'
 
 const Card = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(Theme.Dark)
@@ -49,6 +47,19 @@ const Card = ({ children }: { children: React.ReactNode }) => {
   const className =
     theme === Theme.Dark ? ' dark bg-zinc-900 w-full' : ' w-full'
 
+  if (pathname.startsWith('/instant')) {
+    return (
+      <ThemeProvider value={{ theme: theme, setTheme: onSetTheme }}>
+        <body className={className}>
+          <main className='px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
+            {children}
+          </main>
+          <Toaster />
+        </body>
+      </ThemeProvider>
+    )
+  }
+
   return (
     <ThemeProvider value={{ theme: theme, setTheme: onSetTheme }}>
       <body className={className}>
@@ -56,7 +67,7 @@ const Card = ({ children }: { children: React.ReactNode }) => {
         <main className='ml-56 px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
           {children}
         </main>
-        <ToastContainer />
+        <Toaster />
       </body>
     </ThemeProvider>
   )
