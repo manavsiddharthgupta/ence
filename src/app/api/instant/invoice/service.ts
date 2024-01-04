@@ -1,8 +1,6 @@
 import extractAndValidateData from '../../../../validator/invoice'
 export async function instantInvoiceCreateService(invoiceImageUrl: any) {
-  // const ACCESS_TOKEN = process.env.INSTANT_INVOICE_TOKEN
-  const ACCESS_TOKEN =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMTY5YWM3M2YtMTE1My00ZTI5LWFiODgtMGE5NTNlMWUzMjgwIiwidHlwZSI6ImFwaV90b2tlbiJ9.qNksVv5XVjH_F9TmC7hC9jcNqddk5VEqiLBx_6mOfEI'
+  const ACCESS_TOKEN = process.env.INVOICE_PARSER_ACCESS_TOKEN
 
   const options = {
     method: 'POST',
