@@ -74,7 +74,9 @@ const InvoiceUploader = ({ onSetUrl }: { onSetUrl: (url: string) => void }) => {
         <div className='absolute top-0 left-0 border border-dashed dark:border-zinc-600 border-zinc-400 bg-zinc-50/95 dark:bg-zinc-800/95 dark:text-white text-black w-full h-full rounded-2xl flex justify-center items-center'>
           <div className='w-fit h-fit flex items-center gap-2 '>
             <Loader2Icon className='animate-spin' />
-            <p className='text-sm font-semibold'>Uploading document</p>
+            <p className='text-sm font-semibold'>
+              Uploading and Extracting document
+            </p>
           </div>
         </div>
       )}

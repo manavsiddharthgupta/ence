@@ -171,7 +171,7 @@ export const formatInvoiceData = (
     dueAmount:
       paymentInfoState.status === 'paid'
         ? 0
-        : subTotal + +paymentInfoState.adjustmentFee,
+        : subTotal + +paymentInfoState.adjustmentFee, // Todo: do it in server side instead in client side
     items: formattedIvoiceItems
   }
   return formattedData
@@ -200,4 +200,8 @@ export const formatOrgData = (orgInfo: OrganizationState) => {
     })
   }
   return formattedData
+}
+
+export const formatInstantInvoiceData = () => {
+  // TODO:
 }
