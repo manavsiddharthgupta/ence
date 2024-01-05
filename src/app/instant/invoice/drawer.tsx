@@ -53,7 +53,7 @@ const InstantDrawer = ({ blobUrl }: { blobUrl: string | null }) => {
         instantInvoiceDispatch
       }}
     >
-      <Drawer open={blobUrl === null} dismissible={false}>
+      <Drawer open={blobUrl !== null} dismissible={false}>
         <DrawerContent>
           <div className='mx-auto w-full max-w-4xl min-h-[480px]'>
             <DrawerHeader>
