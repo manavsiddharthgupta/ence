@@ -14,3 +14,18 @@ export type InstantInvoiceAction = {
   type: string
   payload: object
 }
+
+export type InstantInvoiceItems = {
+  id: string
+  name: string
+  quantity: number | string
+  price: number | string
+}[]
+
+export type InstantInvoiceItemsAction = {
+  type: string
+  payload: {
+    index: number
+    value: string | number
+  }
+}
