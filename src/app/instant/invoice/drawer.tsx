@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { formatAmount } from '@/lib/helpers'
 import Image from 'next/image'
-import { useEffect, useReducer, useState } from 'react'
+import { Dispatch, useEffect, useReducer, useState } from 'react'
 import {
   PAYMENT_TERMS as termsOptions,
   SENDING_OPTIONS as sendingOptions,
@@ -25,9 +25,19 @@ import {
 } from '@/context/instant-invoice'
 import {
   InitialInstantInvoiceDetails,
+  InitialInstantInvoiceItemsState,
+  instantInvoiceItemsReducers,
   instantInvoiceReducers
 } from '@/reducers/createInstant'
 import { toast } from 'sonner'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious
+} from '@/components/ui/carousel'
+import { InstantInvoiceItemsAction } from '@/types/instant'
 
 const InstantDrawer = ({ blobUrl }: { blobUrl: string | null }) => {
   const [paymentTerm, setPaymentTerm] = useState(termsOptions[0].value)
@@ -38,9 +48,16 @@ const InstantDrawer = ({ blobUrl }: { blobUrl: string | null }) => {
     instantInvoiceReducers,
     InitialInstantInvoiceDetails
   )
+  const [instantInvoiceItems, instantInvoiceItemsDispatch] = useReducer(
+    instantInvoiceItemsReducers,
+    InitialInstantInvoiceItemsState
+  )
+
   return (
     <InstantInvoiceProvider
       value={{
+        instantInvoiceItems,
+        instantInvoiceItemsDispatch,
         paymentTerm,
         sendingMethod,
         paymentMethod,
@@ -65,7 +82,18 @@ const InstantDrawer = ({ blobUrl }: { blobUrl: string | null }) => {
               </DrawerDescription>
             </DrawerHeader>
             <div className='p-4 flex gap-4 justify-between items-center mt-2'>
-              <InvoiceForm />
+              <Carousel className='w-[calc(100%-320px)]'>
+                <CarouselContent>
+                  <CarouselItem key={1}>
+                    <InvoiceInfo />
+                  </CarouselItem>
+                  <CarouselItem key={2}>
+                    <InvoiceItems />
+                  </CarouselItem>
+                </CarouselContent>
+                <CarouselPrevious className='dark:bg-zinc-800/30 hover:dark:bg-zinc-800/90 bg-zinc-100 hover:bg-zinc-200/80 dark:border-zinc-700 border-zinc-300' />
+                <CarouselNext className='dark:bg-zinc-800/30 hover:dark:bg-zinc-800/90 bg-zinc-100 hover:bg-zinc-200/80 dark:border-zinc-700 border-zinc-300' />
+              </Carousel>
               <div className='h-60 min-w-[230px] overflow-scroll border rounded-lg dark:border-zinc-700 border-zinc-200'>
                 {blobUrl && (
                   <Image
@@ -93,7 +121,7 @@ const InstantDrawer = ({ blobUrl }: { blobUrl: string | null }) => {
 
 export default InstantDrawer
 
-const InvoiceForm = () => {
+const InvoiceInfo = () => {
   const {
     instantInvoiceDetails,
     instantInvoiceDispatch,
@@ -118,7 +146,7 @@ const InvoiceForm = () => {
   }, [])
 
   return (
-    <div className='w-[calc(100%-280px)] flex flex-col gap-4'>
+    <div className='flex flex-col gap-4 py-2'>
       <div className='flex w-full items-center gap-4'>
         <Label
           className='text-sm font-normal text-sky-950 dark:text-white w-[130px] text-right'
@@ -239,6 +267,120 @@ const InvoiceForm = () => {
           setValue={setPaymentMethod}
           placeholder='Select Terms'
           disabled
+        />
+      </div>
+    </div>
+  )
+}
+
+const InvoiceItems = () => {
+  const { instantInvoiceItems, instantInvoiceItemsDispatch } =
+    useInstantInvoiceContext()
+
+  useEffect(() => {
+    instantInvoiceItemsDispatch({
+      type: 'ADD_NEW_ITEM',
+      payload: {
+        index: instantInvoiceItems.length,
+        value: ''
+      }
+    }) // will remove or update
+  }, [])
+
+  return (
+    <div className='h-60 overflow-y-auto'>
+      {instantInvoiceItems.map((item, index) => {
+        return (
+          <Item
+            id={item.id}
+            index={index}
+            name={item.name}
+            price={item.price}
+            quantity={item.quantity}
+            key={item.id}
+            itemsInfoDispatch={instantInvoiceItemsDispatch}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
+const Item = ({
+  id,
+  index,
+  name,
+  price,
+  quantity,
+  itemsInfoDispatch
+}: {
+  id: string
+  index: number
+  name: string
+  price: string | number
+  quantity: string | number
+  itemsInfoDispatch: Dispatch<InstantInvoiceItemsAction>
+}) => {
+  const onChangeItemName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    itemsInfoDispatch({
+      type: 'ITEM_NAME',
+      payload: { index: index, value: e.target.value }
+    })
+  }
+
+  const onChangeItemQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
+    itemsInfoDispatch({
+      type: 'ITEM_QUANTITY',
+      payload: { index: index, value: e.target.value }
+    })
+  }
+
+  const onChangeItemPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
+    itemsInfoDispatch({
+      type: 'ITEM_PRICE',
+      payload: { index: index, value: e.target.value }
+    })
+  }
+
+  return (
+    <div className='flex mb-4 px-2 mt-2 justify-start gap-2 w-full items-center'>
+      <div className='w-[20%]'>
+        <Input
+          value={quantity}
+          type='number'
+          onChange={onChangeItemQuantity}
+          placeholder='Qty'
+          className={`border-[1px] outline-none bg-transparent ${
+            quantity
+              ? 'dark:border-zinc-700 border-zinc-200'
+              : 'dark:border-red-600 border-red-400 focus-visible:ring-red-500'
+          }`}
+        />
+      </div>
+      <div className='w-[48%]'>
+        <Input
+          value={name}
+          type='text'
+          onChange={onChangeItemName}
+          placeholder='Item'
+          className={`border-[1px] outline-none bg-transparent ${
+            name
+              ? 'dark:border-zinc-700 border-zinc-200'
+              : 'dark:border-red-600 border-red-400 focus-visible:ring-red-500'
+          }`}
+        />
+      </div>
+      <div className='w-[20%]'>
+        <Input
+          value={price}
+          type='number'
+          onChange={onChangeItemPrice}
+          placeholder='Price/Pcs'
+          className={`border-[1px] outline-none bg-transparent ${
+            price
+              ? 'dark:border-zinc-700 border-zinc-200'
+              : 'dark:border-red-600 border-red-400 focus-visible:ring-red-500'
+          }`}
         />
       </div>
     </div>
