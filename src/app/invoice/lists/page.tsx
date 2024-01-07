@@ -6,7 +6,7 @@ import err from '@/svgs/err.svg'
 export const dynamic = 'force-dynamic'
 const getInvoiceOverview = async () => {
   const response = await fetch(
-    process.env.NEXTAUTH_URL + '/api/invoice/overview',
+    process.env.NEXT_PUBLIC_NEXTAUTH_URL + '/api/invoice/overview',
     {
       method: 'GET',
       cache: 'no-store',
@@ -18,11 +18,14 @@ const getInvoiceOverview = async () => {
 }
 
 const getInvoices = async () => {
-  const response = await fetch(process.env.NEXTAUTH_URL + '/api/invoice', {
-    method: 'GET',
-    cache: 'no-store',
-    headers: headers()
-  })
+  const response = await fetch(
+    process.env.NEXT_PUBLIC_NEXTAUTH_URL + '/api/invoice',
+    {
+      method: 'GET',
+      cache: 'no-store',
+      headers: headers()
+    }
+  )
   const invoicesResponse = await response.json()
   return invoicesResponse
 }
