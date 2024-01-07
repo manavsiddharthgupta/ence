@@ -7,32 +7,6 @@ import { headers } from 'next/headers'
 import { Loader2Icon } from 'lucide-react'
 export const dynamic = 'force-dynamic'
 
-const getInvoiceOverview = async () => {
-  const response = await fetch(
-    process.env.NEXT_PUBLIC_API_URL + '/api/invoice/overview',
-    {
-      method: 'GET',
-      cache: 'no-store',
-      headers: headers()
-    }
-  )
-  const overviewRes = await response.json()
-  return overviewRes
-}
-
-const getInvoices = async () => {
-  const response = await fetch(
-    process.env.NEXT_PUBLIC_API_URL + '/api/invoice',
-    {
-      method: 'GET',
-      cache: 'no-store',
-      headers: headers()
-    }
-  )
-  const invoicesResponse = await response.json()
-  return invoicesResponse
-}
-
 const Invoices = () => {
   return (
     <div className='w-full max-w-4xl mx-auto'>
@@ -59,6 +33,32 @@ const Invoices = () => {
 export default Invoices
 
 const Lists = async () => {
+  const getInvoiceOverview = async () => {
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_API_URL + '/api/invoice/overview',
+      {
+        method: 'GET',
+        cache: 'no-store',
+        headers: headers()
+      }
+    )
+    const overviewRes = await response.json()
+    return overviewRes
+  }
+
+  const getInvoices = async () => {
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_API_URL + '/api/invoice',
+      {
+        method: 'GET',
+        cache: 'no-store',
+        headers: headers()
+      }
+    )
+    const invoicesResponse = await response.json()
+    return invoicesResponse
+  }
+
   const invoiceOverview = await getInvoiceOverview()
   const invoiceLists = await getInvoices()
   return (
