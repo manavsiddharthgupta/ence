@@ -1,31 +1,18 @@
 import Image from 'next/image'
 import InvoiceTable from './invoices-table'
 import Overview from './overview'
-import { headers } from 'next/headers'
 import err from '@/svgs/err.svg'
 export const dynamic = 'force-dynamic'
 const getInvoiceOverview = async () => {
   const response = await fetch(
-    process.env.NEXT_PUBLIC_API_URL + '/api/invoice/overview',
-    {
-      method: 'GET',
-      cache: 'no-store',
-      headers: headers()
-    }
+    process.env.NEXT_PUBLIC_API_URL + '/api/invoice/overview'
   )
   const overviewRes = await response.json()
   return overviewRes
 }
 
 const getInvoices = async () => {
-  const response = await fetch(
-    process.env.NEXT_PUBLIC_API_URL + '/api/invoice',
-    {
-      method: 'GET',
-      cache: 'no-store',
-      headers: headers()
-    }
-  )
+  const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/invoice')
   const invoicesResponse = await response.json()
   return invoicesResponse
 }
