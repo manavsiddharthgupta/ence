@@ -3,8 +3,10 @@ import InvoiceTable from './invoices-table'
 import Overview from './overview'
 import err from '@/svgs/err.svg'
 import { Suspense } from 'react'
-import { headers } from 'next/headers'
 import { Loader2Icon } from 'lucide-react'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { getInvoices, getInvoicesOverview } from '@/crud/invoices'
 
 const Invoices = () => {
   return (
@@ -32,34 +34,22 @@ const Invoices = () => {
 export default Invoices
 
 const Lists = async () => {
-  const getInvoiceOverview = async () => {
-    const response = await fetch(
-      process.env.NEXT_PUBLIC_API_URL + '/api/invoice/overview',
-      {
-        method: 'GET',
-        cache: 'no-store',
-        headers: headers()
-      }
-    )
-    const overviewRes = await response.json()
-    return overviewRes
+  const getInvoiceLists = async () => {
+    const session = await getServerSession(authOptions)
+    const email = session?.user?.email
+    const response = await getInvoices(email)
+    return JSON.parse(response)
   }
 
-  const getInvoices = async () => {
-    const response = await fetch(
-      process.env.NEXT_PUBLIC_API_URL + '/api/invoice',
-      {
-        method: 'GET',
-        cache: 'no-store',
-        headers: headers()
-      }
-    )
-    const invoicesResponse = await response.json()
-    return invoicesResponse
+  const getInvoiceListsOverview = async () => {
+    const session = await getServerSession(authOptions)
+    const email = session?.user?.email
+    const response = await getInvoicesOverview(email)
+    return JSON.parse(response)
   }
 
-  const invoiceOverview = await getInvoiceOverview()
-  const invoiceLists = await getInvoices()
+  const invoiceOverview = await getInvoiceListsOverview()
+  const invoiceLists = await getInvoiceLists()
   return (
     <>
       <Overview overview={invoiceOverview.data} />
