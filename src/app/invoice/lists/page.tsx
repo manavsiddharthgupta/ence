@@ -5,21 +5,27 @@ import { headers } from 'next/headers'
 import err from '@/svgs/err.svg'
 export const dynamic = 'force-dynamic'
 const getInvoiceOverview = async () => {
-  const response = await fetch('https://app.ence.in/api/invoice/overview', {
-    method: 'GET',
-    cache: 'no-store',
-    headers: headers()
-  })
+  const response = await fetch(
+    process.env.NEXT_PUBLIC_API_URL + '/api/invoice/overview',
+    {
+      method: 'GET',
+      cache: 'no-store',
+      headers: headers()
+    }
+  )
   const overviewRes = await response.json()
   return overviewRes
 }
 
 const getInvoices = async () => {
-  const response = await fetch('https://app.ence.in/api/invoice', {
-    method: 'GET',
-    cache: 'no-store',
-    headers: headers()
-  })
+  const response = await fetch(
+    process.env.NEXT_PUBLIC_API_URL + '/api/invoice',
+    {
+      method: 'GET',
+      cache: 'no-store',
+      headers: headers()
+    }
+  )
   const invoicesResponse = await response.json()
   return invoicesResponse
 }
