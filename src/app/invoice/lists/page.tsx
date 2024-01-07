@@ -5,7 +5,6 @@ import err from '@/svgs/err.svg'
 import { Suspense } from 'react'
 import { headers } from 'next/headers'
 import { Loader2Icon } from 'lucide-react'
-export const dynamic = 'force-dynamic'
 
 const Invoices = () => {
   return (
