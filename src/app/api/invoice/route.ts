@@ -115,7 +115,13 @@ export async function POST(request: Request) {
         totalAmount: totalAmount,
         invoiceTotal: invoiceTotal,
         subTotal: subTotal,
+        auditTrailEntries: {
+          create: {
+            actionType: 'INVOICE_CREATION'
+          }
+        },
         paymentMethod: paymentMethod,
+        approvalStatus: 'APPROVED', // Todo: rmv, this will be done by customer
         paymentStatus: paymentStatus,
         paymentTerms: paymentTerms,
         sendingMethod: sendingMethod,
