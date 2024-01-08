@@ -8,29 +8,31 @@ const merchantSchema = z.object({
 })
 
 const customerSchema = z.object({
-  customer_name: z.string().nullable(),
-  customer_number: z.string().nullable(),
-  customer_email: z.string().nullable(),
-  customer_address: z.string().nullable()
+  customerName: z.string().nullable(),
+  customerNumber: z.string().nullable(),
+  customerEmail: z.string().nullable(),
+  customerAddress: z.string().nullable()
 })
 
 const itemSchema = z.object({
-  description: z.string().nullable(),
+  id: z.string(),
+  name: z.string().nullable(),
   quantity: z.number().nullable(),
-  unit_price: z.number().nullable(),
+  price: z.number().nullable(),
   total: z.number().nullable()
 })
 
 const invoiceSchema = z.object({
   merchant: merchantSchema,
   customer: customerSchema,
-  invoice_number: z.string().nullable(),
-  issue_date: z.string().nullable(),
-  due_date: z.string().nullable(),
+  invoiceNumber: z.string().nullable(),
+  dateIssue: z.string().nullable(),
+  dueDate: z.string().nullable(),
   items: z.array(itemSchema).nullable(),
   subtotal: z.number().nullable(),
   total: z.number().nullable(),
   discount: z.number().nullable(),
+  invoiceTotal: z.number().nullable(),
   service_charge: z.number().nullable()
 })
 

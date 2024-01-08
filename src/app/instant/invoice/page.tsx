@@ -52,7 +52,7 @@ const InvoiceUploader = ({ onSetUrl }: { onSetUrl: (url: string) => void }) => {
   }
 
   const onCreateInstantInvoice = async (file: File) => {
-    const response = await fetch(`/api/scan/invoice?filename=${file.name}`, {
+    const response = await fetch(`/api/upload/doc?filename=${file.name}`, {
       method: 'POST',
       body: file,
       headers: {
@@ -78,9 +78,7 @@ const InvoiceUploader = ({ onSetUrl }: { onSetUrl: (url: string) => void }) => {
         <div className='absolute top-0 left-0 border border-dashed dark:border-zinc-600 border-zinc-400 bg-zinc-50/95 dark:bg-zinc-800/95 dark:text-white text-black w-full h-full rounded-2xl flex justify-center items-center'>
           <div className='w-fit h-fit flex items-center gap-2 '>
             <Loader2Icon className='animate-spin' />
-            <p className='text-sm font-semibold'>
-              Uploading and Scanning document
-            </p>
+            <p className='text-sm font-semibold'>Uploading document</p>
           </div>
         </div>
       )}

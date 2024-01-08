@@ -54,6 +54,11 @@ export const instantInvoiceReducers = (
         ...state,
         ...action.payload
       }
+    case 'UPDATE':
+      return {
+        ...state,
+        ...action.payload
+      }
     default:
       return state
   }
@@ -79,7 +84,6 @@ export const instantInvoiceItemsReducers = (
       return [...state]
     case 'ADD_NEW_ITEM':
       return [
-        ...state,
         {
           id: uuidv4(),
           name: '',

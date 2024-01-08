@@ -18,7 +18,14 @@ import {
   formatInstantInvoiceData
 } from '@/lib/helpers'
 import Image from 'next/image'
-import { Dispatch, useEffect, useReducer, useState } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useReducer,
+  useState
+} from 'react'
 import {
   PAYMENT_TERMS as termsOptions,
   SENDING_OPTIONS as sendingOptions,
@@ -43,6 +50,7 @@ import {
   CarouselPrevious
 } from '@/components/ui/carousel'
 import { InstantInvoiceItemsAction } from '@/types/instant'
+import { Loader2Icon } from 'lucide-react'
 
 const InstantDrawer = ({
   blobUrl,
@@ -51,8 +59,9 @@ const InstantDrawer = ({
   blobUrl: string | null
   onReset: () => void
 }) => {
+  const [loading, setLoadng] = useState(true)
   const [paymentTerm, setPaymentTerm] = useState(termsOptions[0].value)
-  const [sendingMethod, setSendingMethod] = useState(sendingOptions[0].value)
+  const [sendingMethod, setSendingMethod] = useState(sendingOptions[1].value)
   const [paymentMethod, setPaymentMethod] = useState(paymentOptions[0].value)
   const [dueDate, setDueDate] = useState<Date | undefined>(new Date())
   const [instantInvoiceDetails, instantInvoiceDispatch] = useReducer(
@@ -92,19 +101,24 @@ const InstantDrawer = ({
                 Validate and edit the invoice here.
               </DrawerDescription>
             </DrawerHeader>
-            <div className='p-4 flex gap-4 justify-between items-center mt-2'>
-              <Carousel className='w-[calc(100%-320px)]'>
-                <CarouselContent>
-                  <CarouselItem key={1}>
-                    <InvoiceInfo />
-                  </CarouselItem>
-                  <CarouselItem key={2}>
-                    <InvoiceItems />
-                  </CarouselItem>
-                </CarouselContent>
+            <div className='p-4 flex gap-4 justify-between items-center mt-2 relative'>
+              {loading && (
+                <div className='w-[calc(100%-320px)] absolute top-0 z-10 -left-5 bg-zinc-50/90 dark:bg-zinc-800/90 dark:text-white text-black h-full rounded-2xl flex justify-center items-center'>
+                  <div className='w-fit h-fit flex items-center gap-2'>
+                    <Loader2Icon className='animate-spin' />
+                    <p className='text-sm font-semibold'>Scanning document</p>
+                  </div>
+                </div>
+              )}
+              <Carousel className='w-[calc(100%-320px)] z-0'>
+                <InvoiceCarouselContent
+                  blobUrl={blobUrl}
+                  setLoading={setLoadng}
+                />
                 <CarouselPrevious className='dark:bg-zinc-800/30 hover:dark:bg-zinc-800/90 bg-zinc-100 hover:bg-zinc-200/80 dark:border-zinc-700 border-zinc-300' />
                 <CarouselNext className='dark:bg-zinc-800/30 hover:dark:bg-zinc-800/90 bg-zinc-100 hover:bg-zinc-200/80 dark:border-zinc-700 border-zinc-300' />
               </Carousel>
+
               <div className='h-60 min-w-[230px] overflow-scroll border rounded-lg dark:border-zinc-700 border-zinc-200'>
                 {blobUrl && (
                   <Image
@@ -120,8 +134,12 @@ const InstantDrawer = ({
                 )}
               </div>
             </div>
-            <DrawerFooter className='mt-4 max-w-3xl mx-auto'>
-              <Footer blobUrl={blobUrl} onReset={onReset} />
+            <DrawerFooter className='mt-4 max-w-4xl mx-auto'>
+              <Footer
+                blobUrl={blobUrl}
+                onReset={onReset}
+                isScanning={loading}
+              />
             </DrawerFooter>
           </div>
         </DrawerContent>
@@ -131,6 +149,86 @@ const InstantDrawer = ({
 }
 
 export default InstantDrawer
+
+const InvoiceCarouselContent = ({
+  blobUrl,
+  setLoading
+}: {
+  blobUrl: string | null
+  setLoading: Dispatch<SetStateAction<boolean>>
+}) => {
+  const {
+    instantInvoiceDispatch,
+    instantInvoiceItemsDispatch,
+    setPaymentTerm,
+    setSendingMethod
+  } = useInstantInvoiceContext()
+
+  const getLastInvoiceNumber = useCallback(async () => {
+    const response = await fetch('/api/invoice/last')
+    const lastInvNumber = await response.json()
+    if (!lastInvNumber.ok) {
+      return
+    }
+    instantInvoiceDispatch({
+      type: 'INVOICE_NUMBER',
+      payload: { invoiceNumber: lastInvNumber?.data?.invoiceNumber + 1 || 1 }
+    })
+  }, [])
+
+  useEffect(() => {
+    if (!blobUrl) {
+      return
+    }
+    const getParserData = async () => {
+      setLoading(true)
+      const response = await fetch(`/api/scan/invoice?blobUrl=${blobUrl}`)
+      const parsedData = await response.json()
+
+      if (!parsedData.ok) {
+        toast.error('Something went wrong while parsing document', {
+          position: 'bottom-center'
+        })
+        instantInvoiceItemsDispatch({
+          type: 'ADD_NEW_ITEM',
+          payload: {
+            index: 0,
+            value: ''
+          }
+        })
+        instantInvoiceDispatch({
+          type: 'UPDATE',
+          payload: {
+            customerName: null,
+            dateIssue: new Date(),
+            invoiceTotal: null,
+            subTotal: null,
+            totalAmount: null,
+            email: null,
+            whatsappNumber: null
+          }
+        })
+        setPaymentTerm('immediate')
+        setSendingMethod('whatsapp')
+      }
+      console.log(parsedData)
+      setLoading(false)
+    }
+    getParserData()
+    getLastInvoiceNumber()
+  }, [blobUrl])
+
+  return (
+    <CarouselContent>
+      <CarouselItem key={1}>
+        <InvoiceInfo />
+      </CarouselItem>
+      <CarouselItem key={2}>
+        <InvoiceItems />
+      </CarouselItem>
+    </CarouselContent>
+  )
+}
 
 const InvoiceInfo = () => {
   const {
@@ -147,35 +245,13 @@ const InvoiceInfo = () => {
   } = useInstantInvoiceContext()
 
   useEffect(() => {
-    const getLastInvoiceNumber = async () => {
-      const response = await fetch('/api/invoice/last')
-      const lastInvNumber = await response.json()
-      if (!lastInvNumber.ok) {
-        return
-      }
-      instantInvoiceDispatch({
-        type: 'INVOICE_NUMBER',
-        payload: { invoiceNumber: lastInvNumber?.data?.invoiceNumber + 1 || 1 }
-      })
-    }
-    getLastInvoiceNumber()
-  }, [])
-
-  useEffect(() => {
-    instantInvoiceDispatch({
-      type: 'DUE_ISSUE',
-      payload: { dateIssue: new Date() }
-    })
-  }, [])
-
-  useEffect(() => {
     if (paymentTerm === 'immediate') {
       setDueDate(new Date())
     }
   }, [paymentTerm])
 
   useEffect(() => {
-    if (dueDate?.toTimeString() !== new Date().toTimeString()) {
+    if (dueDate?.toDateString() !== new Date().toDateString()) {
       setPaymentTerm('custom')
     }
   }, [dueDate])
@@ -300,7 +376,7 @@ const InvoiceInfo = () => {
           options={paymentOptions}
           value={paymentMethod}
           setValue={setPaymentMethod}
-          placeholder='Select Terms'
+          placeholder='Select Method'
           disabled
         />
       </div>
@@ -440,10 +516,12 @@ const Item = ({
 
 const Footer = ({
   blobUrl,
-  onReset
+  onReset,
+  isScanning
 }: {
   blobUrl: string | null
   onReset: () => void
+  isScanning: boolean
 }) => {
   const [loading, setLoading] = useState(false)
   const {
@@ -452,7 +530,8 @@ const Footer = ({
     instantInvoiceItems,
     paymentMethod,
     paymentTerm,
-    sendingMethod
+    sendingMethod,
+    instantInvoiceDispatch
   } = useInstantInvoiceContext()
 
   const onCreateInstantInvoice = async () => {
@@ -481,7 +560,7 @@ const Footer = ({
 
     setLoading(true)
     const loadingToastId = callLoadingToast('Creating invoice...')
-    const response = await fetch('/api/invoice', {
+    const response = await fetch('/api/invoice/instant', {
       method: 'POST',
       body: JSON.stringify(formattedData)
     })
@@ -491,6 +570,18 @@ const Footer = ({
         id: loadingToastId
       })
       onReset()
+      instantInvoiceDispatch({
+        type: 'UPDATE',
+        payload: {
+          customerName: null,
+          invoiceTotal: null,
+          invoiceNumber: null,
+          subTotal: null,
+          totalAmount: null,
+          email: null,
+          whatsappNumber: null
+        }
+      })
     } else {
       setLoading(false)
       toast.error('Something went wrong while creating invoice', {
@@ -499,7 +590,7 @@ const Footer = ({
     }
   }
   return (
-    <div className='flex items-center justify-between w-full'>
+    <div className='flex items-center justify-between w-full pr-4'>
       <div>
         <p className='text-xs text-zinc-400'>Net Payable Amount</p>
         <h1 className='text-2xl font-semibold'>
@@ -510,20 +601,20 @@ const Footer = ({
           )}
         </h1>
       </div>
-      <div className='flex gap-2 items-center'>
+      <div className='flex gap-6 items-center'>
         <Button
           type='button'
           variant='secondary'
           onClick={() => {
             onReset()
           }}
-          className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50 dark:border-zinc-700 border-zinc-200 border hover:bg-zinc-100 h-11 rounded-full px-6'
+          className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50 hover:bg-zinc-100 h-11 rounded-full px-6'
         >
           Cancel
         </Button>
         <Button
           onClick={onCreateInstantInvoice}
-          disabled={loading}
+          disabled={loading || isScanning}
           variant='default'
           className='bg-sky-600 text-white hover:bg-sky-700 h-11 rounded-full px-6'
         >
