@@ -11,7 +11,12 @@ import {
 } from '@/components/ui/drawer'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { formatAmount } from '@/lib/helpers'
+import {
+  callLoadingToast,
+  checkOnDemandValidation,
+  formatAmount,
+  formatInstantInvoiceData
+} from '@/lib/helpers'
 import Image from 'next/image'
 import { Dispatch, useEffect, useReducer, useState } from 'react'
 import {
@@ -142,14 +147,38 @@ const InvoiceInfo = () => {
   } = useInstantInvoiceContext()
 
   useEffect(() => {
-    toast.info('Invalid while extracting invoice', {
-      position: 'bottom-center'
-    })
+    const getLastInvoiceNumber = async () => {
+      const response = await fetch('/api/invoice/last')
+      const lastInvNumber = await response.json()
+      if (!lastInvNumber.ok) {
+        return
+      }
+      instantInvoiceDispatch({
+        type: 'INVOICE_NUMBER',
+        payload: { invoiceNumber: lastInvNumber?.data?.invoiceNumber + 1 || 1 }
+      })
+    }
+    getLastInvoiceNumber()
+  }, [])
+
+  useEffect(() => {
     instantInvoiceDispatch({
       type: 'DUE_ISSUE',
       payload: { dateIssue: new Date() }
     })
   }, [])
+
+  useEffect(() => {
+    if (paymentTerm === 'immediate') {
+      setDueDate(new Date())
+    }
+  }, [paymentTerm])
+
+  useEffect(() => {
+    if (dueDate?.toTimeString() !== new Date().toTimeString()) {
+      setPaymentTerm('custom')
+    }
+  }, [dueDate])
 
   return (
     <div className='flex flex-col gap-4 py-2'>
@@ -290,7 +319,7 @@ const InvoiceItems = () => {
         index: instantInvoiceItems.length,
         value: ''
       }
-    }) // will remove or update
+    })
   }, [])
 
   return (
@@ -416,12 +445,58 @@ const Footer = ({
   blobUrl: string | null
   onReset: () => void
 }) => {
-  const { instantInvoiceDetails } = useInstantInvoiceContext()
+  const [loading, setLoading] = useState(false)
+  const {
+    instantInvoiceDetails,
+    dueDate,
+    instantInvoiceItems,
+    paymentMethod,
+    paymentTerm,
+    sendingMethod
+  } = useInstantInvoiceContext()
 
-  const onCreateInstantInvoice = () => {
-    toast.error('Invalid Invoice Data', {
-      position: 'bottom-center'
+  const onCreateInstantInvoice = async () => {
+    const isValid = checkOnDemandValidation(
+      instantInvoiceDetails,
+      dueDate,
+      instantInvoiceItems,
+      paymentMethod,
+      paymentTerm,
+      sendingMethod,
+      blobUrl
+    )
+    if (!isValid || !dueDate || !blobUrl) {
+      return
+    }
+
+    const formattedData = formatInstantInvoiceData(
+      instantInvoiceDetails,
+      dueDate,
+      instantInvoiceItems,
+      paymentMethod,
+      paymentTerm,
+      sendingMethod,
+      blobUrl
+    )
+
+    setLoading(true)
+    const loadingToastId = callLoadingToast('Creating invoice...')
+    const response = await fetch('/api/invoice', {
+      method: 'POST',
+      body: JSON.stringify(formattedData)
     })
+    const invRes = await response.json()
+    if (invRes.ok) {
+      toast.success('🎉 Invoice created successfully!', {
+        id: loadingToastId
+      })
+      onReset()
+    } else {
+      setLoading(false)
+      toast.error('Something went wrong while creating invoice', {
+        id: loadingToastId
+      })
+    }
   }
   return (
     <div className='flex items-center justify-between w-full'>
@@ -439,12 +514,16 @@ const Footer = ({
         <Button
           type='button'
           variant='secondary'
-          className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50 dark:border-zinc-700 border-zinc-200 border hover:bg-zinc-100  h-11 rounded-full px-6'
+          onClick={() => {
+            onReset()
+          }}
+          className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50 dark:border-zinc-700 border-zinc-200 border hover:bg-zinc-100 h-11 rounded-full px-6'
         >
-          Close
+          Cancel
         </Button>
         <Button
           onClick={onCreateInstantInvoice}
+          disabled={loading}
           variant='default'
           className='bg-sky-600 text-white hover:bg-sky-700 h-11 rounded-full px-6'
         >

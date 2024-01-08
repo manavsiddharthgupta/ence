@@ -97,13 +97,13 @@ const createInvoice = () => {
     })
     const invRes = await response.json()
     if (invRes.ok) {
-      toast.success('Invoice created successfully!', {
+      toast.success('🎉 Invoice created successfully!', {
         id: loadingToastId
       })
       router.push('/invoice/lists')
     } else {
       setLoading(null)
-      toast.error('Database is not available', {
+      toast.error('Something went wrong while creating invoice', {
         id: loadingToastId
       })
     }

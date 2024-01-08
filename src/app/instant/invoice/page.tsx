@@ -67,9 +67,9 @@ const InvoiceUploader = ({ onSetUrl }: { onSetUrl: (url: string) => void }) => {
       setLoading(false)
       return
     }
-    setError('Error while uploading file')
+    setError('Error while uploading document')
     setLoading(false)
-    callErrorToast('Error while uploading file')
+    callErrorToast('Error while scanning document')
   }
 
   return (
