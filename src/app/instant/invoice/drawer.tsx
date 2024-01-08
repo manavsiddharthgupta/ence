@@ -39,7 +39,13 @@ import {
 } from '@/components/ui/carousel'
 import { InstantInvoiceItemsAction } from '@/types/instant'
 
-const InstantDrawer = ({ blobUrl }: { blobUrl: string | null }) => {
+const InstantDrawer = ({
+  blobUrl,
+  onReset
+}: {
+  blobUrl: string | null
+  onReset: () => void
+}) => {
   const [paymentTerm, setPaymentTerm] = useState(termsOptions[0].value)
   const [sendingMethod, setSendingMethod] = useState(sendingOptions[0].value)
   const [paymentMethod, setPaymentMethod] = useState(paymentOptions[0].value)
@@ -110,7 +116,7 @@ const InstantDrawer = ({ blobUrl }: { blobUrl: string | null }) => {
               </div>
             </div>
             <DrawerFooter className='mt-4 max-w-3xl mx-auto'>
-              <Footer />
+              <Footer blobUrl={blobUrl} onReset={onReset} />
             </DrawerFooter>
           </div>
         </DrawerContent>
@@ -297,6 +303,7 @@ const InvoiceItems = () => {
             name={item.name}
             price={item.price}
             quantity={item.quantity}
+            total={item.total}
             key={item.id}
             itemsInfoDispatch={instantInvoiceItemsDispatch}
           />
@@ -312,6 +319,7 @@ const Item = ({
   name,
   price,
   quantity,
+  total,
   itemsInfoDispatch
 }: {
   id: string
@@ -319,6 +327,7 @@ const Item = ({
   name: string
   price: string | number
   quantity: string | number
+  total: string | number
   itemsInfoDispatch: Dispatch<InstantInvoiceItemsAction>
 }) => {
   const onChangeItemName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -344,7 +353,7 @@ const Item = ({
 
   return (
     <div className='flex mb-4 px-2 mt-2 justify-start gap-2 w-full items-center'>
-      <div className='w-[20%]'>
+      <div className='w-[13%]'>
         <Input
           value={quantity}
           type='number'
@@ -357,7 +366,7 @@ const Item = ({
           }`}
         />
       </div>
-      <div className='w-[48%]'>
+      <div className='w-[40%]'>
         <Input
           value={name}
           type='text'
@@ -370,7 +379,7 @@ const Item = ({
           }`}
         />
       </div>
-      <div className='w-[20%]'>
+      <div className='w-[18%]'>
         <Input
           value={price}
           type='number'
@@ -383,11 +392,30 @@ const Item = ({
           }`}
         />
       </div>
+      <div className='w-[18%]'>
+        <Input
+          value={total}
+          type='number'
+          readOnly
+          placeholder='Price/Pcs'
+          className={`border-[1px] outline-none bg-transparent ${
+            price
+              ? 'dark:border-zinc-700 border-zinc-200'
+              : 'dark:border-red-600 border-red-400 focus-visible:ring-red-500'
+          }`}
+        />
+      </div>
     </div>
   )
 }
 
-const Footer = () => {
+const Footer = ({
+  blobUrl,
+  onReset
+}: {
+  blobUrl: string | null
+  onReset: () => void
+}) => {
   const { instantInvoiceDetails } = useInstantInvoiceContext()
 
   const onCreateInstantInvoice = () => {
@@ -407,13 +435,22 @@ const Footer = () => {
           )}
         </h1>
       </div>
-      <Button
-        onClick={onCreateInstantInvoice}
-        variant='default'
-        className='bg-sky-600 text-white hover:bg-sky-700 h-11 rounded-full px-6'
-      >
-        Send
-      </Button>
+      <div className='flex gap-2 items-center'>
+        <Button
+          type='button'
+          variant='secondary'
+          className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50 dark:border-zinc-700 border-zinc-200 border hover:bg-zinc-100  h-11 rounded-full px-6'
+        >
+          Close
+        </Button>
+        <Button
+          onClick={onCreateInstantInvoice}
+          variant='default'
+          className='bg-sky-600 text-white hover:bg-sky-700 h-11 rounded-full px-6'
+        >
+          Send
+        </Button>
+      </div>
     </div>
   )
 }

@@ -17,6 +17,10 @@ const InstantInvoice = () => {
     setUrl(url)
   }
 
+  const onReset = () => {
+    setUrl(null)
+  }
+
   return (
     <>
       <div className='max-w-3xl mx-auto'>
@@ -26,7 +30,7 @@ const InstantInvoice = () => {
           <InvoiceUploader onSetUrl={onSetUrl} />
         </div>
       </div>
-      <InstantDrawer blobUrl={blobUrl} />
+      <InstantDrawer blobUrl={blobUrl} onReset={onReset} />
     </>
   )
 }
@@ -48,7 +52,7 @@ const InvoiceUploader = ({ onSetUrl }: { onSetUrl: (url: string) => void }) => {
   }
 
   const onCreateInstantInvoice = async (file: File) => {
-    const response = await fetch(`/api/instant/invoice?filename=${file.name}`, {
+    const response = await fetch(`/api/scan/invoice?filename=${file.name}`, {
       method: 'POST',
       body: file,
       headers: {
@@ -75,7 +79,7 @@ const InvoiceUploader = ({ onSetUrl }: { onSetUrl: (url: string) => void }) => {
           <div className='w-fit h-fit flex items-center gap-2 '>
             <Loader2Icon className='animate-spin' />
             <p className='text-sm font-semibold'>
-              Uploading and Extracting document
+              Uploading and Scanning document
             </p>
           </div>
         </div>

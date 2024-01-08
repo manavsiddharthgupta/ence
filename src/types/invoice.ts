@@ -71,6 +71,7 @@ export type InvoiceBody = {
   dateIssue: Date
   dueDate: Date
   invoiceNumber: number
+  instantInvoiceLink?: string
   notes: string
   shippingCharge: number
   adjustmentFee: number

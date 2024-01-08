@@ -5,7 +5,12 @@ import { Textarea } from '@/components/ui/textarea'
 import UploadFile from '@/components/upload-files'
 import { useInvoiceContext } from '@/context/invoice'
 import { callInfoToast, formatAmount } from '@/lib/helpers'
-import { HelpCircle, HelpCircleIcon } from 'lucide-react'
+import { HelpCircle } from 'lucide-react'
+import {
+  PAYMENT_TERMS as paymentTermsOptions,
+  PAYMENT_STATUS_OPTIONS as paymentStatusOptions,
+  PAYMENT_OPTION as paymentMethodOptions
+} from '@/lib/constants'
 const PaymentDetails = () => {
   const {
     paymentInfoState,
@@ -13,45 +18,6 @@ const PaymentDetails = () => {
     invoiceInfoDispatch,
     subTotal
   } = useInvoiceContext()
-  const paymentTermsOptions = [
-    {
-      value: 'immediate',
-      label: 'Immediate'
-    },
-    {
-      value: 'net 15',
-      label: 'NET 15'
-    },
-    {
-      value: 'net 30',
-      label: 'NET 30'
-    },
-    {
-      value: 'net 60',
-      label: 'NET 60'
-    },
-    {
-      value: 'net 90',
-      label: 'NET 90'
-    },
-    {
-      value: 'custom',
-      label: 'Custom'
-    }
-  ] // Will Removed From Here
-
-  const paymentMethodOptions = [
-    { value: 'cash', label: 'Cash' },
-    { value: 'digital wallets', label: 'Digital Wallets' }
-    // { value: 'rtgs', label: 'RTGS' }
-  ] // Will Removed From Here
-
-  const paymentStatusOptions = [
-    { value: 'paid', label: 'Paid' },
-    { value: 'due', label: 'Due' },
-    { value: 'partially paid', label: 'Partially Paid' },
-    { value: 'overdue', label: 'Overdue' }
-  ] // Will Removed From Here
 
   const onChangeNotes = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     paymentInfoDispatch({

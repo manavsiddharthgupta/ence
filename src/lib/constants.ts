@@ -6,22 +6,6 @@ export const PAYMENT_TERMS = [
     label: 'Immediate'
   },
   {
-    value: 'net 15',
-    label: 'NET 15'
-  },
-  {
-    value: 'net 30',
-    label: 'NET 30'
-  },
-  {
-    value: 'net 60',
-    label: 'NET 60'
-  },
-  {
-    value: 'net 90',
-    label: 'NET 90'
-  },
-  {
     value: 'custom',
     label: 'Custom'
   }
@@ -36,4 +20,10 @@ export const PAYMENT_OPTION = [
   { value: 'cash', label: 'Cash' },
   { value: 'digital wallets', label: 'Digital Wallets' }
   // { value: 'rtgs', label: 'RTGS' }
+]
+
+export const PAYMENT_STATUS_OPTIONS = [
+  { value: 'paid', label: 'Paid' },
+  { value: 'due', label: 'Due' },
+  { value: 'overdue', label: 'Overdue' }
 ]
