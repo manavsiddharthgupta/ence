@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid'
 import {
   merchantSchema,
   customerSchema,
@@ -15,29 +16,31 @@ function extractAndValidateData(data: any) {
   }
 
   const customerData = {
-    customer_name: extractedData.customer_information.customer_name || '',
-    customer_number: extractedData.customer_information.customer_phone || '',
-    customer_email: extractedData.customer_information.customer_email || '',
-    customer_address: extractedData.customer_information.customer_address || ''
+    customerName: extractedData.customer_information.customer_name || '',
+    customerNumber: extractedData.customer_information.customer_phone || '',
+    customerEmail: extractedData.customer_information.customer_email || '',
+    customerAddress: extractedData.customer_information.customer_address || ''
   }
 
   const itemsData = extractedData.item_lines.map((item: any) => ({
-    description: item.description || '',
-    quantity: item.quantity || '',
-    unit_price: item.unit_price || '',
-    total: item.amount || ''
+    id: uuidv4(),
+    name: item.description || '',
+    quantity: item.quantity || 0,
+    price: item.unit_price || 0,
+    total: item.amount || 0
   }))
 
   const invoiceData = {
     merchant: merchantSchema.parse(merchantData),
     customer: customerSchema.parse(customerData),
-    invoice_number: extractedData.invoice_number || '',
-    issue_date: extractedData.date || '',
-    due_date: extractedData.due_date || '',
+    invoiceNumber: extractedData.invoice_number || '',
+    dateIssue: extractedData.date || '',
+    dueDate: extractedData.due_date || '',
     items: itemsData.map((item: any) => itemSchema.parse(item)),
-    subtotal: extractedData.invoice_subtotal || '',
-    total: extractedData.invoice_total || '',
+    subtotal: extractedData.invoice_subtotal || 0,
+    total: extractedData.invoice_total || 0,
     discount: extractedData.discount || 0,
+    invoiceTotal: extractedData.invoice_total || 0,
     service_charge: extractedData.service_charge || 0
   }
 

@@ -12,6 +12,7 @@ import {
 import { OrganizationBody, OrganizationState } from '@/types/organization'
 import { ToWords } from 'to-words'
 import { toast } from 'sonner'
+import { InstantInvoice, InstantInvoiceItems } from '@/types/instant'
 export const formatAmount = (amount: number) => {
   const formattedNumber = amount.toLocaleString('en-IN', {
     maximumFractionDigits: 2
@@ -117,7 +118,7 @@ export const formatInvoiceData = (
   itemsInfoState: ItemsInfoState,
   subTotal: number
 ) => {
-  const formattedIvoiceItems = itemsInfoState.map((item) => {
+  const formattedInvoiceItems = itemsInfoState.map((item) => {
     return {
       id: item.id,
       name: item.name,
@@ -172,7 +173,7 @@ export const formatInvoiceData = (
       paymentInfoState.status === 'paid'
         ? 0
         : subTotal + +paymentInfoState.adjustmentFee, // Todo: do it in server side instead in client side
-    items: formattedIvoiceItems
+    items: formattedInvoiceItems
   }
   return formattedData
 }
@@ -202,6 +203,124 @@ export const formatOrgData = (orgInfo: OrganizationState) => {
   return formattedData
 }
 
-export const formatInstantInvoiceData = () => {
-  // TODO:
+export const formatInstantInvoiceData = (
+  instantInvoiceDetails: InstantInvoice,
+  dueDate: Date,
+  instantInvoiceItems: InstantInvoiceItems,
+  paymentMethod: string,
+  paymentTerm: string,
+  sendingMethod: string,
+  blobUrl: string
+) => {
+  const formattedInvoiceItems = JSON.parse(
+    JSON.stringify(instantInvoiceItems)
+  ).map(
+    (item: {
+      id: string
+      name: string
+      quantity: number
+      price: number
+      total: number | string
+    }) => {
+      return {
+        id: item.id,
+        name: item.name,
+        quantity: +item.quantity,
+        price: +item.price,
+        total: item.total
+      }
+    }
+  )
+  const formattedData: InvoiceBody = {
+    customerInfo: JSON.stringify({
+      email: instantInvoiceDetails.email,
+      whatsappNumber: instantInvoiceDetails.whatsappNumber,
+      customerLegalName: {
+        id: null,
+        value: instantInvoiceDetails.customerName
+      }
+    }),
+    dateIssue: instantInvoiceDetails.dateIssue!,
+    dueDate: dueDate,
+    invoiceNumber: +instantInvoiceDetails.invoiceNumber!,
+    instantInvoiceLink: blobUrl,
+    notes: '-',
+    shippingCharge: 0,
+    adjustmentFee: 0,
+    sendingMethod:
+      sendingMethod === 'mail' ? SendMethods.MAIL : SendMethods.WHATSAPP,
+    paymentMethod:
+      paymentMethod === 'cash'
+        ? PaymentMethods.CASH
+        : PaymentMethods.DIGITAL_WALLET,
+    paymentStatus: PaymentStatus.DUE,
+    paymentTerms:
+      paymentTerm === 'immediate'
+        ? PaymentTerms.IMMEDIATE
+        : PaymentTerms.CUSTOM,
+    invoiceTotal: +instantInvoiceDetails.invoiceTotal!, // Todo: add discount
+    subTotal: +instantInvoiceDetails.invoiceTotal!,
+    totalAmount: +instantInvoiceDetails.invoiceTotal!, // Todo: add shipping charge, packaging charge and discount
+    dueAmount: +instantInvoiceDetails.invoiceTotal!,
+    items: formattedInvoiceItems
+  }
+  return formattedData
+}
+
+export const checkOnDemandValidation = (
+  instantInvoiceDetails: InstantInvoice,
+  dueDate: Date | undefined,
+  instantInvoiceItems: InstantInvoiceItems,
+  paymentMethod: string,
+  paymentTerm: string,
+  sendingMethod: string,
+  blobUrl: string | null
+) => {
+  if (!blobUrl) {
+    toast.error(
+      'Please re-upload your manual invoice to level up your experience 🌟',
+      {
+        position: 'bottom-center'
+      }
+    )
+    return false
+  }
+  if (!instantInvoiceDetails.invoiceNumber) {
+    toast.error('Please re-upload, we did not catch invoice number', {
+      position: 'bottom-center'
+    })
+    return false
+  }
+  if (
+    !instantInvoiceDetails.customerName ||
+    !instantInvoiceDetails.invoiceTotal ||
+    !instantInvoiceDetails.dateIssue
+  ) {
+    toast.error('Please fill invoice total and customer name', {
+      position: 'bottom-center'
+    })
+    return false
+  }
+  if (!dueDate || !paymentMethod || !paymentTerm || !sendingMethod) {
+    toast.error('Please validate invoice details', {
+      position: 'bottom-center'
+    })
+    return false
+  }
+
+  if (sendingMethod === 'mail' && !instantInvoiceDetails.email) {
+    toast.error('Please fill customer email', {
+      position: 'bottom-center'
+    })
+    return false
+  }
+
+  if (sendingMethod === 'whatsapp' && !instantInvoiceDetails.whatsappNumber) {
+    toast.error('Please fill customer whatsapp number', {
+      position: 'bottom-center'
+    })
+    return false
+  }
+
+  return true
 }

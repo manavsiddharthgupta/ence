@@ -120,6 +120,7 @@ model Organization {
 model Invoice {
   id                String                @id @default(uuid())
   invoiceNumber     Int
+  instantInvoiceLink String?
   sendingMethod     SendMethods           @default(MAIL)
   customerInfo      Json
   dateIssue         DateTime
@@ -139,8 +140,16 @@ model Invoice {
   approvalStatus    InvoiceApprovalStatus @default(UNAPPROVED)
   receiptSendStatus ReceiptSendStatus     @default(NOT_SENT)
   auditTrailEntries AuditTrail[]
+  relatedDocuments  InvoiceRelatedDocument[]
   organizationId    String
   organization      Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model InvoiceRelatedDocument {
+  id                String    @id @default(uuid())
+  documentLink      String
+  invoiceId         String
+  invoice           Invoice   @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
 }
 
 model InvoiceItem {

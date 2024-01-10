@@ -11,9 +11,21 @@ import {
 } from '@/components/ui/drawer'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { formatAmount } from '@/lib/helpers'
+import {
+  callLoadingToast,
+  checkOnDemandValidation,
+  formatAmount,
+  formatInstantInvoiceData
+} from '@/lib/helpers'
 import Image from 'next/image'
-import { Dispatch, useEffect, useReducer, useState } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useReducer,
+  useState
+} from 'react'
 import {
   PAYMENT_TERMS as termsOptions,
   SENDING_OPTIONS as sendingOptions,
@@ -38,10 +50,18 @@ import {
   CarouselPrevious
 } from '@/components/ui/carousel'
 import { InstantInvoiceItemsAction } from '@/types/instant'
+import { Loader2Icon } from 'lucide-react'
 
-const InstantDrawer = ({ blobUrl }: { blobUrl: string | null }) => {
+const InstantDrawer = ({
+  blobUrl,
+  onReset
+}: {
+  blobUrl: string | null
+  onReset: () => void
+}) => {
+  const [loading, setLoadng] = useState(true)
   const [paymentTerm, setPaymentTerm] = useState(termsOptions[0].value)
-  const [sendingMethod, setSendingMethod] = useState(sendingOptions[0].value)
+  const [sendingMethod, setSendingMethod] = useState(sendingOptions[1].value)
   const [paymentMethod, setPaymentMethod] = useState(paymentOptions[0].value)
   const [dueDate, setDueDate] = useState<Date | undefined>(new Date())
   const [instantInvoiceDetails, instantInvoiceDispatch] = useReducer(
@@ -81,19 +101,24 @@ const InstantDrawer = ({ blobUrl }: { blobUrl: string | null }) => {
                 Validate and edit the invoice here.
               </DrawerDescription>
             </DrawerHeader>
-            <div className='p-4 flex gap-4 justify-between items-center mt-2'>
-              <Carousel className='w-[calc(100%-320px)]'>
-                <CarouselContent>
-                  <CarouselItem key={1}>
-                    <InvoiceInfo />
-                  </CarouselItem>
-                  <CarouselItem key={2}>
-                    <InvoiceItems />
-                  </CarouselItem>
-                </CarouselContent>
+            <div className='p-4 flex gap-4 justify-between items-center mt-2 relative'>
+              {loading && (
+                <div className='w-[calc(100%-320px)] absolute top-0 z-10 -left-5 bg-zinc-50/90 dark:bg-zinc-800/90 dark:text-white text-black h-full rounded-2xl flex justify-center items-center'>
+                  <div className='w-fit h-fit flex items-center gap-2'>
+                    <Loader2Icon className='animate-spin' />
+                    <p className='text-sm font-semibold'>Scanning document</p>
+                  </div>
+                </div>
+              )}
+              <Carousel className='w-[calc(100%-320px)] z-0'>
+                <InvoiceCarouselContent
+                  blobUrl={blobUrl}
+                  setLoading={setLoadng}
+                />
                 <CarouselPrevious className='dark:bg-zinc-800/30 hover:dark:bg-zinc-800/90 bg-zinc-100 hover:bg-zinc-200/80 dark:border-zinc-700 border-zinc-300' />
                 <CarouselNext className='dark:bg-zinc-800/30 hover:dark:bg-zinc-800/90 bg-zinc-100 hover:bg-zinc-200/80 dark:border-zinc-700 border-zinc-300' />
               </Carousel>
+
               <div className='h-60 min-w-[230px] overflow-scroll border rounded-lg dark:border-zinc-700 border-zinc-200'>
                 {blobUrl && (
                   <Image
@@ -109,8 +134,12 @@ const InstantDrawer = ({ blobUrl }: { blobUrl: string | null }) => {
                 )}
               </div>
             </div>
-            <DrawerFooter className='mt-4 max-w-3xl mx-auto'>
-              <Footer />
+            <DrawerFooter className='mt-4 max-w-4xl mx-auto'>
+              <Footer
+                blobUrl={blobUrl}
+                onReset={onReset}
+                isScanning={loading}
+              />
             </DrawerFooter>
           </div>
         </DrawerContent>
@@ -120,6 +149,86 @@ const InstantDrawer = ({ blobUrl }: { blobUrl: string | null }) => {
 }
 
 export default InstantDrawer
+
+const InvoiceCarouselContent = ({
+  blobUrl,
+  setLoading
+}: {
+  blobUrl: string | null
+  setLoading: Dispatch<SetStateAction<boolean>>
+}) => {
+  const {
+    instantInvoiceDispatch,
+    instantInvoiceItemsDispatch,
+    setPaymentTerm,
+    setSendingMethod
+  } = useInstantInvoiceContext()
+
+  const getLastInvoiceNumber = useCallback(async () => {
+    const response = await fetch('/api/invoice/last')
+    const lastInvNumber = await response.json()
+    if (!lastInvNumber.ok) {
+      return
+    }
+    instantInvoiceDispatch({
+      type: 'INVOICE_NUMBER',
+      payload: { invoiceNumber: lastInvNumber?.data?.invoiceNumber + 1 || 1 }
+    })
+  }, [])
+
+  useEffect(() => {
+    if (!blobUrl) {
+      return
+    }
+    const getParserData = async () => {
+      setLoading(true)
+      const response = await fetch(`/api/scan/invoice?blobUrl=${blobUrl}`)
+      const parsedData = await response.json()
+
+      if (!parsedData.ok) {
+        toast.error('Something went wrong while parsing document', {
+          position: 'bottom-center'
+        })
+        instantInvoiceItemsDispatch({
+          type: 'ADD_NEW_ITEM',
+          payload: {
+            index: 0,
+            value: ''
+          }
+        })
+        instantInvoiceDispatch({
+          type: 'UPDATE',
+          payload: {
+            customerName: null,
+            dateIssue: new Date(),
+            invoiceTotal: null,
+            subTotal: null,
+            totalAmount: null,
+            email: null,
+            whatsappNumber: null
+          }
+        })
+        setPaymentTerm('immediate')
+        setSendingMethod('whatsapp')
+      }
+      console.log(parsedData)
+      setLoading(false)
+    }
+    getParserData()
+    getLastInvoiceNumber()
+  }, [blobUrl])
+
+  return (
+    <CarouselContent>
+      <CarouselItem key={1}>
+        <InvoiceInfo />
+      </CarouselItem>
+      <CarouselItem key={2}>
+        <InvoiceItems />
+      </CarouselItem>
+    </CarouselContent>
+  )
+}
 
 const InvoiceInfo = () => {
   const {
@@ -136,14 +245,16 @@ const InvoiceInfo = () => {
   } = useInstantInvoiceContext()
 
   useEffect(() => {
-    toast.info('Invalid while extracting invoice', {
-      position: 'bottom-center'
-    })
-    instantInvoiceDispatch({
-      type: 'DUE_ISSUE',
-      payload: { dateIssue: new Date() }
-    })
-  }, [])
+    if (paymentTerm === 'immediate') {
+      setDueDate(new Date())
+    }
+  }, [paymentTerm])
+
+  useEffect(() => {
+    if (dueDate?.toDateString() !== new Date().toDateString()) {
+      setPaymentTerm('custom')
+    }
+  }, [dueDate])
 
   return (
     <div className='flex flex-col gap-4 py-2'>
@@ -265,7 +376,7 @@ const InvoiceInfo = () => {
           options={paymentOptions}
           value={paymentMethod}
           setValue={setPaymentMethod}
-          placeholder='Select Terms'
+          placeholder='Select Method'
           disabled
         />
       </div>
@@ -284,7 +395,7 @@ const InvoiceItems = () => {
         index: instantInvoiceItems.length,
         value: ''
       }
-    }) // will remove or update
+    })
   }, [])
 
   return (
@@ -297,6 +408,7 @@ const InvoiceItems = () => {
             name={item.name}
             price={item.price}
             quantity={item.quantity}
+            total={item.total}
             key={item.id}
             itemsInfoDispatch={instantInvoiceItemsDispatch}
           />
@@ -312,6 +424,7 @@ const Item = ({
   name,
   price,
   quantity,
+  total,
   itemsInfoDispatch
 }: {
   id: string
@@ -319,6 +432,7 @@ const Item = ({
   name: string
   price: string | number
   quantity: string | number
+  total: string | number
   itemsInfoDispatch: Dispatch<InstantInvoiceItemsAction>
 }) => {
   const onChangeItemName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -344,7 +458,7 @@ const Item = ({
 
   return (
     <div className='flex mb-4 px-2 mt-2 justify-start gap-2 w-full items-center'>
-      <div className='w-[20%]'>
+      <div className='w-[13%]'>
         <Input
           value={quantity}
           type='number'
@@ -357,7 +471,7 @@ const Item = ({
           }`}
         />
       </div>
-      <div className='w-[48%]'>
+      <div className='w-[40%]'>
         <Input
           value={name}
           type='text'
@@ -370,7 +484,7 @@ const Item = ({
           }`}
         />
       </div>
-      <div className='w-[20%]'>
+      <div className='w-[18%]'>
         <Input
           value={price}
           type='number'
@@ -383,20 +497,100 @@ const Item = ({
           }`}
         />
       </div>
+      <div className='w-[18%]'>
+        <Input
+          value={total}
+          type='number'
+          readOnly
+          placeholder='Price/Pcs'
+          className={`border-[1px] outline-none bg-transparent ${
+            price
+              ? 'dark:border-zinc-700 border-zinc-200'
+              : 'dark:border-red-600 border-red-400 focus-visible:ring-red-500'
+          }`}
+        />
+      </div>
     </div>
   )
 }
 
-const Footer = () => {
-  const { instantInvoiceDetails } = useInstantInvoiceContext()
+const Footer = ({
+  blobUrl,
+  onReset,
+  isScanning
+}: {
+  blobUrl: string | null
+  onReset: () => void
+  isScanning: boolean
+}) => {
+  const [loading, setLoading] = useState(false)
+  const {
+    instantInvoiceDetails,
+    dueDate,
+    instantInvoiceItems,
+    paymentMethod,
+    paymentTerm,
+    sendingMethod,
+    instantInvoiceDispatch
+  } = useInstantInvoiceContext()
 
-  const onCreateInstantInvoice = () => {
-    toast.error('Invalid Invoice Data', {
-      position: 'bottom-center'
+  const onCreateInstantInvoice = async () => {
+    const isValid = checkOnDemandValidation(
+      instantInvoiceDetails,
+      dueDate,
+      instantInvoiceItems,
+      paymentMethod,
+      paymentTerm,
+      sendingMethod,
+      blobUrl
+    )
+    if (!isValid || !dueDate || !blobUrl) {
+      return
+    }
+
+    const formattedData = formatInstantInvoiceData(
+      instantInvoiceDetails,
+      dueDate,
+      instantInvoiceItems,
+      paymentMethod,
+      paymentTerm,
+      sendingMethod,
+      blobUrl
+    )
+
+    setLoading(true)
+    const loadingToastId = callLoadingToast('Creating invoice...')
+    const response = await fetch('/api/invoice/instant', {
+      method: 'POST',
+      body: JSON.stringify(formattedData)
     })
+    const invRes = await response.json()
+    if (invRes.ok) {
+      toast.success('🎉 Invoice created successfully!', {
+        id: loadingToastId
+      })
+      onReset()
+      instantInvoiceDispatch({
+        type: 'UPDATE',
+        payload: {
+          customerName: null,
+          invoiceTotal: null,
+          invoiceNumber: null,
+          subTotal: null,
+          totalAmount: null,
+          email: null,
+          whatsappNumber: null
+        }
+      })
+    } else {
+      setLoading(false)
+      toast.error('Something went wrong while creating invoice', {
+        id: loadingToastId
+      })
+    }
   }
   return (
-    <div className='flex items-center justify-between w-full'>
+    <div className='flex items-center justify-between w-full pr-4'>
       <div>
         <p className='text-xs text-zinc-400'>Net Payable Amount</p>
         <h1 className='text-2xl font-semibold'>
@@ -407,13 +601,26 @@ const Footer = () => {
           )}
         </h1>
       </div>
-      <Button
-        onClick={onCreateInstantInvoice}
-        variant='default'
-        className='bg-sky-600 text-white hover:bg-sky-700 h-11 rounded-full px-6'
-      >
-        Send
-      </Button>
+      <div className='flex gap-6 items-center'>
+        <Button
+          type='button'
+          variant='secondary'
+          onClick={() => {
+            onReset()
+          }}
+          className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50 hover:bg-zinc-100 h-11 rounded-full px-6'
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={onCreateInstantInvoice}
+          disabled={loading || isScanning}
+          variant='default'
+          className='bg-sky-600 text-white hover:bg-sky-700 h-11 rounded-full px-6'
+        >
+          Send
+        </Button>
+      </div>
     </div>
   )
 }

@@ -8,7 +8,6 @@ import {
 
 export const InitialInstantInvoiceDetails: InstantInvoice = {
   customerName: null,
-  dueDate: undefined,
   dateIssue: undefined,
   invoiceNumber: null,
   invoiceTotal: null,
@@ -26,11 +25,6 @@ export const instantInvoiceReducers = (
 ) => {
   switch (action.type) {
     case 'CUSTOMER_NAME':
-      return {
-        ...state,
-        ...action.payload
-      }
-    case 'DUE_DATE':
       return {
         ...state,
         ...action.payload
@@ -60,6 +54,11 @@ export const instantInvoiceReducers = (
         ...state,
         ...action.payload
       }
+    case 'UPDATE':
+      return {
+        ...state,
+        ...action.payload
+      }
     default:
       return state
   }
@@ -74,19 +73,23 @@ export const instantInvoiceItemsReducers = (
       state[action.payload.index].name = action.payload.value + ''
       return [...state]
     case 'ITEM_PRICE':
-      state[action.payload.index].price = action.payload.value
+      state[action.payload.index].price = +action.payload.value
+      state[action.payload.index].total =
+        +action.payload.value * +state[action.payload.index].quantity
       return [...state]
     case 'ITEM_QUANTITY':
-      state[action.payload.index].quantity = action.payload.value
+      state[action.payload.index].quantity = +action.payload.value
+      state[action.payload.index].total =
+        +action.payload.value * +state[action.payload.index].price
       return [...state]
     case 'ADD_NEW_ITEM':
       return [
-        ...state,
         {
           id: uuidv4(),
           name: '',
           price: '',
-          quantity: ''
+          quantity: '',
+          total: 0
         }
       ]
     case 'DELETE_ITEM':

@@ -24,6 +24,9 @@ export async function instantInvoiceCreateService(invoiceImageUrl: any) {
     const data = await response.json()
 
     const edenAiData = data['eden-ai']
+    if (!edenAiData) {
+      return null
+    }
     const validatedData = extractAndValidateData(edenAiData.extracted_data)
     return validatedData
   } catch (error) {
