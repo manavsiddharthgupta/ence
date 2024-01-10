@@ -169,23 +169,24 @@ const InvoiceBody = ({
                   <DropdownMenuLabel>Invoice Action</DropdownMenuLabel>
                   <DropdownMenuSeparator className='bg-zinc-600/20' />
                   <DropdownMenuItem>Update</DropdownMenuItem>
-                  <DropdownMenuItem
-                    disabled={invoice.paymentStatus === 'PAID'}
-                    className='text-green-500 hover:text-green-500'
-                    onClick={async () => {
-                      const response = await onChangePaymentStatus(invoice.id)
-                      if (!response.ok) {
-                        callErrorToast(response.data)
-                      } else {
-                        callSuccessToast(
-                          `INV-${invoice.invoiceNumber} Marked as Paid`
-                        )
-                        router.refresh()
-                      }
-                    }}
-                  >
-                    Mark as Paid
-                  </DropdownMenuItem>
+                  {invoice.paymentStatus !== 'PAID' && (
+                    <DropdownMenuItem
+                      className='text-green-500 hover:text-green-500'
+                      onClick={async () => {
+                        const response = await onChangePaymentStatus(invoice.id)
+                        if (!response.ok) {
+                          callErrorToast(response.data)
+                        } else {
+                          callSuccessToast(
+                            `INV-${invoice.invoiceNumber} Marked as Paid`
+                          )
+                          router.refresh()
+                        }
+                      }}
+                    >
+                      Mark as Paid
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem
                     onClick={() => {
                       onSelectInvoice(invoice.id)
