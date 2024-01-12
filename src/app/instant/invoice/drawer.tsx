@@ -51,6 +51,7 @@ import {
 } from '@/components/ui/carousel'
 import { InstantInvoiceItemsAction } from '@/types/instant'
 import { Loader2Icon } from 'lucide-react'
+import { ImageMagnifier } from '@/components/img-magnifier'
 
 const InstantDrawer = ({
   blobUrl,
@@ -119,20 +120,15 @@ const InstantDrawer = ({
                 <CarouselNext className='dark:bg-zinc-800/30 hover:dark:bg-zinc-800/90 bg-zinc-100 hover:bg-zinc-200/80 dark:border-zinc-700 border-zinc-300' />
               </Carousel>
 
-              <div className='h-60 min-w-[230px] overflow-scroll border rounded-lg dark:border-zinc-700 border-zinc-200'>
-                {blobUrl && (
-                  <Image
-                    src={blobUrl}
-                    blurDataURL={blobUrl}
-                    width='0'
-                    height='0'
-                    sizes='100vw'
-                    style={{ width: '230px', height: 'auto' }}
-                    alt='alt'
-                    placeholder='blur'
-                  />
-                )}
-              </div>
+              {blobUrl && (
+                <ImageMagnifier
+                  blobUrl={blobUrl}
+                  width='230px'
+                  height='240px'
+                  magnifierHeight={120}
+                  magnifieWidth={120}
+                />
+              )}
             </div>
             <DrawerFooter className='mt-4 max-w-4xl mx-auto'>
               <Footer
@@ -178,12 +174,14 @@ const InvoiceCarouselContent = ({
 
   useEffect(() => {
     if (!blobUrl) {
+      setLoading(false)
       return
     }
     const getParserData = async () => {
       setLoading(true)
       const response = await fetch(`/api/scan/invoice?blobUrl=${blobUrl}`)
       const parsedData = await response.json()
+      console.log(parsedData)
 
       if (!parsedData.ok) {
         toast.error('Something went wrong while parsing document', {
@@ -210,8 +208,20 @@ const InvoiceCarouselContent = ({
         })
         setPaymentTerm('immediate')
         setSendingMethod('whatsapp')
+      } else {
+        instantInvoiceDispatch({
+          type: 'UPDATE',
+          payload: {
+            customerName: parsedData?.data?.customer?.customerName || '',
+            dateIssue: new Date(),
+            invoiceTotal: parsedData?.data?.total || 0,
+            subTotal: parsedData?.data?.total || 0,
+            totalAmount: parsedData?.data?.total || 0,
+            email: parsedData?.data?.customer?.customerEmail || '',
+            whatsappNumber: parsedData?.data?.customer?.customerNumber || ''
+          }
+        })
       }
-      console.log(parsedData)
       setLoading(false)
     }
     getParserData()

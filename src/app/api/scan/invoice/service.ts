@@ -9,7 +9,7 @@ export async function instantInvoiceCreateService(invoiceImageUrl: any) {
       Authorization: `Bearer ${ACCESS_TOKEN}`
     },
     body: JSON.stringify({
-      providers: 'microsoft, mindee',
+      providers: 'mindee',
       language: 'en',
       file_url: `${invoiceImageUrl}`,
       fallback_providers: ''
