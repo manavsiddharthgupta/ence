@@ -10,10 +10,18 @@ import {
   SheetTitle
 } from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { formatAmount, formatDate } from '@/lib/helpers'
 import { InvoiceBody } from '@/types/invoice'
 import { Pencil2Icon } from '@radix-ui/react-icons'
-import { Banknote, Bell, Calendar, Info, UserCircleIcon } from 'lucide-react'
+import {
+  Banknote,
+  Bell,
+  Calendar,
+  CheckCircle,
+  Info,
+  UserCircleIcon
+} from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
@@ -87,6 +95,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
         paymentMethod: formatTextToCamelCase(invoiceInfo.paymentMethod),
         adjustmentFee: invoiceInfo?.adjustmentFee,
         invoiceTotal: invoiceInfo?.invoiceTotal,
+        approvalStatus: invoiceInfo?.approvalStatus,
         shippingCharges: invoiceInfo.shippingCharge,
         amtToConsumer: invoiceInfo?.totalAmount,
         paidAmount: invoiceInfo.totalAmount - invoiceInfo.dueAmount,
@@ -103,12 +112,19 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                 <Skeleton className='h-7 bg-gray-500/10' />
               ) : (
                 <div className='flex justify-between items-center'>
-                  <p className='text-xl font-medium'>
-                    Invoice info{' '}
-                    <span className='text-base font-bold'>
-                      #{invoiceDetail?.invoiceNumber || '-'}
-                    </span>
-                  </p>
+                  <div className='flex items-end gap-1.5'>
+                    <p className='text-xl font-medium'>Invoice info</p>
+                    <div className='flex gap-2 items-center'>
+                      <span className='text-base font-bold'>
+                        #{invoiceDetail?.invoiceNumber || '-'}
+                      </span>
+                      {invoiceDetail?.approvalStatus === 'APPROVED' && (
+                        <Tip info='Invoice is approved by customer'>
+                          <CheckCircle size={17} className='text-green-400' />
+                        </Tip>
+                      )}
+                    </div>
+                  </div>
                   <StatusBadge status={invoiceDetail?.paymentStatus || '-'} />
                 </div>
               )}
@@ -184,11 +200,6 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                     {invoiceDetail?.paymentMethod || '-'}
                   </Badge>
                 </Button>
-                <Tip info='Update/Edit Invoice Details'>
-                  <div className='p-2.5 opacity-70 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 rounded-md transition-all ease-in-out duration-75 cursor-not-allowed'>
-                    <Pencil2Icon width='16' height='16' />
-                  </div>
-                </Tip>
               </div>
             )}
           </div>
@@ -274,13 +285,28 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
         <div className='w-[45%]'>
           <SheetHeader>
             <SheetTitle className='text-lg'>Preview</SheetTitle>
-            <SheetDescription className='text-xs'>
-              See Invoice overview and audit trail.
-            </SheetDescription>
           </SheetHeader>
-          <div className='my-4 py-8'>
-            <p className='text-xs text-center font-medium'>Coming Soon...</p>
-          </div>
+          <Separator className='h-[0.5px] mt-2 mb-3 dark:bg-zinc-700 bg-zinc-300' />
+          <Tabs defaultValue='overview' className='w-full'>
+            <TabsList className='grid w-full grid-cols-2'>
+              <TabsTrigger value='overview'>Overview</TabsTrigger>
+              <TabsTrigger value='audit'>Audit Trail</TabsTrigger>
+            </TabsList>
+            <TabsContent value='overview'>
+              <div className='my-4 py-8'>
+                <p className='text-xs text-center font-medium'>
+                  Invoice overview coming soon...
+                </p>
+              </div>
+            </TabsContent>
+            <TabsContent value='audit'>
+              <div className='my-4 py-8'>
+                <p className='text-xs text-center font-medium'>
+                  Audit trail coming soon...
+                </p>
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </SheetContent>

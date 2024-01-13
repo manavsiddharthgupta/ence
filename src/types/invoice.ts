@@ -1,3 +1,5 @@
+import { AuditTrail } from '@prisma/client'
+
 export type Option = {
   id: number
   value: string
@@ -84,6 +86,9 @@ export type InvoiceBody = {
   totalAmount: number
   dueAmount: number
   items: InvoiceItemBody[] // Todo: methods, status .. types will be enum
+  approvalStatus?: InvoiceApprovalStatus
+  receiptSendStatus?: ReceiptSendStatus
+  auditTrailEntries?: AuditTrail[]
 }
 
 export type InvoiceItemBody = {
@@ -92,6 +97,18 @@ export type InvoiceItemBody = {
   quantity: number
   price: number
   total: number
+}
+
+export enum InvoiceApprovalStatus {
+  UNAPPROVED = 'UNAPPROVED',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED'
+}
+
+export enum ReceiptSendStatus {
+  SENT = 'SENT',
+  NOT_SENT = 'NOT_SENT',
+  FAILED = 'FAILED'
 }
 
 export enum SendMethods {

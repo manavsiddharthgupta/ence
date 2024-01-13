@@ -81,7 +81,7 @@ const InvoiceTypeOverview = ({
       <h1 className='text-2xl font-bold pl-1'>{count || '-'}</h1>
       <div className='flex gap-1 items-center'>
         <span className='text-[10px] dark:text-zinc-400/70 text-zinc-700/70'>
-          vs last week
+          vs week
         </span>
         <span className='text-xs font-semibold'>{rate || '0.0'}%</span>
         {rate === null || rate === undefined || rate === 0 ? (
