@@ -1,7 +1,14 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Loader2Icon } from 'lucide-react'
+import {
+  CheckCircle,
+  FileUp,
+  GitCompare,
+  Loader2Icon,
+  ScanText,
+  Zap
+} from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import createInv from '@/svgs/create-inv.svg'
@@ -26,7 +33,25 @@ const InstantInvoice = () => {
       <div className='max-w-3xl mx-auto'>
         <HomeBtn />
         <div className='mt-4 flex flex-col gap-4'>
-          <div className='h-32'></div>
+          <div className='h-32 border text-zinc-900 dark:text-zinc-200 dark:border-zinc-700/60 border-zinc-300/60 rounded-lg bg-white dark:bg-zinc-900 p-2 flex items-center justify-around bg-[radial-gradient(black_1px,transparent_0)] dark:bg-[radial-gradient(white_1px,transparent_0)] dot'>
+            <div>
+              <FileUp size={30} strokeWidth={1.5} className='mx-auto' />
+              <p className='font-medium'>UPLOAD</p>
+            </div>
+            <div>
+              <ScanText size={30} strokeWidth={1.5} className='mx-auto' />
+              <p className='font-medium'>SCAN</p>
+            </div>
+            <div>
+              <GitCompare size={30} strokeWidth={1.5} className='mx-auto' />
+              <p className='font-medium'>VERIFY</p>
+            </div>
+            <div>
+              <CheckCircle size={30} strokeWidth={1.5} className='mx-auto' />
+              <p className='font-medium'>DONE</p>
+            </div>
+          </div>
+
           <InvoiceUploader onSetUrl={onSetUrl} />
         </div>
       </div>
