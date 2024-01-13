@@ -1,19 +1,14 @@
 import Tip from '@/components/component-tip'
+import AuditTrail from '@/components/invoice/audit-trail'
 import { StatusBadge } from '@/components/status-badge'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import {
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle
-} from '@/components/ui/sheet'
+import { SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { formatAmount, formatDate } from '@/lib/helpers'
 import { InvoiceBody } from '@/types/invoice'
-import { Pencil2Icon } from '@radix-ui/react-icons'
 import {
   Banknote,
   Bell,
@@ -91,6 +86,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
         dueDate: formatDate(invoiceInfo.dueDate),
         paymentStatus: formatTextToCamelCase(invoiceInfo.paymentStatus),
         customer: formatCustomerName(customerInfo.customerLegalName.value),
+        auditTrail: invoiceInfo.auditTrailEntries,
         paymentTerm: formatTextToCamelCase(invoiceInfo.paymentTerms),
         paymentMethod: formatTextToCamelCase(invoiceInfo.paymentMethod),
         adjustmentFee: invoiceInfo?.adjustmentFee,
@@ -120,7 +116,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                       </span>
                       {invoiceDetail?.approvalStatus === 'APPROVED' && (
                         <Tip info='Invoice is approved by customer'>
-                          <CheckCircle size={17} className='text-green-400' />
+                          <CheckCircle size={17} className='text-green-500' />
                         </Tip>
                       )}
                     </div>
@@ -282,12 +278,12 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
             </div>
           </div>
         </div>
-        <div className='w-[45%]'>
+        <div className='w-[45%] h-full'>
           <SheetHeader>
             <SheetTitle className='text-lg'>Preview</SheetTitle>
           </SheetHeader>
           <Separator className='h-[0.5px] mt-2 mb-3 dark:bg-zinc-700 bg-zinc-300' />
-          <Tabs defaultValue='overview' className='w-full'>
+          <Tabs defaultValue='audit' className='w-full h-full'>
             <TabsList className='grid w-full grid-cols-2'>
               <TabsTrigger value='overview'>Overview</TabsTrigger>
               <TabsTrigger value='audit'>Audit Trail</TabsTrigger>
@@ -299,12 +295,11 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                 </p>
               </div>
             </TabsContent>
-            <TabsContent value='audit'>
-              <div className='my-4 py-8'>
-                <p className='text-xs text-center font-medium'>
-                  Audit trail coming soon...
-                </p>
-              </div>
+            <TabsContent
+              value='audit'
+              className='h-[calc(100%-82px)] overflow-scroll'
+            >
+              <AuditTrail auditTrail={invoiceDetail?.auditTrail} />
             </TabsContent>
           </Tabs>
         </div>

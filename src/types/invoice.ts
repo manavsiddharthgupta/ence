@@ -91,6 +91,8 @@ export type InvoiceBody = {
   auditTrailEntries?: AuditTrail[]
 }
 
+export type InvoiceAuditTrail = AuditTrail[]
+
 export type InvoiceItemBody = {
   id: string
   name: string

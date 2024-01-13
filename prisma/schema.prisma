@@ -166,6 +166,8 @@ model AuditTrail {
   id         String     @id @default(uuid())
   createdAt  DateTime   @default(now())
   actionType ActionType
+  title      String?
+  description String?
   oldStatus  String?
   newStatus  String?
   invoiceId  String
@@ -173,7 +175,8 @@ model AuditTrail {
 }
 
 enum ActionType {
-  INVOICE_CREATION
+  MANUAL_CREATION
+  INSTANT_CREATION
   APPROVAL_ACTION
   PAYMENT_STATUS_CHANGE
   RECEIPT_SEND_STATUS_CHANGE
