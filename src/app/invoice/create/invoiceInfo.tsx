@@ -101,6 +101,7 @@ const InvoiceInfo = () => {
             value={invoiceInfoState.dateIssue}
             onChange={onChangeInvoiceDateIssue}
             placeholder='Date Issue'
+            disabled
           />
         </div>
         <div className='w-1/6'>

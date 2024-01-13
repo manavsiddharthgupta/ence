@@ -140,6 +140,7 @@ const PaymentDetails = () => {
             setValue={onSetPaymentStatus}
             options={paymentStatusOptions}
             label='Select Payment Status'
+            disabled
           />
         </div>
       </div>

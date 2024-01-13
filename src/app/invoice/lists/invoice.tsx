@@ -299,7 +299,11 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
               value='audit'
               className='h-[calc(100%-82px)] overflow-scroll'
             >
-              <AuditTrail auditTrail={invoiceDetail?.auditTrail} />
+              {loading ? (
+                <p className='text-xs text-center font-medium'>Loading...</p>
+              ) : (
+                <AuditTrail auditTrail={invoiceDetail?.auditTrail} />
+              )}
             </TabsContent>
           </Tabs>
         </div>
