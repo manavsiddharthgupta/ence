@@ -116,8 +116,23 @@ export async function POST(request: Request) {
         invoiceTotal: invoiceTotal,
         subTotal: subTotal,
         auditTrailEntries: {
-          create: {
-            actionType: 'INVOICE_CREATION'
+          createMany: {
+            data: [
+              {
+                actionType: 'MANUAL_CREATION',
+                title: 'Invoice Manually Created',
+                description: 'You manually created a new invoice.',
+                oldStatus: 'N/A',
+                newStatus: 'Unapproved'
+              },
+              {
+                actionType: 'APPROVAL_ACTION',
+                title: 'Customer Approval of Invoice',
+                description: 'Customer has officially approved the invoice.',
+                oldStatus: 'Unapproved',
+                newStatus: 'Approved'
+              } // Todo: rmv, this will be done by customer
+            ]
           }
         },
         paymentMethod: paymentMethod,

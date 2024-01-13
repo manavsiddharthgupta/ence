@@ -71,10 +71,7 @@ const Sidebar = ({
                 <p className='text-xs'>Instant</p>
               </div>
             </PopoverTrigger>
-            <PopoverContent
-              sideOffset={1}
-              className='w-fit flex gap-2 dark:border-zinc-700 border-zinc-300 dark:bg-zinc-900/30 bg-white/30 backdrop-blur-md'
-            >
+            <PopoverContent className='w-fit flex gap-2 dark:border-zinc-700 border-zinc-300 dark:bg-zinc-900/30 bg-white/30 backdrop-blur-md'>
               <Button
                 asChild
                 className='w-fit bg-transparent border-none hover:bg-white hover:dark:bg-zinc-800 justify-start gap-4 text-xs font-medium'

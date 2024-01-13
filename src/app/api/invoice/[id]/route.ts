@@ -56,7 +56,13 @@ export async function GET(
         invoiceTotal: true,
         subTotal: true,
         totalAmount: true,
-        items: true
+        items: true,
+        approvalStatus: true,
+        auditTrailEntries: true,
+        discount: true,
+        receiptSendStatus: true,
+        instantInvoiceLink: true,
+        relatedDocuments: true
       }
     })
     return Response.json({ ok: true, data: response, status: 200 })

@@ -89,3 +89,8 @@
   width: 0; /* Remove scrollbar space */
   background: transparent; /* Optional: just make scrollbar invisible */
 }
+
+.dot {
+  background-size: 40px 40px;
+  background-position: -19px -19px;
+}
