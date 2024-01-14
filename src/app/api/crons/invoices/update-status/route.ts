@@ -13,10 +13,13 @@ export async function GET(request: Request) {
       })
     }
 
+    const currentDate = new Date()
+    currentDate.setHours(0, 0, 0, 0)
+
     const overdueInvoices = await db.invoice.findMany({
       where: {
         dueDate: {
-          lt: new Date()
+          lt: currentDate
         },
         paymentStatus: 'DUE'
       }
