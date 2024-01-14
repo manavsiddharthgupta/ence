@@ -13,11 +13,13 @@ import {
 const InputDate = ({
   value,
   onChange,
-  placeholder
+  placeholder,
+  disabled
 }: {
   value: Date | undefined
   onChange?: Dispatch<SetStateAction<Date | undefined>>
   placeholder: string
+  disabled?: boolean
 }) => {
   const checkVal = (value: Date | undefined) => {
     return !!value
@@ -28,7 +30,7 @@ const InputDate = ({
     : 'top-1/2 left-2.5 -translate-y-1/2 text-xs transition-all duration-100 ease-out'
 
   return (
-    <div className='w-full h-10 relative'>
+    <div className={`w-full h-10 relative ${disabled ? 'opacity-65' : ''}`}>
       <div className='w-full h-full border-[1px] dark:border-zinc-600 border-zinc-400 bg-transparent outline-none text-xs z-10 absolute left-0 top-0 px-2.5 pt-1.5 rounded-md'></div>
       <p
         className={`w-fit absolute dark:text-zinc-400 text-zinc-600 z-0 ${focusedInput}`}
@@ -42,7 +44,7 @@ const InputDate = ({
       )}
       <div className='absolute top-1/2 right-4 -translate-y-1/2 z-20'>
         <Popover>
-          <PopoverTrigger asChild>
+          <PopoverTrigger disabled={disabled}>
             <CalendarIcon className='h-4 w-4' />
           </PopoverTrigger>
           <PopoverContent className='w-auto p-0 z-20 dark:border-zinc-600 border-zinc-400 dark:bg-zinc-900 bg-white'>
@@ -51,6 +53,7 @@ const InputDate = ({
               selected={value}
               onSelect={onChange}
               initialFocus
+              disabled={disabled}
             />
           </PopoverContent>
         </Popover>

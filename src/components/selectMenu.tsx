@@ -18,13 +18,15 @@ export function SelectMenu({
   setValue,
   label,
   options,
-  stack = 'z-10'
+  stack = 'z-10',
+  disabled
 }: {
   value: string
   setValue: React.Dispatch<React.SetStateAction<string>>
   label?: string
   options: MenuOptions[]
   stack?: string
+  disabled?: boolean
 }) {
   const [open, setOpen] = React.useState(false)
   // const [value, setValue] = React.useState("");
@@ -38,6 +40,7 @@ export function SelectMenu({
           aria-expanded={open}
           className='w-full justify-between bg-transparent dark:border-zinc-600 border-zinc-400 hover:bg-transparent rounded-md shadow-none font-normal h-10 text-xs'
           size='sm'
+          disabled={disabled}
         >
           {value
             ? options.find((option) => option.value === value)?.label

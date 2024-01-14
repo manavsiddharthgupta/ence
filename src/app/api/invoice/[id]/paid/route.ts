@@ -74,7 +74,8 @@ export async function PATCH(
         oldStatus: oldStatus,
         newStatus: 'PAID',
         title: 'Payment Status Change',
-        description: 'Customer has successfully made a payment.'
+        description:
+          'You updated the payment status of the invoice to Paid, signifies  the successful completion of the payment.'
       }
     })
 
