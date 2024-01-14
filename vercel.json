@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/crons/invoices/update-status?key=enceisgreat",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}
