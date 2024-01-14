@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     const overdueInvoices = await db.invoice.findMany({
       where: {
         dueDate: {
-          lte: new Date()
+          lt: new Date()
         },
         paymentStatus: 'DUE'
       }
