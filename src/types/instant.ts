@@ -27,5 +27,6 @@ export type InstantInvoiceItemsAction = {
   payload: {
     index: number
     value: string | number
+    items?: InstantInvoiceItems
   }
 }

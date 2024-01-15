@@ -1,0 +1,52 @@
+{
+  "Merchantname": "Gilbert's",
+  "MerchantAddress": "750 Harrison Street\nSan Francisco, California, 94107",
+  "MerchantNumber": "",
+  "MerchantEmail": "",
+  "Customername": "S.F. Music Council",
+  "CustomerNumber": "",
+  "CustomerEmail": "",
+  "CustomerAddress": "3044 Pine St.\nSan Francisco, Calif.",
+  "IssueDate": "8-12-69",
+  "DueDate": "9-11-69",
+  "ItemDetails": [
+    {
+      "Description": "ream 8x11 S/6 Bond cobra",
+      "Quantity": 3,
+      "ItemPrice": 2.65,
+      "TotalPrice": 7.95
+    },
+
+    {
+      "Description": "12 pc 10\" Pan Head Elevating\nRelease",
+      "Quantity": 2,
+      "ItemPrice": 6.0,
+      "TotalPrice": 12.0
+    },
+
+    {
+      "Description": "2- 3H Stencil Hangers 10' extension",
+      "Quantity": 2,
+      "ItemPrice": 2.5,
+      "TotalPrice": 5.0
+    },
+    {
+      "Description": "DT 20 Stotka Drawers/drawer guides",
+      "Quantity": 6,
+      "ItemPrice": 2.0,
+      "TotalPrice": 12.0
+    },
+    {
+      "Description": "6027 Rd/Metal Table",
+      "Quantity": 2,
+      "ItemPrice": 2.6,
+      "TotalPrice": 5.2
+    }
+  ],
+  "SubTotal": 44.55,
+  "DiscountRate": 10,
+  "DiscountValue": 4.46,
+  "Total": 40.09,
+  "Tax": 2.0,
+  "GrandTotal": 42.09
+}
