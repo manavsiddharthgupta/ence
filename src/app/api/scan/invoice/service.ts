@@ -65,21 +65,19 @@ export async function instantInvoiceCreateServiceByGemini(
     const result = await model.generateContent([prompt, ...imageParts])
     const response = result.response
     const parsedResponse = response.text()
-    console.log('response --->', parsedResponse)
+
     if (!parsedResponse) {
       return null
     }
     const cleanDataString = parsedResponse.replace(/```/g, '').trim()
     const finalDataString = cleanDataString.replace('JSON', '')
-    return finalDataString
+    return JSON.parse(finalDataString)
   }
   try {
-    const invoiceData = await run(invoiceImageUrl)
-    if (!invoiceData) {
+    const parsedInvoice = await run(invoiceImageUrl)
+    if (!parsedInvoice) {
       return null
     }
-    console.log('data check --->', invoiceData)
-    const parsedInvoice = JSON.parse(invoiceData)
     return modifyAndValidateInstantInvoice(parsedInvoice)
   } catch (error) {
     console.error('Error processing invoice:', error)
