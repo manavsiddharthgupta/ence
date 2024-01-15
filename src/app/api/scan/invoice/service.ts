@@ -45,12 +45,12 @@ export async function instantInvoiceCreateServiceByGemini(
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
   async function urlToGenerativePart(url: string, mimeType: any) {
     const response = await fetch(url)
+    console.log('fetch--->', response)
     const data = await response.arrayBuffer()
 
     return {
       inlineData: {
         data: Buffer.from(new Uint8Array(data)).toString('base64'),
-
         mimeType
       }
     }
@@ -79,6 +79,7 @@ export async function instantInvoiceCreateServiceByGemini(
     if (!invoiceData) {
       return null
     }
+    console.log('data check --->', invoiceData)
     const parsedInvoice = JSON.parse(invoiceData)
     return modifyAndValidateInstantInvoice(parsedInvoice)
   } catch (error) {
