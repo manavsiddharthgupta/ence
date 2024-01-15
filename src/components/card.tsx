@@ -19,16 +19,16 @@ const Card = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname()
   if (pathname.startsWith('/auth')) {
     return (
-      <body>
-        <main className='min-h-screen bg-zinc-900 text-white'>{children}</main>
+      <body className='bg-zinc-900 text-white'>
+        <main className='min-h-screen'>{children}</main>
       </body>
     )
   }
 
   if (pathname.startsWith('/onboarding')) {
     return (
-      <body>
-        <main className='min-h-screen bg-zinc-900 text-white'>{children}</main>
+      <body className='bg-zinc-900 text-white'>
+        <main className='min-h-screen'>{children}</main>
       </body>
     )
   }
