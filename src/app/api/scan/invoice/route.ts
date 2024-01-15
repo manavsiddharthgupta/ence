@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../../auth/[...nextauth]/route'
 import { db } from '../../../../lib/db'
-import { instantInvoiceCreateService } from './service'
+import { instantInvoiceCreateServiceByGemini } from './service'
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
@@ -40,11 +40,11 @@ export async function GET(request: Request) {
       return Response.json({ ok: false, data: 'Invalid Url', status: 500 })
     }
 
-    const parsedData = await instantInvoiceCreateService(blobUrl)
+    const parsedData = await instantInvoiceCreateServiceByGemini(blobUrl)
     if (!parsedData) {
       return Response.json({
         ok: false,
-        data: 'Internal system error',
+        data: 'Invalid Invoice Format',
         status: 500
       })
     }

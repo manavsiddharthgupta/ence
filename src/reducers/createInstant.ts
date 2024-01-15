@@ -100,6 +100,8 @@ export const instantInvoiceItemsReducers = (
         return item.id !== action.payload.value
       })
       return [...filteredItems]
+    case 'ADD_ITEMS':
+      return action.payload.items || []
     default:
       return state
   }

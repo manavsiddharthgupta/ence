@@ -6,7 +6,7 @@ import {
   invoiceSchema
 } from './schema'
 
-function extractAndValidateData(data: any) {
+export function extractAndValidateData(data: any) {
   const extractedData = data[0]
   const merchantData = {
     merchant_name: extractedData.merchant_information.merchant_name || '',
@@ -47,4 +47,66 @@ function extractAndValidateData(data: any) {
   return invoiceSchema.parse(invoiceData)
 }
 
-export default extractAndValidateData
+export function modifyAndValidateInstantInvoice(data: any) {
+  const merchantData = {
+    merchant_name: data?.MerchantName || '',
+    merchant_number: data?.MerchantNumber || '',
+    merchant_email: data?.MerchantEmail || '',
+    merchant_address: data?.MerchantAddress || ''
+  }
+
+  const customerData = {
+    customerName: data?.CustomerName || '',
+    customerNumber: data?.CustomerNumber || '',
+    customerEmail: data?.CustomerEmail || '',
+    customerAddress: data?.CustomerAddress || ''
+  }
+
+  const itemsData = data?.ItemDetails?.map((item: any) => ({
+    id: uuidv4(),
+    name: item?.Description || '',
+    quantity: item?.Quantity || 0,
+    price: item?.ItemPrice || 0,
+    total: item?.TotalPrice || 0
+  }))
+
+  const invoiceData = {
+    merchant: merchantData,
+    customer: customerData,
+    dateIssue: data?.IssueDate || '',
+    dueDate: data?.DueDate || '',
+    items: itemsData,
+    subtotal: data?.SubTotal || 0,
+    discount: data?.DiscountValue || 0,
+    invoiceTotal: data?.Total || 0,
+    service_charge: data?.Tax || 0,
+    total: data?.GrandTotal || 0
+  }
+  return invoiceData
+}
+
+export interface ParsedInvoice {
+  Merchantname: string
+  MerchantAddress: string
+  MerchantNumber: string
+  MerchantEmail: string
+  Customername: string
+  CustomerNumber: string
+  CustomerEmail: string
+  CustomerAddress: string
+  IssueDate: Date
+  DueDate: Date
+  ItemDetails: ItemDetailsEntity[]
+  SubTotal: number
+  DiscountRate: number
+  DiscountValue: number
+  Total: number
+  Tax: number
+  GrandTotal: number
+}
+export interface ItemDetailsEntity {
+  Description: string
+  Quantity: number
+  ItemPrice: number
+  TotalPrice: number
+}

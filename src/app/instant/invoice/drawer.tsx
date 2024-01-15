@@ -17,7 +17,6 @@ import {
   formatAmount,
   formatInstantInvoiceData
 } from '@/lib/helpers'
-import Image from 'next/image'
 import {
   Dispatch,
   SetStateAction,
@@ -184,7 +183,7 @@ const InvoiceCarouselContent = ({
       console.log(parsedData)
 
       if (!parsedData.ok) {
-        toast.error('Something went wrong while parsing document', {
+        toast.error('Invalid Invoice Format', {
           position: 'bottom-center'
         })
         instantInvoiceItemsDispatch({
@@ -214,11 +213,27 @@ const InvoiceCarouselContent = ({
           payload: {
             customerName: parsedData?.data?.customer?.customerName || '',
             dateIssue: new Date(),
-            invoiceTotal: parsedData?.data?.total || 0,
-            subTotal: parsedData?.data?.total || 0,
-            totalAmount: parsedData?.data?.total || 0,
+            invoiceTotal: parsedData?.data?.total || 0, // will change
+            subTotal: parsedData?.data?.total || 0, // will change
+            totalAmount: parsedData?.data?.total || 0, // will change
             email: parsedData?.data?.customer?.customerEmail || '',
             whatsappNumber: parsedData?.data?.customer?.customerNumber || ''
+          }
+        })
+        instantInvoiceItemsDispatch({
+          type: 'ADD_ITEMS',
+          payload: {
+            index: 0,
+            value: '',
+            items: parsedData?.data?.items.map((item: any) => {
+              return {
+                id: item.id,
+                name: item.name || '',
+                price: +item.price || 0,
+                quantity: +item.quantity || 0,
+                total: +item.total || 0
+              }
+            })
           }
         })
       }
