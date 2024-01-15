@@ -67,6 +67,9 @@ export async function instantInvoiceCreateServiceByGemini(
     const result = await model.generateContent([prompt, ...imageParts])
     const response = result.response
     const parsedResponse = response.text()
+    if (!parsedResponse) {
+      return null
+    }
     const cleanDataString = parsedResponse.replace(/```/g, '').trim()
     const finalDataString = cleanDataString.replace('JSON', '')
     return finalDataString
