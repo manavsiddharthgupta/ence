@@ -38,7 +38,8 @@ export const getInvoices = async (email: string | null | undefined) => {
         dueDate: true,
         paymentStatus: true,
         dueAmount: true,
-        totalAmount: true
+        totalAmount: true,
+        approvalStatus: true
       }
     })
 

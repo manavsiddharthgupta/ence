@@ -212,18 +212,19 @@ const PaymentDetails = () => {
                   align='center'
                   sideOffset={15}
                   side='left'
-                  className='w-44 p-2 z-10'
+                  className='w-44 p-2 z-10 dark:bg-zinc-950 dark:border-zinc-700'
                 >
                   <button className='w-full cursor-text text-sm text-center font-medium'>
                     Additional Charges
                   </button>
-                  <Separator className='h-[0.5px] bg-slate-300 my-1' />
+                  <Separator className='my-1 h-[0.5px] dark:bg-zinc-700 bg-zinc-300' />
                   <div className='flex justify-between w-full text-xs font-normal text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1'>
                     <p>Packaging(₹)</p>
                     <input
+                      autoFocus
                       value={paymentInfoState.packagingCharge}
                       type='number'
-                      className='outline-none border-none w-2/5 bg-transparent text-right remove-arrow'
+                      className='outline-none border-none w-2/5 bg-transparent text-black dark:text-white text-right remove-arrow'
                       onChange={onChangePackagingCharge}
                     />
                   </div>
@@ -232,7 +233,7 @@ const PaymentDetails = () => {
                     <input
                       value={paymentInfoState.shippingCharge}
                       type='number'
-                      className='outline-none border-none w-2/5 bg-transparent text-right remove-arrow'
+                      className='outline-none border-none w-2/5 bg-transparent text-black dark:text-white text-right remove-arrow'
                       onChange={onChangeShippingCharge}
                     />
                   </div>

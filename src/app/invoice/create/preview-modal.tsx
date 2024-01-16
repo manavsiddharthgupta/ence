@@ -383,7 +383,11 @@ export const InvoiceFormat = ({
         <p className='text-xs font-semibold text-right'>
           Amount Payable{' '}
           <span className='ml-6'>
-            {formatAmount(subTotal + +paymentInfoState.adjustmentFee)}
+            {formatAmount(
+              subTotal +
+                +paymentInfoState.adjustmentFee +
+                +paymentInfoState.additionalCharges
+            )}
           </span>
         </p>
         <div className='mt-6 flex justify-between'>

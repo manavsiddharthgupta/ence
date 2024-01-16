@@ -150,6 +150,7 @@ export type InvoicesResponse = {
   customerInfo: string
   dateIssue: Date
   dueAmount: number
+  approvalStatus: 'UNAPPROVED' | 'APPROVED' | 'REJECTED'
   dueDate: Date
   id: string
   invoiceNumber: number
