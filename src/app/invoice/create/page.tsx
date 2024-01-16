@@ -164,7 +164,11 @@ const createInvoice = () => {
           <div>
             <p className='text-xs text-zinc-400'>Net Payable Amount</p>
             <h1 className='text-2xl font-semibold'>
-              {formatAmount(subTotal + +paymentInfoState.adjustmentFee)}
+              {formatAmount(
+                subTotal +
+                  +paymentInfoState.adjustmentFee +
+                  +paymentInfoState.additionalCharges
+              )}
             </h1>
           </div>
           <div className='flex gap-4 items-center'>

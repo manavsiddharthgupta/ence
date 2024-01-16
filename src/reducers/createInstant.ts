@@ -12,7 +12,6 @@ export const InitialInstantInvoiceDetails: InstantInvoice = {
   invoiceNumber: null,
   invoiceTotal: null,
   subTotal: null,
-  totalAmount: null,
   email: null,
   whatsappNumber: null
 }

@@ -53,7 +53,10 @@ export type PaymentInfoState = {
   status: string // May me change to obj
   notes: string
   discount: number | string
-  tax: number // will calculate based on tax %(from db)
+  tax: number | string
+  packagingCharge: number | string
+  lateCharge: number | string
+  additionalCharges: number | string
   shippingCharge: number | string
   adjustmentFee: number | string
 }
@@ -75,8 +78,12 @@ export type InvoiceBody = {
   invoiceNumber: number
   instantInvoiceLink?: string
   notes: string
-  shippingCharge: number
-  adjustmentFee: number
+  shippingCharge?: number
+  packagingCharge?: number
+  lateCharge?: number
+  tax?: number
+  discount?: number
+  adjustmentFee?: number
   sendingMethod: SendMethods
   paymentMethod: PaymentMethods
   paymentStatus: PaymentStatus

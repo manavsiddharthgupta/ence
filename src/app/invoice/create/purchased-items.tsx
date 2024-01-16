@@ -83,6 +83,15 @@ const CollapsiblePurchasedItems = () => {
             </div>
             <div className='flex w-full justify-between relative mb-1'>
               <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
+                +
+              </span>
+              <span className='text-zinc-800/60 dark:text-zinc-200/60'>
+                Packaging
+              </span>
+              <span>{formatAmount(+paymentInfoState.packagingCharge)}</span>
+            </div>
+            <div className='flex w-full justify-between relative mb-1'>
+              <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
                 {+paymentInfoState.adjustmentFee >= 0 ? '+' : '-'}
               </span>
               <span className='text-zinc-800/60 dark:text-zinc-200/60'>

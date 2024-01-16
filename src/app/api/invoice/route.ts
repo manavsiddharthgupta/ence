@@ -96,6 +96,7 @@ export async function POST(request: Request) {
       paymentTerms,
       sendingMethod,
       shippingCharge,
+      packagingCharge,
       invoiceTotal,
       subTotal,
       totalAmount,
@@ -143,6 +144,7 @@ export async function POST(request: Request) {
         adjustmentFee: adjustmentFee,
         notes: notes,
         shippingCharge,
+        packagingCharge,
         items: {
           createMany: {
             data: items

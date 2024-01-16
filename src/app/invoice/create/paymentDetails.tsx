@@ -11,6 +11,12 @@ import {
   PAYMENT_STATUS_OPTIONS as paymentStatusOptions,
   PAYMENT_OPTION as paymentMethodOptions
 } from '@/lib/constants'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover'
+import { Separator } from '@/components/ui/separator'
 const PaymentDetails = () => {
   const {
     paymentInfoState,
@@ -33,6 +39,24 @@ const PaymentDetails = () => {
       type: 'DISCOUNT_PERCENT',
       payload: {
         discount: e.target.value
+      }
+    })
+  }
+
+  const onChangePackagingCharge = (e: React.ChangeEvent<HTMLInputElement>) => {
+    paymentInfoDispatch({
+      type: 'PACKAGE_CHARGE',
+      payload: {
+        packagingCharge: e.target.value
+      }
+    })
+  }
+
+  const onChangeShippingCharge = (e: React.ChangeEvent<HTMLInputElement>) => {
+    paymentInfoDispatch({
+      type: 'SHIPPING_CHARGES',
+      payload: {
+        shippingCharge: e.target.value
       }
     })
   }
@@ -180,12 +204,45 @@ const PaymentDetails = () => {
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
             <div className='flex gap-1 items-center'>
-              <p>Additional Charges</p>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <p className='cursor-pointer underline'>Additional Charges</p>
+                </PopoverTrigger>
+                <PopoverContent
+                  align='center'
+                  sideOffset={15}
+                  side='left'
+                  className='w-44 p-2 z-10'
+                >
+                  <button className='w-full cursor-text text-sm text-center font-medium'>
+                    Additional Charges
+                  </button>
+                  <Separator className='h-[0.5px] bg-slate-300 my-1' />
+                  <div className='flex justify-between w-full text-xs font-normal text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1'>
+                    <p>Packaging(₹)</p>
+                    <input
+                      value={paymentInfoState.packagingCharge}
+                      type='number'
+                      className='outline-none border-none w-2/5 bg-transparent text-right remove-arrow'
+                      onChange={onChangePackagingCharge}
+                    />
+                  </div>
+                  <div className='flex justify-between w-full text-xs font-normal text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
+                    <p>Shipping(₹)</p>
+                    <input
+                      value={paymentInfoState.shippingCharge}
+                      type='number'
+                      className='outline-none border-none w-2/5 bg-transparent text-right remove-arrow'
+                      onChange={onChangeShippingCharge}
+                    />
+                  </div>
+                </PopoverContent>
+              </Popover>
               <Tip info='Packaging Charge + Shipping Charge'>
                 <HelpCircle size={10} strokeWidth={2.5} className='mt-0.5' />
               </Tip>
             </div>
-            <p>{formatAmount(0)}</p>
+            <p>{formatAmount(+paymentInfoState.additionalCharges)}</p>
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5 dark:bg-zinc-800/10 bg-zinc-200/40 rounded-sm'>
             <div className='flex gap-1 items-center'>
@@ -203,7 +260,13 @@ const PaymentDetails = () => {
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
             <p>Total</p>
-            <p>{formatAmount(subTotal + +paymentInfoState.adjustmentFee)}</p>
+            <p>
+              {formatAmount(
+                subTotal +
+                  +paymentInfoState.adjustmentFee +
+                  +paymentInfoState.additionalCharges
+              )}
+            </p>
           </div>
         </div>
       </div>

@@ -93,6 +93,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
         invoiceTotal: invoiceInfo?.invoiceTotal,
         approvalStatus: invoiceInfo?.approvalStatus,
         shippingCharges: invoiceInfo.shippingCharge,
+        packagingCharges: invoiceInfo.packagingCharge,
         amtToConsumer: invoiceInfo?.totalAmount,
         paidAmount: invoiceInfo.totalAmount - invoiceInfo.dueAmount,
         amountPayable: invoiceInfo.dueAmount
@@ -218,14 +219,20 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                 )}
               </div>
               <div className='flex justify-between items-center'>
-                <h3 className='text-xs font-medium text-zinc-900/60 dark:text-white/50'>
-                  Shipping Charge
-                </h3>
+                <div className='flex items-center gap-2 text-zinc-900/60 dark:text-white/50'>
+                  <h3 className='text-xs font-medium'>Additional Charges</h3>
+                  <Tip info='Packaging Charge + Shipping Charge'>
+                    <Info size={10} strokeWidth={2.5} className='mt-0.5' />
+                  </Tip>
+                </div>
                 {loading ? (
                   <AmountInfoSkeleton />
                 ) : (
                   <h2 className='text-lg font-bold'>
-                    {formatAmount(invoiceDetail?.shippingCharges || 0)}
+                    {formatAmount(
+                      (invoiceDetail?.shippingCharges || 0) +
+                        (invoiceDetail?.packagingCharges || 0)
+                    )}
                   </h2>
                 )}
               </div>
