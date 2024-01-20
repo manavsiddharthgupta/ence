@@ -1,9 +1,9 @@
-import { db } from '@/lib/db'
+import {db} from '@/lib/db'
 
 export const dynamic = 'force-dynamic'
 export async function GET(request: Request) {
   try {
-    const { searchParams } = new URL(request.url)
+    const {searchParams} = new URL(request.url)
     const key = searchParams.get('key')
     if (key !== process.env.NEXT_CRON_SECRET) {
       return Response.json({
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
     })
 
     await Promise.all(
-      overdueInvoices.map(async (invoice) => {
+      overdueInvoices.map(async (invoice: any) => {
         await db.invoice.update({
           where: {
             id: invoice.id
@@ -54,6 +54,6 @@ export async function GET(request: Request) {
     })
   } catch (error) {
     console.error('Error:', error)
-    return Response.json({ ok: false, data: null, status: 500 })
+    return Response.json({ok: false, data: null, status: 500})
   }
 }

@@ -1,8 +1,8 @@
-import NextAuth, { SessionStrategy, User } from 'next-auth'
+import NextAuth, {SessionStrategy, User} from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
-import { db } from '../../../../lib/db'
-import { ALLOWED_USER } from '@/lib/constants'
+import {PrismaAdapter} from '@next-auth/prisma-adapter'
+import {db} from '../../../../lib/db'
+import {ALLOWED_USER} from '@/lib/constants'
 
 const isAllowedUser = (email: string | undefined | null) => {
   if (!email) {
@@ -30,15 +30,16 @@ export const authOptions = {
     strategy: 'jwt' as SessionStrategy
   },
   callbacks: {
-    signIn({ user }: { user: User }) {
+    signIn({user}: {user: User}) {
       if (!isAllowedUser(user?.email)) {
         return false
       }
       return true
     } // Todo: Currently in dev mode will be removed
-  }
+  },
+  secret: process.env.NEXTAUTH_SECRET
 }
 
 const handler = NextAuth(authOptions)
 
-export { handler as GET, handler as POST }
+export {handler as GET, handler as POST}
