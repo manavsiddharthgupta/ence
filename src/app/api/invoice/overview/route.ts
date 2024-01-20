@@ -1,7 +1,7 @@
-import {getServerSession} from 'next-auth'
-import {db} from '@/lib/db'
-import {authOptions} from '../../auth/[...nextauth]/route'
-import {Invoice} from '@prisma/client'
+import { getServerSession } from 'next-auth'
+import { db } from '@/lib/db'
+import { authOptions } from '../../auth/[...nextauth]/route'
+import { Invoice } from '@prisma/client'
 export const dynamic = 'force-dynamic'
 export async function GET() {
   try {
@@ -9,7 +9,7 @@ export async function GET() {
     const email = session?.user?.email
     if (!email) {
       console.error('Error:', 'Not Authorized')
-      return Response.json({ok: false, data: null, status: 401})
+      return Response.json({ ok: false, data: null, status: 401 })
     }
     const org = await db.user.findUnique({
       where: {
@@ -28,7 +28,7 @@ export async function GET() {
 
     if (!org?.organizations?.id) {
       console.error('Error:', 'Organization Not Found')
-      return Response.json({ok: false, data: null, status: 404})
+      return Response.json({ ok: false, data: null, status: 404 })
     }
 
     const allInvoices: Invoice[] = await db.invoice.findMany({
@@ -93,7 +93,7 @@ export async function GET() {
     })
   } catch (error) {
     console.error('Error retrieving invoice statistics:', error)
-    return Response.json({ok: false, data: null, status: 500})
+    return Response.json({ ok: false, data: null, status: 500 })
   }
 
   function calculatePercentageChange(
