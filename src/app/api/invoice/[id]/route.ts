@@ -51,6 +51,7 @@ export async function GET(
         paymentTerms: true,
         sendingMethod: true,
         shippingCharge: true,
+        packagingCharge: true,
         dueAmount: true,
         adjustmentFee: true,
         invoiceTotal: true,

@@ -11,7 +11,14 @@ import {
 import { Button } from '@/components/ui/button'
 import { StatusBadge } from '@/components/status-badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { ChevronLeftIcon, ChevronRightIcon, User2Icon } from 'lucide-react'
+import {
+  AlertCircle,
+  CheckCircle2,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  Loader,
+  User2Icon
+} from 'lucide-react'
 import { useState } from 'react'
 import { InvoicesResponse } from '@/types/invoice'
 import {
@@ -72,13 +79,13 @@ const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
           <table className='w-full text-black dark:text-white'>
             <thead>
               <tr className='text-sm font-medium text-zinc-600/60 dark:text-zinc-400/70 border-b-[1px] border-zinc-200 dark:border-zinc-700/40'>
-                <td className='p-3 w-[12%]'># Invoice</td>
-                <td className='p-2 w-[25%]'>To</td>
-                <td className='p-2 w-[13%]'>Issue Date</td>
-                <td className='p-2 w-[13%]'>Due Date</td>
-                <td className='p-2 w-[10%]'>Status</td>
-                <td className='p-2 w-[11%]'>Total</td>
-                <td className='p-2 w-[11%]'>Due</td>
+                <td className='p-3 w-[10%]'># Invoice</td>
+                <td className='p-2 w-[24%]'>To</td>
+                <td className='p-2 w-[10%] text-center'>Approval</td>
+                <td className='p-2 w-[13%] text-center'>Due Date</td>
+                <td className='p-2 w-[11%] text-center'>Status</td>
+                <td className='p-2 w-[13%] text-center'>Total</td>
+                <td className='p-2 w-[13%] text-center'>Due</td>
                 <td className='p-2 w-[5%]'></td>
               </tr>
             </thead>
@@ -146,13 +153,23 @@ const InvoiceBody = ({
                 </span>
               </div>
             </td>
-            <td className='p-2'>{formatDate(invoice.dateIssue)}</td>
-            <td className='p-2'>{formatDate(invoice.dueDate)}</td>
             <td className='p-2'>
+              {invoice.approvalStatus === 'APPROVED' ? (
+                <CheckCircle2 size={18} className='text-green-500 mx-auto' />
+              ) : invoice.approvalStatus === 'UNAPPROVED' ? (
+                <Loader size={18} className='text-yellow-500 mx-auto' />
+              ) : (
+                <AlertCircle size={16} className='text-red-500 mx-auto' />
+              )}
+            </td>
+            <td className='p-2 text-center'>{formatDate(invoice.dueDate)}</td>
+            <td className='p-2 text-center'>
               <StatusBadge status={invoice.paymentStatus} />
             </td>
-            <td className='p-2'>{formatAmount(invoice.totalAmount)}</td>
-            <td className='p-2 font-semibold'>
+            <td className='p-2 text-center'>
+              {formatAmount(invoice.totalAmount)}
+            </td>
+            <td className='p-2 font-semibold text-center'>
               {formatAmount(invoice.dueAmount)}
             </td>
             <td className=''>
