@@ -1,7 +1,9 @@
+import { NextApiRequest } from 'next'
+
 const verify_token = process.env.VERIFY_TOKEN
 const token = process.env.WHATSAPP_TOKEN
 
-export default async function whatsappWebhookModule(request: Request) {
+export default async function whatsappWebhookModule(request: NextApiRequest) {
   if (request.method === 'GET') {
     let mode = request.query['hub.mode']
     let token = request.query['hub.verify_token']
