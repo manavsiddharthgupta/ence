@@ -1,5 +1,5 @@
-import whatsappWebhook from '@/webhooks/whatsapp'
+import whatsappWebhookModule from '@/webhooks/whatsapp'
 
 export async function POST(request: Request) {
-  whatsappWebhook(request)
+  whatsappWebhookModule(request)
 }
