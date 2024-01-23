@@ -1,36 +1,47 @@
 import { Badge } from '@/components/ui/badge'
 import { formatAmount } from '@/lib/helpers'
 import { Banknote, Coins, TrendingUp, Wallet2 } from 'lucide-react'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { getOverview } from '@/crud/invoices'
 
-const CountOverview = () => {
+const CountOverview = async () => {
+  const getCountOverview = async () => {
+    const session = await getServerSession(authOptions)
+    const email = session?.user?.email
+    const response = await getOverview(email)
+    return JSON.parse(response)
+  }
+
+  const countOverview = await getCountOverview()
   return (
     <div className='py-6 flex gap-4'>
       <OverviewCard
         name='SALES'
-        amount={189078}
+        amount={countOverview.data.all.sum}
         color='bg-sky-500/10 text-sky-500'
-        count={53}
+        count={countOverview.data.all.count}
         icon={<TrendingUp size={18} strokeWidth={1.5} />}
       />
       <OverviewCard
         name='PAID'
-        amount={85002}
+        amount={countOverview.data.paid.sum}
         color='bg-green-500/10 text-green-500'
-        count={32}
+        count={countOverview.data.paid.count}
         icon={<Banknote size={18} strokeWidth={1.5} />}
       />
       <OverviewCard
         name='UNPAID'
-        amount={104076}
+        amount={countOverview.data.unpaid.sum}
         color='bg-red-500/10 text-red-500'
-        count={21}
+        count={countOverview.data.unpaid.count}
         icon={<Coins size={18} strokeWidth={1.5} />}
       />
       <OverviewCard
         name='EXPENSE'
-        amount={4076}
+        amount={0}
         color='bg-yellow-500/10 text-yellow-500'
-        count={9}
+        count={0}
         type='Expense'
         icon={<Wallet2 size={18} strokeWidth={1.5} />}
       />
@@ -63,7 +74,7 @@ const OverviewCard = ({
         </span>
         <IconWrap className={color}>{icon}</IconWrap>
       </div>
-      <h1 className='text-3xl mb-3 font-semibold'>
+      <h1 className='text-[1.75rem] leading-9 mb-3 font-semibold'>
         {formatAmount(amount || 0)}
       </h1>
       <CountBadge type={type} count={count} />

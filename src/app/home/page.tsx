@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import CountOverview from './count-overview'
 import ActivityCard from './activity'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const dashboard = () => {
   return (
@@ -9,7 +10,7 @@ const dashboard = () => {
         Overview
       </p>
       <h1 className='text-4xl leading-9 font-semibold'>Home</h1>
-      <Suspense>
+      <Suspense fallback={<CountOverviewSuspense />}>
         <CountOverview />
       </Suspense>
       <div className='py-6 flex justify-between'>
@@ -23,3 +24,26 @@ const dashboard = () => {
 }
 
 export default dashboard
+
+const CountOverviewSuspense = () => {
+  return (
+    <div className='py-6 flex gap-4'>
+      <div className='rounded-3xl w-1/4 max-w-60'>
+        <Skeleton className='rounded-3xl h-[150px] bg-gray-500/10' />
+      </div>
+      <div className='rounded-3xl w-1/4 max-w-60'>
+        <Skeleton className='rounded-3xl h-[150px] bg-gray-500/10' />
+      </div>
+      <div className='rounded-3xl w-1/4 max-w-60'>
+        <Skeleton className='rounded-3xl h-[150px] bg-gray-500/10' />
+      </div>
+      <div className='rounded-3xl w-1/4 max-w-60'>
+        <Skeleton className='rounded-3xl h-[150px] bg-gray-500/10' />
+      </div>
+    </div>
+  )
+}
+
+const ActivityCardSuspense = () => {
+  return <div></div>
+}
