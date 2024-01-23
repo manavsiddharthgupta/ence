@@ -1,3 +1,4 @@
+import { formatDateTime } from '@/lib/helpers'
 import { InvoiceAuditTrail } from '@/types/invoice'
 import {
   FilePlus2,
@@ -19,47 +20,6 @@ const AuditTrail = ({
         <p className='text-xs text-center font-medium'>No history available.</p>
       </div>
     )
-  }
-  function formatDate(dateString: Date): string {
-    const date = new Date(dateString)
-
-    if (isNaN(date.getTime())) {
-      return 'Invalid Date'
-    }
-
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ]
-
-    const hours = date.getHours()
-    const minutes = date.getMinutes()
-    const ampm = hours >= 12 ? 'PM' : 'AM'
-
-    const formattedDate = `${
-      months[date.getMonth()]
-    } ${date.getDate()}, ${date.getFullYear()} at ${format12HourTime(
-      hours,
-      minutes
-    )} ${ampm}`
-
-    return formattedDate
-  }
-
-  function format12HourTime(hours: number, minutes: number): string {
-    const formattedHours = hours % 12 || 12
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes.toString()
-    return `${formattedHours}:${formattedMinutes}`
   }
 
   return (
@@ -84,7 +44,7 @@ const AuditTrail = ({
             desc={trail.description}
             newState={trail.newStatus}
             oldState={trail.oldStatus}
-            time={formatDate(trail.createdAt)}
+            time={formatDateTime(trail.createdAt)}
             title={trail.title}
             isFirstorLast={ind === auditTrail.length - 1}
           />

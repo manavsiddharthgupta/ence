@@ -249,3 +249,64 @@ export const getOverview = async (email: string | null | undefined) => {
     return JSON.stringify({ ok: false, data: null, status: 500 })
   }
 }
+
+export const getActivity = async (email: string | null | undefined) => {
+  try {
+    if (!email) {
+      console.error('Error:', 'Not Authorized')
+      return JSON.stringify({ ok: false, data: null, status: 401 })
+    }
+    const org = await db.user.findUnique({
+      where: {
+        email: email
+      },
+      select: {
+        email: true,
+        organizations: {
+          select: {
+            id: true,
+            orgName: true
+          }
+        }
+      }
+    })
+    if (!org?.organizations?.id) {
+      console.error('Error:', 'Organization Not Found')
+      return JSON.stringify({ ok: false, data: null, status: 404 })
+    }
+
+    const lastActivities = await db.auditTrail.findMany({
+      where: {
+        invoice: {
+          organizationId: org.organizations.id
+        }
+      },
+      select: {
+        title: true,
+        actionType: true,
+        id: true,
+        createdAt: true,
+        description: true,
+        newStatus: true,
+        invoice: {
+          select: {
+            invoiceNumber: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: 3
+    })
+
+    return JSON.stringify({
+      ok: true,
+      data: lastActivities,
+      status: 200
+    })
+  } catch (error) {
+    console.error('Error retrieving invoice statistics:', error)
+    return JSON.stringify({ ok: false, data: null, status: 500 })
+  }
+}

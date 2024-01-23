@@ -4,6 +4,7 @@ import { Banknote, Coins, TrendingUp, Wallet2 } from 'lucide-react'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { getOverview } from '@/crud/invoices'
+import { notFound } from 'next/navigation'
 
 const CountOverview = async () => {
   const getCountOverview = async () => {
@@ -14,6 +15,9 @@ const CountOverview = async () => {
   }
 
   const countOverview = await getCountOverview()
+  if (!countOverview.ok) {
+    notFound()
+  }
   return (
     <div className='py-6 flex gap-4'>
       <OverviewCard
@@ -74,7 +78,7 @@ const OverviewCard = ({
         </span>
         <IconWrap className={color}>{icon}</IconWrap>
       </div>
-      <h1 className='text-[1.75rem] leading-9 mb-3 font-semibold'>
+      <h1 className='text-[1.75rem] leading-9 mb-3 font-semibold truncate'>
         {formatAmount(amount || 0)}
       </h1>
       <CountBadge type={type} count={count} />
@@ -99,7 +103,7 @@ const CountBadge = ({
   count: number | null
   type?: 'Invoice' | 'Expense'
 }) => {
-  const text = `${count} ${type === 'Expense' ? 'Expenses' : 'Invoices'}`
+  const text = `${count || 0} ${type === 'Expense' ? 'Expenses' : 'Invoices'}`
   return (
     <Badge
       className='bg-zinc-200/40 dark:bg-zinc-700/20 py-1 px-2.5'
