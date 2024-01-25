@@ -1,49 +1,100 @@
-import { FilePlus2, IndianRupee, Landmark, User, Zap } from 'lucide-react'
+import {
+  FilePlus2,
+  IndianRupee,
+  Landmark,
+  User,
+  Zap,
+  Receipt
+} from 'lucide-react'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { getActivity } from '@/crud/invoices'
+import { notFound } from 'next/navigation'
+import { formatDateTime } from '@/lib/helpers'
 
-const ActivityCard = () => {
-  let actionType = 'INSTANT_CREATION'
+type Activity = {
+  id: string
+  createdAt: Date
+  actionType: string
+  title: string | null
+  description: string | null
+  newStatus: string | null
+  invoice: {
+    invoiceNumber: number
+  }
+}
 
-  let icon =
-    actionType === 'MANUAL_CREATION' ? (
-      <FilePlus2 size={10} strokeWidth={2} />
-    ) : actionType === 'PAYMENT_STATUS_CHANGE' ? (
-      <Landmark size={10} strokeWidth={2} />
-    ) : actionType === 'INSTANT_CREATION' ? (
-      <Zap size={12} strokeWidth={2} />
-    ) : actionType === 'APPROVAL_ACTION' ? (
-      <User size={10} strokeWidth={2} />
-    ) : (
-      <IndianRupee size={10} strokeWidth={2} />
-    )
+const ActivityCard = async () => {
+  const getLastActivities = async () => {
+    const session = await getServerSession(authOptions)
+    const email = session?.user?.email
+    const response = await getActivity(email)
+    return JSON.parse(response)
+  }
+
+  const activitiesRes = await getLastActivities()
+  if (!activitiesRes.ok) {
+    notFound()
+  }
+  const activities: Activity[] = activitiesRes.data
 
   return (
     <div className='w-2/5 py-4'>
       <h2 className='text-lg font-medium'>Activity</h2>
       <div className='w-full flex flex-col gap-6 py-6 px-3'>
-        <EachActivity
-          key={'24'}
-          trailIcon={icon}
-          invoiceNumber='#INV-81'
-          desc={'You created at Jan 16, 2024 at 11:59 PM'}
-          title={'Instant Invoice Creation'}
-        />
-        <EachActivity
-          key={'4'}
-          trailIcon={<User size={12} strokeWidth={2} />}
-          invoiceNumber='#INV-78'
-          desc={'Customer approved at Jan 17, 2024 at 10:59 PM'}
-          title={'Customer Approval of Invoice'}
-        />
-        <EachActivity
-          key={'42'}
-          trailIcon={<Landmark size={12} strokeWidth={2} />}
-          invoiceNumber='#INV-78'
-          desc={
-            'You updated the payment status to Paid at Jan 17, 2024 at 10:59 PM'
+        {activities.map((activity, ind) => {
+          let desc = '-'
+          let icon = <IndianRupee size={14} strokeWidth={2} />
+          switch (activity.actionType) {
+            case 'MANUAL_CREATION':
+              desc = `You created this manually on ${formatDateTime(
+                activity.createdAt
+              )}`
+              icon = <FilePlus2 size={14} strokeWidth={2} />
+              break
+
+            case 'INSTANT_CREATION':
+              desc = `You instantly created this on ${formatDateTime(
+                activity.createdAt
+              )}`
+              icon = <Zap size={15} strokeWidth={2} />
+              break
+
+            case 'APPROVAL_ACTION':
+              desc = `Customer approved on ${formatDateTime(
+                activity.createdAt
+              )}`
+              icon = <User size={14} strokeWidth={2} />
+              break
+
+            case 'PAYMENT_STATUS_CHANGE':
+              desc = `You updated the payment status to ${activity.newStatus?.toLowerCase()} on ${formatDateTime(
+                activity.createdAt
+              )}`
+              icon = <Landmark size={14} strokeWidth={2} />
+              break
+
+            case 'RECEIPT_SEND_STATUS_CHANGE':
+              desc = `Customer recieved the receipt on ${formatDateTime(
+                activity.createdAt
+              )}`
+              icon = <Receipt size={14} strokeWidth={2} />
+              break
+
+            default:
+              break
           }
-          title={'Payment Status Change'}
-          isFirstorLast={true}
-        />
+          return (
+            <EachActivity
+              key={activity.id}
+              trailIcon={icon}
+              invoiceNumber={`#INV-${activity.invoice.invoiceNumber}`}
+              desc={desc}
+              title={activity.title}
+              isFirstorLast={activities.length - 1 === ind}
+            />
+          )
+        })}
       </div>
     </div>
   )
@@ -80,7 +131,7 @@ const EachActivity = ({
         </p>
       </div>
       {!isFirstorLast && (
-        <div className='absolute left-[10px] top-4 w-0.5 rounded-lg h-16 bg-zinc-500/10 z-10'></div>
+        <div className='absolute left-3 top-6 w-0.5 rounded-lg h-20 bg-zinc-500/10 z-10'></div>
       )}
     </div>
   )
