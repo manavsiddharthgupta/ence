@@ -50,7 +50,7 @@ export async function GET() {
 
     const weeklySales: Record<string, number> = {}
     sales.forEach((entry) => {
-      const entryDate = new Date(entry.dateIssue)
+      const entryDate = new Date(entry.dateIssue.toLocaleDateString())
       const day = entryDate.getDate()
 
       if (!weeklySales[day]) {
