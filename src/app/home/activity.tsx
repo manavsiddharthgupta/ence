@@ -68,7 +68,7 @@ const ActivityCard = async () => {
               break
 
             case 'PAYMENT_STATUS_CHANGE':
-              desc = `You updated the payment status to Paid on ${formatDateTime(
+              desc = `You updated the payment status to ${activity.newStatus?.toLowerCase()} on ${formatDateTime(
                 activity.createdAt
               )}`
               icon = <Landmark size={14} strokeWidth={2} />
@@ -131,7 +131,7 @@ const EachActivity = ({
         </p>
       </div>
       {!isFirstorLast && (
-        <div className='absolute left-3 top-5 w-0.5 rounded-lg h-16 bg-zinc-500/10 z-10'></div>
+        <div className='absolute left-3 top-6 w-0.5 rounded-lg h-20 bg-zinc-500/10 z-10'></div>
       )}
     </div>
   )
