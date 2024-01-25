@@ -155,3 +155,158 @@ export const getInvoicesOverview = async (email: string | null | undefined) => {
     return parseFloat(rawPercentageChange.toFixed(2))
   }
 }
+
+export const getOverview = async (email: string | null | undefined) => {
+  try {
+    if (!email) {
+      console.error('Error:', 'Not Authorized')
+      return JSON.stringify({ ok: false, data: null, status: 401 })
+    }
+    const org = await db.user.findUnique({
+      where: {
+        email: email
+      },
+      select: {
+        email: true,
+        organizations: {
+          select: {
+            id: true,
+            orgName: true
+          }
+        }
+      }
+    })
+    if (!org?.organizations?.id) {
+      console.error('Error:', 'Organization Not Found')
+      return JSON.stringify({ ok: false, data: null, status: 404 })
+    }
+
+    // count
+    const totalInvoices = await db.invoice.count({
+      where: {
+        organizationId: org.organizations.id
+      }
+    })
+    const paidInvoices = await db.invoice.count({
+      where: {
+        organizationId: org.organizations.id,
+        paymentStatus: 'PAID'
+      }
+    })
+    const unpaidInvoices = await db.invoice.count({
+      where: {
+        organizationId: org.organizations.id,
+        paymentStatus: 'DUE'
+      }
+    })
+    // amount
+    const totalAmountAll = await db.invoice.aggregate({
+      where: {
+        organizationId: org.organizations.id
+      },
+      _sum: {
+        totalAmount: true
+      }
+    })
+    const totalAmountPaid = await db.invoice.aggregate({
+      _sum: {
+        totalAmount: true
+      },
+      where: {
+        organizationId: org.organizations.id,
+        paymentStatus: 'PAID'
+      }
+    })
+    const totalAmountUnpaid = await db.invoice.aggregate({
+      _sum: {
+        totalAmount: true
+      },
+      where: {
+        organizationId: org.organizations.id,
+        paymentStatus: 'DUE'
+      }
+    })
+    return JSON.stringify({
+      ok: true,
+      data: {
+        all: {
+          count: totalInvoices,
+          sum: totalAmountAll._sum.totalAmount
+        },
+        paid: {
+          count: paidInvoices,
+          sum: totalAmountPaid._sum.totalAmount
+        },
+        unpaid: {
+          count: unpaidInvoices,
+          sum: totalAmountUnpaid._sum.totalAmount
+        }
+      },
+      status: 200
+    })
+  } catch (error) {
+    console.error('Error retrieving invoice statistics:', error)
+    return JSON.stringify({ ok: false, data: null, status: 500 })
+  }
+}
+
+export const getActivity = async (email: string | null | undefined) => {
+  try {
+    if (!email) {
+      console.error('Error:', 'Not Authorized')
+      return JSON.stringify({ ok: false, data: null, status: 401 })
+    }
+    const org = await db.user.findUnique({
+      where: {
+        email: email
+      },
+      select: {
+        email: true,
+        organizations: {
+          select: {
+            id: true,
+            orgName: true
+          }
+        }
+      }
+    })
+    if (!org?.organizations?.id) {
+      console.error('Error:', 'Organization Not Found')
+      return JSON.stringify({ ok: false, data: null, status: 404 })
+    }
+
+    const lastActivities = await db.auditTrail.findMany({
+      where: {
+        invoice: {
+          organizationId: org.organizations.id
+        }
+      },
+      select: {
+        title: true,
+        actionType: true,
+        id: true,
+        createdAt: true,
+        description: true,
+        newStatus: true,
+        invoice: {
+          select: {
+            invoiceNumber: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: 3
+    })
+
+    return JSON.stringify({
+      ok: true,
+      data: lastActivities,
+      status: 200
+    })
+  } catch (error) {
+    console.error('Error retrieving invoice statistics:', error)
+    return JSON.stringify({ ok: false, data: null, status: 500 })
+  }
+}

@@ -330,3 +330,45 @@ export const checkOnDemandValidation = (
 
   return true
 }
+
+export function formatDateTime(dateString: Date): string {
+  const date = new Date(dateString)
+
+  if (isNaN(date.getTime())) {
+    return 'Invalid Date'
+  }
+
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ]
+
+  const hours = date.getHours()
+  const minutes = date.getMinutes()
+  const ampm = hours >= 12 ? 'PM' : 'AM'
+
+  const formattedDate = `${
+    months[date.getMonth()]
+  } ${date.getDate()}, ${date.getFullYear()} at ${format12HourTime(
+    hours,
+    minutes
+  )} ${ampm}`
+
+  return formattedDate
+}
+
+function format12HourTime(hours: number, minutes: number): string {
+  const formattedHours = hours % 12 || 12
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes.toString()
+  return `${formattedHours}:${formattedMinutes}`
+}
