@@ -70,7 +70,7 @@ export const TimeLine = () => {
           index='Week'
           colors={['sky', 'yellow']}
           valueFormatter={(number: number) =>
-            `₹ ${Intl.NumberFormat('us').format(number).toString()}`
+            `₹ ${formatCompactNumber(number)}`
           }
           yAxisWidth={60}
           showGridLines={false}
@@ -80,4 +80,18 @@ export const TimeLine = () => {
       </Card>
     </div>
   )
+}
+
+function formatCompactNumber(number: number) {
+  if (number < 1000) {
+    return number
+  } else if (number >= 1000 && number < 1_000_000) {
+    return (number / 1000).toFixed(1) + 'K'
+  } else if (number >= 1_000_000 && number < 1_000_000_000) {
+    return (number / 1_000_000).toFixed(1) + 'M'
+  } else if (number >= 1_000_000_000 && number < 1_000_000_000_000) {
+    return (number / 1_000_000_000).toFixed(1) + 'B'
+  } else if (number >= 1_000_000_000_000 && number < 1_000_000_000_000_000) {
+    return (number / 1_000_000_000_000).toFixed(1) + 'T'
+  }
 }

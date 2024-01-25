@@ -10,7 +10,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { getActivity } from '@/crud/invoices'
 import { notFound } from 'next/navigation'
-import { formatDateTime } from '@/lib/helpers'
+import { Desc } from './activity-desc'
 
 type Activity = {
   id: string
@@ -43,41 +43,61 @@ const ActivityCard = async () => {
       <h2 className='text-lg font-medium'>Activity</h2>
       <div className='w-full flex flex-col gap-6 py-6 px-3'>
         {activities.map((activity, ind) => {
-          let desc = '-'
+          let desc = <p>-</p>
           let icon = <IndianRupee size={14} strokeWidth={2} />
           switch (activity.actionType) {
             case 'MANUAL_CREATION':
-              desc = `You created this manually on ${formatDateTime(
-                activity.createdAt
-              )}`
+              desc = (
+                <Desc
+                  date={activity.createdAt}
+                  desc='You created this manually on'
+                  invoiceNumber={`#INV-${activity.invoice.invoiceNumber}`}
+                />
+              )
               icon = <FilePlus2 size={14} strokeWidth={2} />
               break
 
             case 'INSTANT_CREATION':
-              desc = `You instantly created this on ${formatDateTime(
-                activity.createdAt
-              )}`
+              desc = (
+                <Desc
+                  date={activity.createdAt}
+                  desc='You instantly created this on'
+                  invoiceNumber={`#INV-${activity.invoice.invoiceNumber}`}
+                />
+              )
               icon = <Zap size={15} strokeWidth={2} />
               break
 
             case 'APPROVAL_ACTION':
-              desc = `Customer approved on ${formatDateTime(
-                activity.createdAt
-              )}`
+              desc = (
+                <Desc
+                  date={activity.createdAt}
+                  desc='Customer approved on'
+                  invoiceNumber={`#INV-${activity.invoice.invoiceNumber}`}
+                />
+              )
               icon = <User size={14} strokeWidth={2} />
               break
 
             case 'PAYMENT_STATUS_CHANGE':
-              desc = `You updated the payment status to ${activity.newStatus?.toLowerCase()} on ${formatDateTime(
-                activity.createdAt
-              )}`
+              desc = (
+                <Desc
+                  date={activity.createdAt}
+                  desc={`You updated the payment status to ${activity.newStatus?.toLowerCase()} on`}
+                  invoiceNumber={`#INV-${activity.invoice.invoiceNumber}`}
+                />
+              )
               icon = <Landmark size={14} strokeWidth={2} />
               break
 
             case 'RECEIPT_SEND_STATUS_CHANGE':
-              desc = `Customer recieved the receipt on ${formatDateTime(
-                activity.createdAt
-              )}`
+              desc = (
+                <Desc
+                  date={activity.createdAt}
+                  desc='Customer recieved the receipt on'
+                  invoiceNumber={`#INV-${activity.invoice.invoiceNumber}`}
+                />
+              )
               icon = <Receipt size={14} strokeWidth={2} />
               break
 
@@ -88,7 +108,6 @@ const ActivityCard = async () => {
             <EachActivity
               key={activity.id}
               trailIcon={icon}
-              invoiceNumber={`#INV-${activity.invoice.invoiceNumber}`}
               desc={desc}
               title={activity.title}
               isFirstorLast={activities.length - 1 === ind}
@@ -106,13 +125,11 @@ const EachActivity = ({
   trailIcon,
   title,
   desc,
-  invoiceNumber,
   isFirstorLast = false
 }: {
   trailIcon: JSX.Element
   title: string | null
-  desc: string | null
-  invoiceNumber: string
+  desc: JSX.Element
   isFirstorLast?: boolean
 }) => {
   return (
@@ -125,11 +142,7 @@ const EachActivity = ({
           <h2 className='text-sm font-medium'>{title || '-'}</h2>
         </div>
       </div>
-      <div className='ml-[56px]'>
-        <p className='pl-0.5 text-[10px] text-zinc-600 dark:text-zinc-400 mt-0.5'>
-          {`${invoiceNumber}: ${desc}`}
-        </p>
-      </div>
+      <div className='ml-[56px]'>{desc}</div>
       {!isFirstorLast && (
         <div className='absolute left-3 top-6 w-0.5 rounded-lg h-20 bg-zinc-500/10 z-10'></div>
       )}
