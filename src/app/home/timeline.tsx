@@ -51,7 +51,14 @@ export const TimeLine = () => {
       <Skeleton className='rounded-3xl  w-[54%] h-[336px] bg-gray-500/10' />
     )
 
-  const chartData = formatData(data.data.sales)
+  if (error)
+    return (
+      <div className='rounded-3xl flex justify-center items-center w-[54%] border bg-red-500/5 border-red-400'>
+        <p className='text-xs text-red-500'>Something went wrong :(</p>
+      </div>
+    )
+
+  const chartData = formatData(data?.data?.sales)
   return (
     <div className='rounded-3xl w-[54%] border border-zinc-400/20 dark:border-zinc-600/20'>
       <Card className='ring-0 bg-transparent'>
