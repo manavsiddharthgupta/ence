@@ -46,27 +46,9 @@ export async function GET() {
       }
     })
 
-    // Expense
-
-    const weeklySales: Record<string, number> = {}
-    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-    sales.forEach((entry) => {
-      const entryDate = new Date(
-        entry.dateIssue.toLocaleString('en-US', {
-          timeZone: userTimeZone
-        })
-      )
-      const day = entryDate.getDate()
-
-      if (!weeklySales[day]) {
-        weeklySales[day] = 0
-      }
-      weeklySales[day] += entry.totalAmount
-    })
-
     return Response.json({
       ok: true,
-      data: { weeklySales },
+      data: { sales },
       status: 200
     })
   } catch (error) {

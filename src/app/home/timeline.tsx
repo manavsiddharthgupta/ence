@@ -6,10 +6,23 @@ import { Card, AreaChart } from '@tremor/react'
 
 const baseurl = process.env.NEXT_PUBLIC_API_URL
 
-const formatData = (res: any) => {
-  if (!res) {
+const formatData = (sales: any) => {
+  if (!sales) {
     return []
   }
+
+  const weeklySales: Record<string, number> = {}
+  sales.forEach((entry: any) => {
+    const entryDate = new Date(entry.dateIssue)
+    const day = entryDate.getDate()
+
+    if (!weeklySales[day]) {
+      weeklySales[day] = 0
+    }
+    weeklySales[day] += entry.totalAmount
+  })
+  // Expense
+
   const currDateTime = new Date()
   const chartData = Array.from({ length: 7 }, (_, index) => {
     const date = currDateTime.getDate() - index
@@ -17,7 +30,7 @@ const formatData = (res: any) => {
     return {
       Date: date,
       Week: getWeekName[day],
-      Sales: res.weeklySales[date] || 0,
+      Sales: weeklySales[date] || 0,
       Expense: 0
     }
   })
@@ -38,7 +51,7 @@ export const TimeLine = () => {
       <Skeleton className='rounded-3xl  w-[54%] h-[336px] bg-gray-500/10' />
     )
 
-  const chartData = formatData(data.data)
+  const chartData = formatData(data.data.sales)
   return (
     <div className='rounded-3xl w-[54%] border border-zinc-400/20 dark:border-zinc-600/20'>
       <Card className='ring-0 bg-transparent'>
