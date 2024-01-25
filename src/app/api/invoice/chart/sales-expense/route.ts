@@ -49,8 +49,13 @@ export async function GET() {
     // Expense
 
     const weeklySales: Record<string, number> = {}
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
     sales.forEach((entry) => {
-      const entryDate = new Date(entry.dateIssue.toLocaleDateString())
+      const entryDate = new Date(
+        entry.dateIssue.toLocaleString('en-US', {
+          timeZone: userTimeZone
+        })
+      )
       const day = entryDate.getDate()
 
       if (!weeklySales[day]) {
