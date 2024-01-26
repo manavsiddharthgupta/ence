@@ -1,5 +1,5 @@
-import { SqsProducer } from '@/resources/sqsProducer'
-import { sqsConsumerConfig } from '../../config/worker'
+import { SqsProducer } from '@/sqs/resources/sqsProducer'
+import { sqsConsumerConfig } from '../../../config/worker'
 
 const workerQueueProducer = new SqsProducer({ ...sqsConsumerConfig })
 

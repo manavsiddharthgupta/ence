@@ -1,6 +1,6 @@
-import { sqsConsumerConfig } from './config/worker'
+import { sqsConsumerConfig } from '../config/worker'
 import { SqsConsumer } from './resources/sqsConsumer'
-import { SQSProcessor } from './sqsProcessor'
+import { SQSProcessor } from './resources/sqsProcessor'
 
 export const sqsConsumer = new SqsConsumer({
   name: 'worker',
@@ -8,6 +8,6 @@ export const sqsConsumer = new SqsConsumer({
   handleMessage: SQSProcessor.handleMessage
 })
 
-sqsConsumer.start().catch(error => {
+sqsConsumer.start().catch((error) => {
   console.error('Failed to start Consumer', error)
 })

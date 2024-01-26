@@ -1,5 +1,5 @@
-import { InvoiceJobsProcessor } from './processors/invoicejobs'
-import { Constants } from './utils/constants'
+import { InvoiceJobsProcessor } from '../processors/invoice-jobs'
+import { Constants } from '@/utils/constants'
 
 export class SQSProcessor {
   static async handleMessage(rawPayload: any) {
@@ -7,9 +7,7 @@ export class SQSProcessor {
       if (!('Body' in rawPayload)) {
         return
       }
-
       const body = JSON.parse(rawPayload.Body)
-
       const payload = body?.Message ? JSON.parse(body.Message) : body
 
       if (body.name === Constants.JOBS.INVOICE_DATA_TO_MEDIA) {

@@ -1,4 +1,4 @@
-import { WorkerQueue } from '@/models/queues/worker'
+import { WorkerQueue } from '@/sqs/models/queues/worker'
 import { Constants } from '@/utils/constants'
 
 export class InvoiceJobs {
