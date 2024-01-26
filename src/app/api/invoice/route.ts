@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '../auth/[...nextauth]/route'
 import { db } from '@/lib/db'
 import { InvoiceBody } from '@/types/invoice'
+import { InvoiceJobs } from '@/sqs/events/invoice/job'
 
 export async function GET() {
   try {
@@ -154,6 +155,11 @@ export async function POST(request: Request) {
     })
 
     // Todo: create link for customer and send them based on sending method
+    await InvoiceJobs.createMediaFromInvoiceDataJob(
+      invoiceRes.id,
+      org.organizations.id,
+      invoiceRes
+    )
     return Response.json({
       ok: true,
       data: {

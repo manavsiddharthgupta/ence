@@ -10,7 +10,7 @@ interface SqsConsumerConfig {
 
 export const sqsConsumerConfig: SqsConsumerConfig = {
   REGION: 'us-east-1',
-  URL: process.env.WORKER_QUEUE_URL ?? '',
+  URL: process.env.SQS_URL ?? '',
   BATCH_SIZE: 2,
   THROTTLE_LIMIT: 5,
   VISIBILITY_TIMEOUT: 30,

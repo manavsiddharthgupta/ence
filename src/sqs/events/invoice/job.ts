@@ -2,9 +2,16 @@ import { WorkerQueue } from '@/sqs/models/queues/worker'
 import { Constants } from '@/utils/constants'
 
 export class InvoiceJobs {
-  static async createMediaFromInvoiceDataJob() {
+  static async createMediaFromInvoiceDataJob(
+    invoiceId: string,
+    orgId: string,
+    data: any
+  ) {
     const job = {
-      name: Constants.JOBS.INVOICE_DATA_TO_MEDIA
+      name: Constants.JOBS.INVOICE_DATA_TO_MEDIA,
+      invoiceId: invoiceId,
+      orgId: orgId,
+      data: data
     }
     return WorkerQueue.push(job)
   }
