@@ -158,7 +158,8 @@ export async function POST(request: Request) {
     await InvoiceJobs.createMediaFromInvoiceDataJob(
       invoiceRes.id,
       org.organizations.id,
-      invoiceRes
+      invoiceRes,
+      invoiceRes.invoiceNumber
     )
     return Response.json({
       ok: true,

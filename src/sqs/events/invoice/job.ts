@@ -5,14 +5,17 @@ export class InvoiceJobs {
   static async createMediaFromInvoiceDataJob(
     invoiceId: string,
     orgId: string,
-    data: any
+    data: any,
+    invoiceNumber: any
   ) {
     const job = {
       name: Constants.JOBS.INVOICE_DATA_TO_MEDIA,
       invoiceId: invoiceId,
       orgId: orgId,
-      data: data
+      data: data,
+      invoiceNumber: invoiceNumber
     }
+    console.log('--->', data)
     return WorkerQueue.push(job)
   }
 
