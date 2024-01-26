@@ -11,7 +11,7 @@ export class WorkerQueue {
         .sendMessage({
           QueueUrl: workerQueueProducer.queueUrl,
           MessageBody: JSON.stringify(value),
-          MessageGroupId: String(value.data.invoiceNumber)
+          MessageGroupId: String(value.data.invoiceId)
         })
         .promise()
 
@@ -19,7 +19,6 @@ export class WorkerQueue {
       return result
     } catch (error) {
       console.error('Error sending message:', error)
-      throw error
     }
   }
 }
