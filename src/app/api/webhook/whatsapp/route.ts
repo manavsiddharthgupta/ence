@@ -1,5 +1,5 @@
 export async function GET(request: Request) {
-  const verify_token = process.env.VERIFY_TOKEN
+  const verify_token = process.env.WHATSAPP_VERIFICATION_TOKEN
 
   const { searchParams } = new URL(request.url)
   const mode = searchParams.get('hub.mode')

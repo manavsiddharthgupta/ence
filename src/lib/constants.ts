@@ -1,4 +1,10 @@
-export const ALLOWED_USER = ['manavgupta6207', 'devanshdwivedi68', '2006043']
+export const ALLOWED_USER = [
+  'manavgupta6207',
+  'devanshdwivedi68',
+  '2006043',
+  'manavgupta14032003',
+  'jeeinfo69'
+]
 
 export const PAYMENT_TERMS = [
   {
@@ -27,3 +33,5 @@ export const PAYMENT_STATUS_OPTIONS = [
   { value: 'due', label: 'Due' },
   { value: 'overdue', label: 'Overdue' }
 ]
+
+export const WEEK_VALUES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat']

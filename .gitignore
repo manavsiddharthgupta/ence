@@ -27,7 +27,7 @@ yarn-error.log*
 # local env files
 .env*.local
 .env
-
+.env.production
 # vercel
 .vercel
 
@@ -37,3 +37,6 @@ next-env.d.ts
 
 # extras
 .vscode
+
+
+docker-compose.production.yml

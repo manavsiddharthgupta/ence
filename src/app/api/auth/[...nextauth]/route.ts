@@ -36,7 +36,8 @@ export const authOptions = {
       }
       return true
     } // Todo: Currently in dev mode will be removed
-  }
+  },
+  secret: process.env.NEXTAUTH_SECRET
 }
 
 const handler = NextAuth(authOptions)

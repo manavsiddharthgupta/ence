@@ -73,7 +73,6 @@ export async function instantInvoiceCreateServiceByGemini(
     const cleanDataString = parsedResponse.replace(/```/g, '').trim()
     const finalDataString = cleanDataString.replace(/JSON|json/g, '')
 
-    console.log('parsedData', finalDataString)
     return JSON.parse(finalDataString)
   }
   try {
