@@ -1,4 +1,10 @@
-export const ALLOWED_USER = ['manavgupta6207', 'devanshdwivedi68', '2006043']
+export const ALLOWED_USER = [
+  'manavgupta6207',
+  'devanshdwivedi68',
+  '2006043',
+  'manavgupta14032003',
+  'jeeinfo69'
+]
 
 export const PAYMENT_TERMS = [
   {
