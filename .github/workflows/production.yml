@@ -3,7 +3,6 @@ name: Ence Production Pipeline
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-  DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
 
 on:
   push:
