@@ -7,7 +7,7 @@ export const sqsConsumer = new SqsConsumer({
   ...sqsConsumerConfig,
   handleMessage: SQSProcessor.handleMessage
 })
-
+console.log('SQS CONSUMER started')
 sqsConsumer.start().catch((error) => {
   console.error('Failed to start Consumer', error)
 })

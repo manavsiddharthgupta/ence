@@ -1,5 +1,6 @@
 import AWS from 'aws-sdk'
 import pTimeout, { TimeoutError } from 'p-timeout'
+import autoBind from 'auto-bind'
 
 function hasMessages(response: any) {
   return response.Messages && response.Messages.length > 0
@@ -38,6 +39,8 @@ export class SqsConsumer {
     this.running = false
     this.stopped = false
     this.handleMessage = options.handleMessage
+
+    autoBind(this)
   }
 
   status(): Record<string, any> {
@@ -57,9 +60,9 @@ export class SqsConsumer {
     this.running = true
     this.stopped = false
     this.throttleValue = this.throttleLimit / this.batchSize
-    for (let i = 0; i < this.throttleLimit; i++) {
+    for (let i = 0; i < this.throttleValue; i++) {
       setTimeout(() => {
-        this.poll().catch(error => {
+        this.poll().catch((error) => {
           console.log(error)
         })
       }, i * 1000)
@@ -88,7 +91,7 @@ export class SqsConsumer {
       console.error(error)
     } finally {
       setTimeout(() => {
-        this.poll().catch(error => {
+        this.poll().catch((error) => {
           console.error(error)
         })
       }, 0)
