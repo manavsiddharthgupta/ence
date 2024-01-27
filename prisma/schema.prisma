@@ -140,31 +140,31 @@ model Invoice {
   id                 String                   @id @default(uuid())
   invoiceNumber      Int
   instantInvoiceLink String?
-  sendingMethod     SendMethods           @default(MAIL)
-  customerInfo      Json
-  dateIssue         DateTime
-  dueDate           DateTime
-  shippingCharge    Float?
-  packagingCharge   Float?
-  lateCharge        Float?
-  tax               Float?
-  adjustmentFee     Float?
-  discount          Float?
-  paymentMethod     PaymentMethods        @default(CASH)
-  paymentStatus     PaymentStatus         @default(DUE)
-  paymentTerms      PaymentTerms          @default(IMMEDIATE)
-  notes             String?
-  items             InvoiceItem[]
-  subTotal          Float?
-  invoiceTotal      Float?
-  totalAmount       Float
-  dueAmount         Float
-  approvalStatus    InvoiceApprovalStatus @default(UNAPPROVED)
-  receiptSendStatus ReceiptSendStatus     @default(NOT_SENT)
-  auditTrailEntries AuditTrail[]
-  relatedDocuments  InvoiceRelatedDocument[]
-  organizationId    String
-  organization      Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  sendingMethod      SendMethods              @default(MAIL)
+  customerInfo       Json
+  dateIssue          DateTime
+  dueDate            DateTime
+  shippingCharge     Float?
+  packagingCharge    Float?
+  lateCharge         Float?
+  tax                Float?
+  adjustmentFee      Float?
+  discount           Float?
+  paymentMethod      PaymentMethods           @default(CASH)
+  paymentStatus      PaymentStatus            @default(DUE)
+  paymentTerms       PaymentTerms             @default(IMMEDIATE)
+  notes              String?
+  items              InvoiceItem[]
+  subTotal           Float?
+  invoiceTotal       Float?
+  totalAmount        Float
+  dueAmount          Float
+  approvalStatus     InvoiceApprovalStatus    @default(UNAPPROVED)
+  receiptSendStatus  ReceiptSendStatus        @default(NOT_SENT)
+  auditTrailEntries  AuditTrail[]
+  relatedDocuments   InvoiceRelatedDocument[]
+  organizationId     String
+  organization       Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 }
 
 model InvoiceRelatedDocument {
@@ -175,8 +175,8 @@ model InvoiceRelatedDocument {
 }
 
 model InvoiceItem {
-  id        String  @unique
-  invoice   Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  id        String        @unique
+  invoice   Invoice       @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
   invoiceId String
   name      String?
   unit      ItemsUnitType @default(ITEM)
