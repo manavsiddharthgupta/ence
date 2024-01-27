@@ -26,7 +26,7 @@ export async function GET(request: Request) {
     })
 
     await Promise.all(
-      overdueInvoices.map(async (invoice: any) => {
+      overdueInvoices.map(async (invoice) => {
         await db.invoice.update({
           where: {
             id: invoice.id

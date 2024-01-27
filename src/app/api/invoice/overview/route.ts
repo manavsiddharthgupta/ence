@@ -47,7 +47,7 @@ export async function GET() {
     })
 
     const getTotalCount = (invoices: Invoice[], status: string) =>
-      invoices.filter(invoice => invoice.paymentStatus === status).length
+      invoices.filter((invoice) => invoice.paymentStatus === status).length
 
     const totalCountCurrentWeek = {
       paid: getTotalCount(currentWeekInvoices, 'PAID'),
