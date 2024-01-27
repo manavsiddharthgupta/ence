@@ -34,7 +34,10 @@ export const PaymentInfoInitailState: PaymentInfoState = {
   method: 'cash',
   discount: '0',
   notes: 'Thank you for your business! We appreciate your trust.',
-  tax: 0,
+  tax: '0',
+  lateCharge: '0',
+  packagingCharge: '0',
+  additionalCharges: '0',
   shippingCharge: '0',
   adjustmentFee: '0'
 }
@@ -192,10 +195,24 @@ export const paymentInfoReducers = (
         ...state,
         ...action.payload
       }
-    case 'SHIPPING_CHARGES':
+    case 'LATE_CHARGE':
       return {
         ...state,
         ...action.payload
+      }
+    case 'PACKAGE_CHARGE':
+      return {
+        ...state,
+        ...action.payload,
+        additionalCharges:
+          +state.shippingCharge + +(action.payload as any).packagingCharge
+      }
+    case 'SHIPPING_CHARGES':
+      return {
+        ...state,
+        ...action.payload,
+        additionalCharges:
+          +state.packagingCharge + +(action.payload as any).shippingCharge
       }
     case 'ADJUSTMENT_FEE':
       return {

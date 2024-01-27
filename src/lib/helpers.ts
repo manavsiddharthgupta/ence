@@ -137,6 +137,7 @@ export const formatInvoiceData = (
     invoiceNumber: +invoiceInfoState.invoiceNumber!,
     notes: paymentInfoState.notes,
     shippingCharge: +paymentInfoState.shippingCharge,
+    packagingCharge: +paymentInfoState.packagingCharge,
     adjustmentFee: +paymentInfoState.adjustmentFee,
     sendingMethod:
       invoiceInfoState.sendingMethod === 'mail'
@@ -168,11 +169,16 @@ export const formatInvoiceData = (
         : PaymentTerms.CUSTOM,
     invoiceTotal: subTotal + +paymentInfoState.adjustmentFee, // Todo: add discount
     subTotal: subTotal,
-    totalAmount: subTotal + +paymentInfoState.adjustmentFee, // Todo: add shipping charge, packaging charge and discount
+    totalAmount:
+      subTotal +
+      +paymentInfoState.adjustmentFee +
+      +paymentInfoState.additionalCharges, // Todo: add tax and discount
     dueAmount:
       paymentInfoState.status === 'paid'
         ? 0
-        : subTotal + +paymentInfoState.adjustmentFee, // Todo: do it in server side instead in client side
+        : subTotal +
+          +paymentInfoState.adjustmentFee +
+          +paymentInfoState.additionalCharges, // Todo: do it in server side instead in client side
     items: formattedInvoiceItems
   }
   return formattedData
@@ -323,4 +329,46 @@ export const checkOnDemandValidation = (
   }
 
   return true
+}
+
+export function formatDateTime(dateString: Date): string {
+  const date = new Date(dateString)
+
+  if (isNaN(date.getTime())) {
+    return 'Invalid Date'
+  }
+
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ]
+
+  const hours = date.getHours()
+  const minutes = date.getMinutes()
+  const ampm = hours >= 12 ? 'PM' : 'AM'
+
+  const formattedDate = `${
+    months[date.getMonth()]
+  } ${date.getDate()}, ${date.getFullYear()} at ${format12HourTime(
+    hours,
+    minutes
+  )} ${ampm}`
+
+  return formattedDate
+}
+
+function format12HourTime(hours: number, minutes: number): string {
+  const formattedHours = hours % 12 || 12
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes.toString()
+  return `${formattedHours}:${formattedMinutes}`
 }

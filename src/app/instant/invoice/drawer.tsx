@@ -200,7 +200,6 @@ const InvoiceCarouselContent = ({
             dateIssue: new Date(),
             invoiceTotal: null,
             subTotal: null,
-            totalAmount: null,
             email: null,
             whatsappNumber: null
           }
@@ -215,7 +214,6 @@ const InvoiceCarouselContent = ({
             dateIssue: new Date(),
             invoiceTotal: parsedData?.data?.total || 0, // will change
             subTotal: parsedData?.data?.total || 0, // will change
-            totalAmount: parsedData?.data?.total || 0, // will change
             email: parsedData?.data?.customer?.customerEmail || '',
             whatsappNumber: parsedData?.data?.customer?.customerNumber || ''
           }
@@ -388,8 +386,7 @@ const InvoiceInfo = () => {
                 type: 'INVOICE_TOTAL',
                 payload: {
                   invoiceTotal: e.target.value,
-                  subTotal: e.target.value,
-                  totalAmount: e.target.value
+                  subTotal: e.target.value
                 }
               })
             }}
@@ -602,7 +599,6 @@ const Footer = ({
           invoiceTotal: null,
           invoiceNumber: null,
           subTotal: null,
-          totalAmount: null,
           email: null,
           whatsappNumber: null
         }
@@ -620,9 +616,9 @@ const Footer = ({
         <p className='text-xs text-zinc-400'>Net Payable Amount</p>
         <h1 className='text-2xl font-semibold'>
           {formatAmount(
-            instantInvoiceDetails.totalAmount === null
+            instantInvoiceDetails.invoiceTotal === null
               ? 0
-              : +instantInvoiceDetails.totalAmount
+              : +instantInvoiceDetails.invoiceTotal
           )}
         </h1>
       </div>

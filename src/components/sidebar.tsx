@@ -19,7 +19,7 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover'
 import { Button } from './ui/button'
-import { LogOut, Settings, Zap } from 'lucide-react'
+import { FileMinus2, FilePlus2, LogOut, Settings, Zap } from 'lucide-react'
 import { Beta } from './beta-badge'
 import { Skeleton } from './ui/skeleton'
 import Link from 'next/link'
@@ -67,26 +67,36 @@ const Sidebar = ({
           <Popover>
             <PopoverTrigger asChild>
               <div className='flex items-center gap-1 rounded-3xl py-1 px-2 border dark:border-zinc-700 border-zinc-200 cursor-pointer'>
-                <Zap size={14} strokeWidth={1} />
-                <p className='text-xs'>Instant</p>
+                <Zap size={14} strokeWidth={2} />
+                <p className='text-xs font-medium'>Instant</p>
               </div>
             </PopoverTrigger>
-            <PopoverContent className='w-fit flex gap-2 dark:border-zinc-700 border-zinc-300 dark:bg-zinc-900/30 bg-white/30 backdrop-blur-md'>
+            <PopoverContent
+              side='top'
+              align='start'
+              className='w-fit flex flex-col p-1 dark:border-zinc-800 border-zinc-200 dark:bg-zinc-900/30 bg-white/30 shadow-none'
+            >
               <Button
                 asChild
-                className='w-fit bg-transparent border-none hover:bg-white hover:dark:bg-zinc-800 justify-start gap-4 text-xs font-medium'
+                className='w-fit bg-transparent border-none hover:bg-white hover:dark:bg-zinc-900 justify-start gap-2 text-xs font-medium hover:text-sky-500'
                 variant='outline'
                 size='sm'
               >
-                <Link href='/instant/invoice'>Create Invoice</Link>
+                <Link href='/instant/invoice'>
+                  <FilePlus2 size={14} strokeWidth={2} />
+                  <p>Invoice</p>
+                </Link>
               </Button>
               <Button
-                asChild
-                className='w-fit bg-transparent border-none hover:bg-white hover:dark:bg-zinc-800 justify-start gap-4 text-xs font-medium'
+                className='w-fit bg-transparent border-none hover:bg-white hover:dark:bg-zinc-900 justify-start gap-2 text-xs font-medium hover:text-sky-500'
                 variant='outline'
                 size='sm'
+                disabled
               >
-                <Link href='/instant/invoice'>Create Expense</Link>
+                <Link className='flex gap-2' href='/instant/expense'>
+                  <FileMinus2 size={14} strokeWidth={2} />
+                  <p>Expense</p>
+                </Link>
               </Button>
             </PopoverContent>
           </Popover>

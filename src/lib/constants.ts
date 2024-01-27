@@ -27,3 +27,5 @@ export const PAYMENT_STATUS_OPTIONS = [
   { value: 'due', label: 'Due' },
   { value: 'overdue', label: 'Overdue' }
 ]
+
+export const WEEK_VALUES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat']

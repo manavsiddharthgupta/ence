@@ -82,6 +82,25 @@ enum ReceiptSendStatus {
   FAILED
 }
 
+enum ItemsUnitType {
+  ITEM
+  HOUR
+  DAY
+  WEEK
+  MONTH
+  PROJECT
+  KILO
+  GRAM
+  LITRE
+  METER
+  SQUARE_FEET
+  CASE
+  BAG
+  BOX
+  PACKS
+  BOTTLE
+}
+
 model User {
   id            String        @id @default(uuid())
   name          String? // Todo: Divide Firstname + LastName
@@ -121,28 +140,31 @@ model Invoice {
   id                 String                   @id @default(uuid())
   invoiceNumber      Int
   instantInvoiceLink String?
-  sendingMethod      SendMethods              @default(MAIL)
-  customerInfo       Json
-  dateIssue          DateTime
-  dueDate            DateTime
-  shippingCharge     Int?
-  adjustmentFee      Int?
-  discount           Int?
-  paymentMethod      PaymentMethods           @default(CASH)
-  paymentStatus      PaymentStatus            @default(DUE)
-  paymentTerms       PaymentTerms             @default(IMMEDIATE)
-  notes              String?
-  items              InvoiceItem[]
-  subTotal           Float
-  invoiceTotal       Float
-  totalAmount        Float
-  dueAmount          Float
-  approvalStatus     InvoiceApprovalStatus    @default(UNAPPROVED)
-  receiptSendStatus  ReceiptSendStatus        @default(NOT_SENT)
-  auditTrailEntries  AuditTrail[]
-  relatedDocuments   InvoiceRelatedDocument[]
-  organizationId     String
-  organization       Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  sendingMethod     SendMethods           @default(MAIL)
+  customerInfo      Json
+  dateIssue         DateTime
+  dueDate           DateTime
+  shippingCharge    Float?
+  packagingCharge   Float?
+  lateCharge        Float?
+  tax               Float?
+  adjustmentFee     Float?
+  discount          Float?
+  paymentMethod     PaymentMethods        @default(CASH)
+  paymentStatus     PaymentStatus         @default(DUE)
+  paymentTerms      PaymentTerms          @default(IMMEDIATE)
+  notes             String?
+  items             InvoiceItem[]
+  subTotal          Float?
+  invoiceTotal      Float?
+  totalAmount       Float
+  dueAmount         Float
+  approvalStatus    InvoiceApprovalStatus @default(UNAPPROVED)
+  receiptSendStatus ReceiptSendStatus     @default(NOT_SENT)
+  auditTrailEntries AuditTrail[]
+  relatedDocuments  InvoiceRelatedDocument[]
+  organizationId    String
+  organization      Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 }
 
 model InvoiceRelatedDocument {
@@ -157,9 +179,10 @@ model InvoiceItem {
   invoice   Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
   invoiceId String
   name      String?
-  price     Int?
-  quantity  Int?
-  total     Int?
+  unit      ItemsUnitType @default(ITEM)
+  price     Float?
+  quantity  Float?
+  total     Float?
 }
 
 model AuditTrail {

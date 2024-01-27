@@ -43,23 +43,23 @@ export async function instantInvoiceCreateServiceByGemini(
   invoiceImageUrl: string
 ) {
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '')
-  async function urlToGenerativePart(url: string, mimeType: any) {
-    const response = await fetch(url)
-    const data = await response.arrayBuffer()
-
-    return {
-      inlineData: {
-        data: Buffer.from(new Uint8Array(data)).toString('base64'),
-        mimeType
-      }
-    }
-  }
-
   async function run(invoiceImageUrl: string) {
     const model = genAI.getGenerativeModel({ model: 'gemini-pro-vision' })
 
     const prompt =
-      'Firstly check if the image is really an invoice if not then give fields as empty. Parse the given invoice to extract the following details in JSON format  MerchantName, MerchantAddress,MerchantNumber, MerchantEmail, CustomerName, CustomerNumber, CustomerEmail, CustomerAddress, IssueDate, DueDate, ItemDetails [{Description(remember to not include quantity here but just the decription that should be in a single string), Quantity, ItemPrice, TotalPrice}], SubTotal, DiscountRate, DiscountValue, Total, Tax, GrandTotal. If a field is not present in the invoice, the corresponding value in the response will be empty. Ensure that the data is correct and valid type for the corresponding field.'
+      'Firstly check if the image is really an invoice if not then give fields as N/A. Parse the given invoice to extract the following details in JSON format  MerchantName, MerchantAddress,MerchantNumber, MerchantEmail, CustomerName, CustomerNumber, CustomerEmail, CustomerAddress, IssueDate, DueDate, ItemDetails [{Description(remember to not include quantity here but just the description that should be in a single string), Quantity, ItemPrice, TotalPrice}], SubTotal, DiscountRate, DiscountValue, Total, Tax, GrandTotal. If a field is not present in the invoice, the corresponding value in the response will be empty. Ensure that the data is correct and valid type for the corresponding field. Ensure that in the value of each field, there are exactly two double quotes – one at the beginning and one at the end. For example, if the value is "12 pk 10" Pen refills", correct it to "12 pk 10 Pen refills" to maintain the required format.'
+
+    async function urlToGenerativePart(url: string, mimeType: any) {
+      const response = await fetch(url)
+      const data = await response.arrayBuffer()
+
+      return {
+        inlineData: {
+          data: Buffer.from(new Uint8Array(data)).toString('base64'),
+          mimeType
+        }
+      }
+    }
 
     const imageParts = [await urlToGenerativePart(invoiceImageUrl, 'image/png')]
     const result = await model.generateContent([prompt, ...imageParts])
@@ -69,8 +69,10 @@ export async function instantInvoiceCreateServiceByGemini(
     if (!parsedResponse) {
       return null
     }
+
     const cleanDataString = parsedResponse.replace(/```/g, '').trim()
-    const finalDataString = cleanDataString.replace('JSON', '')
+    const finalDataString = cleanDataString.replace(/JSON|json/g, '')
+
     return JSON.parse(finalDataString)
   }
   try {
