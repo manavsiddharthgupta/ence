@@ -3,7 +3,7 @@ name: Ence Development Pipeline
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  DATABASE_URL: ${{ secrets.DEV_DATABASE_URL }}
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
       - name: Apply all pending migrations to the database
         run: npx prisma migrate deploy
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.DEV_DATABASE_URL }}
 
       - name: Deploy Project Artifacts
         run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
