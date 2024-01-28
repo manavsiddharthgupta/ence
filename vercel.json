@@ -6,6 +6,8 @@
     }
   ],
   "functions": {
-    "api/worker.ts": {}
+    "api/worker.ts": {
+      "memory": 1024
+    }
   }
 }
