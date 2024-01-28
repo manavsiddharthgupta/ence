@@ -6,8 +6,6 @@
     }
   ],
   "functions": {
-    "api/worker.ts": {
-      "runtime": "nodejs@20.x"
-    }
+    "api/worker.ts": {}
   }
 }
