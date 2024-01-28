@@ -1,6 +1,6 @@
-import { sqsConsumerConfig } from '../config/worker'
-import { SqsConsumer } from './resources/sqsConsumer'
-import { SQSProcessor } from './resources/sqsProcessor'
+import { sqsConsumerConfig } from '@/config/worker'
+import { SqsConsumer } from '@/sqs/resources/sqsConsumer'
+import { SQSProcessor } from '@/sqs/resources/sqsProcessor'
 
 export const sqsConsumer = new SqsConsumer({
   name: 'worker',

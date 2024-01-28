@@ -5,5 +5,9 @@
       "schedule": "0 1 * * *"
     }
   ],
-  "builds": [{ "src": "sqs/worker.ts", "use": "@vercel/node" }]
+  "functions": {
+    "api/worker.ts": {
+      "runtime": "@vercel/node"
+    }
+  }
 }
