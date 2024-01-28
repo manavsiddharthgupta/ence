@@ -3,9 +3,7 @@
     {
       "path": "/api/crons/invoices/update-status?key=enceisgreat",
       "schedule": "0 1 * * *"
-    },
-    {
-      "builds": [{ "src": "sqs/worker.ts", "use": "@vercel/node" }]
     }
-  ]
+  ],
+  "builds": [{ "src": "sqs/worker.ts", "use": "@vercel/node" }]
 }
