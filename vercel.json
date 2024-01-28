@@ -6,8 +6,6 @@
     }
   ],
   "functions": {
-    "api/worker.ts": {
-      "memory": 1024
-    }
+    "src/app/api/worker/route.ts": { "memory": 1024 }
   }
 }
