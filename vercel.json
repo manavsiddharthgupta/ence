@@ -4,8 +4,5 @@
       "path": "/api/crons/invoices/update-status?key=enceisgreat",
       "schedule": "0 1 * * *"
     }
-  ],
-  "functions": {
-    "src/app/api/worker/route.ts": { "memory": 1024 }
-  }
+  ]
 }

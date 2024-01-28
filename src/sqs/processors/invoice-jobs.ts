@@ -1,15 +1,15 @@
-import { InvoiceGenerateMedia } from '@/lib/invoice/generate-media'
-import { uploadFilesToS3 } from '@/resources/s3'
+// import { InvoiceGenerateMedia } from '@/lib/invoice/generate-media'
+// import { uploadFilesToS3 } from '@/resources/s3'
 
 export class InvoiceJobsProcessor {
   static async processInvoiceDataToMedia(value: any) {
-    const imageBufferData = await InvoiceGenerateMedia.generateImage({})
-    const fileUrl = await uploadFilesToS3(
-      'ence-invoice',
-      'test',
-      imageBufferData
-    )
-    console.log(fileUrl)
+    console.log('PROCESSING JOBS', value)
+    // const imageBufferData = await InvoiceGenerateMedia.generateImage({})
+    // const fileUrl = await uploadFilesToS3(
+    //   'ence-invoice',
+    //   'test',
+    //   imageBufferData
+    // )
   }
 
   static async processSendInvoiceToWhatsapp(value: any) {}
