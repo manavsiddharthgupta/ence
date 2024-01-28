@@ -13,5 +13,7 @@ export async function GET() {
   console.log('SQS CONSUMER started')
   sqsConsumer.start().catch((error) => {
     console.error('Failed to start Consumer', error)
+    return new Response('Not found', { status: 404 })
   })
+  return new Response('Success', { status: 200 })
 }
