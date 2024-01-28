@@ -7,7 +7,7 @@
   ],
   "functions": {
     "api/worker.ts": {
-      "runtime": "@vercel/node"
+      "runtime": "nodejs20.x"
     }
   }
 }
