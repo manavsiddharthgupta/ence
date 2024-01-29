@@ -1,4 +1,4 @@
-import { InvoiceJobsProcessor } from '../processors/invoice-jobs'
+import { InvoiceJobsProcessor } from './processors/invoice-jobs'
 import { Constants } from '@/utils/constants'
 
 export class SQSProcessor {

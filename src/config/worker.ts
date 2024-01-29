@@ -1,16 +1,4 @@
-interface SqsConsumerConfig {
-  REGION: string
-  URL: string
-  BATCH_SIZE: number
-  THROTTLE_LIMIT: number
-  VISIBILITY_TIMEOUT: number
-  MESSAGE_TIMEOUT: number
-  WAIT_TIME_SECONDS: number
-  ACCESS_KEY_ID: string
-  SECRET_ACCESS_KEY: string
-}
-
-export const sqsConsumerConfig: SqsConsumerConfig = {
+export const sqsConsumerConfig = {
   REGION: 'us-east-1',
   URL: process.env.SQS_WORKER_QUEUE_URL ?? '',
   ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID ?? '',
