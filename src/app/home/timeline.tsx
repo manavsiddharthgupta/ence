@@ -25,7 +25,24 @@ const formatData = (sales: any) => {
 
   const currDateTime = new Date()
   const chartData = Array.from({ length: 7 }, (_, index) => {
-    const date = currDateTime.getDate() - index
+    let date = currDateTime.getDate() - index
+    let month = currDateTime.getMonth()
+
+    if (date <= 0) {
+      // calculates the days in the previous month
+      const daysInPreviousMonth = new Date(
+        currDateTime.getFullYear(),
+        month,
+        0
+      ).getDate()
+      date = daysInPreviousMonth + date
+      month -= 1
+
+      if (month < 0) {
+        month = 11
+        currDateTime.setFullYear(currDateTime.getFullYear() - 1)
+      }
+    }
     const day = (currDateTime.getDay() - index + 7) % 7
     return {
       Date: date,
