@@ -102,6 +102,13 @@ enum ItemsUnitType {
   BOTTLE
 }
 
+enum RelatedDocName {
+  MAIN_PDF
+  MAIN_IMAGE
+  DOWNLOAD_PDF
+  OTHERS
+}
+
 model User {
   id            String        @id @default(uuid())
   name          String? // Todo: Divide Firstname + LastName
@@ -169,10 +176,11 @@ model Invoice {
 }
 
 model InvoiceRelatedDocument {
-  id           String  @id @default(uuid())
-  documentLink String
-  invoiceId    String
-  invoice      Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  id                String    @id @default(uuid())
+  documentLink      String
+  name              RelatedDocName
+  invoiceId         String
+  invoice           Invoice   @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
 }
 
 model InvoiceItem {
