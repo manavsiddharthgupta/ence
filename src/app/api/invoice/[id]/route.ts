@@ -59,7 +59,9 @@ export async function GET(
         totalAmount: true,
         items: true,
         approvalStatus: true,
-        auditTrailEntries: true,
+        auditTrailEntries: {
+          orderBy: { createdAt: 'asc' }
+        },
         discount: true,
         receiptSendStatus: true,
         instantInvoiceLink: true,
