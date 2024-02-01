@@ -17,33 +17,36 @@ import {
   Info,
   UserCircleIcon
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+
+const baseurl = process.env.NEXT_PUBLIC_API_URL
 
 const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
-  const [invoiceInfo, setInvoiceInfo] = useState<InvoiceBody | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
-
-  useEffect(() => {
-    const getInvoiceInfo = async () => {
-      setLoading(true)
-      setInvoiceInfo(null)
-      setError(false)
-      const response = await fetch(`/api/invoice/${invoiceId}`)
-      const invoiceInfo = await response.json()
-      if (!invoiceInfo.ok) {
-        setInvoiceInfo(null)
-        setError(true)
-        setLoading(false)
-        return
-      }
-      setInvoiceInfo(invoiceInfo.data)
-      setLoading(false)
+  const {
+    isPending,
+    error,
+    data: invoiceInfo
+  } = useQuery({
+    queryKey: ['invoice', invoiceId],
+    queryFn: async () => {
+      const response = await fetch(`${baseurl}/api/invoice/${invoiceId}`)
+      const responseData = await response.json()
+      const invoiceData: InvoiceBody = responseData.data
+      return invoiceData
     }
-    getInvoiceInfo()
-  }, [invoiceId])
+  })
 
   if (error) {
+    return (
+      <SheetContent className='w-full sm:max-w-5xl flex items-center justify-center'>
+        <p className='text-xs text-red-500 font-semibold'>
+          something went wrong :(
+        </p>
+      </SheetContent>
+    )
+  }
+
+  if (!invoiceInfo && !isPending) {
     return (
       <SheetContent className='w-full sm:max-w-5xl flex items-center justify-center'>
         <p className='text-xs text-red-500 font-semibold'>
@@ -105,7 +108,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
         <div className='w-1/2 overflow-y-auto h-full'>
           <SheetHeader>
             <SheetTitle className='w-full'>
-              {loading ? (
+              {isPending ? (
                 <Skeleton className='h-7 bg-gray-500/10' />
               ) : (
                 <div className='flex justify-between items-center'>
@@ -132,40 +135,40 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
             <InvoiceField
               fieldName='Invoice Number'
               fieldValue={invoiceDetail?.invoiceNumber || '-'}
-              loading={loading}
+              loading={isPending}
             />
             <InvoiceField
               fieldName='Issue Date'
               fieldValue={invoiceDetail?.issueDate || '-'}
               type='date'
-              loading={loading}
+              loading={isPending}
             />
             <InvoiceField
               fieldName='Customer'
               fieldValue={invoiceDetail?.customer || '-'}
               type='user'
-              loading={loading}
+              loading={isPending}
             />
             <InvoiceField
               fieldName='Payment Term'
               fieldValue={invoiceDetail?.paymentTerm || '-'}
-              loading={loading}
+              loading={isPending}
             />
             <InvoiceField
               fieldName='Due Date'
               fieldValue={invoiceDetail?.dueDate || '-'}
               type='date'
-              loading={loading}
+              loading={isPending}
             />
             <InvoiceField
               fieldName='Status'
               fieldValue={invoiceDetail?.paymentStatus || '-'}
-              loading={loading}
+              loading={isPending}
             />
             <InvoiceField
               fieldName='Payment Method'
               fieldValue={invoiceDetail?.paymentMethod || '-'}
-              loading={loading}
+              loading={isPending}
             />
           </div>
           <div className='flex flex-col gap-3'>
@@ -174,7 +177,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
               <h3 className='font-semibold dark:text-zinc-50/50 text-zinc-900/60'>
                 Payable Amount
               </h3>
-              {loading ? (
+              {isPending ? (
                 <Skeleton className='w-28 h-7 bg-gray-500/10' />
               ) : (
                 <span className='font-bold text-xl text-black dark:text-white'>
@@ -182,7 +185,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                 </span>
               )}
             </div>
-            {loading ? (
+            {isPending ? (
               <Skeleton className='w-1/2 h-9 bg-gray-500/10' />
             ) : (
               <div className='flex items-center gap-2'>
@@ -210,7 +213,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                     <Info size={10} strokeWidth={2.5} className='mt-0.5' />
                   </Tip>
                 </div>
-                {loading ? (
+                {isPending ? (
                   <AmountInfoSkeleton />
                 ) : (
                   <h2 className='text-lg font-bold'>
@@ -225,7 +228,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                     <Info size={10} strokeWidth={2.5} className='mt-0.5' />
                   </Tip>
                 </div>
-                {loading ? (
+                {isPending ? (
                   <AmountInfoSkeleton />
                 ) : (
                   <h2 className='text-lg font-bold'>
@@ -243,7 +246,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                     <Info size={10} strokeWidth={2.5} className='mt-0.5' />
                   </Tip>
                 </div>
-                {loading ? (
+                {isPending ? (
                   <AmountInfoSkeleton />
                 ) : (
                   <h2 className='text-lg font-bold'>
@@ -258,7 +261,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                     <Info size={10} strokeWidth={2.5} className='mt-0.5' />
                   </Tip>
                 </div>
-                {loading ? (
+                {isPending ? (
                   <AmountInfoSkeleton />
                 ) : (
                   <h2 className='text-lg font-bold'>
@@ -274,7 +277,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                     <Info size={10} strokeWidth={2.5} className='mt-0.5' />
                   </Tip>
                 </div>
-                {loading ? (
+                {isPending ? (
                   <AmountInfoSkeleton />
                 ) : (
                   <h2 className='text-lg font-bold'>
@@ -306,7 +309,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
               value='audit'
               className='h-[calc(100%-82px)] overflow-scroll'
             >
-              {loading ? (
+              {isPending ? (
                 <p className='text-xs text-center font-medium'>Loading...</p>
               ) : (
                 <AuditTrail auditTrail={invoiceDetail?.auditTrail} />

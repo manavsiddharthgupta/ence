@@ -38,6 +38,7 @@ import { useRouter } from 'next/navigation'
 const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
   // const [invoices, setInvoices] = useState<InvoicesResponse[]>(lists)
   const [selectedInvoice, setInvoiceView] = useState<string | null>(null)
+  const [slideOverviewStatus, setSlideOverview] = useState(false)
   const [currentPage, setPageNumber] = useState(1)
   const invoicesPerPage = 10
   const itemOffset = (currentPage - 1) * invoicesPerPage
@@ -65,14 +66,15 @@ const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
 
   const onSelectInvoice = (invoiceId: string) => {
     setInvoiceView(invoiceId)
+    setSlideOverview(true)
   }
 
   const onCloseInvoiceView = () => {
-    setInvoiceView(null)
+    setSlideOverview(false)
   }
 
   return (
-    <Sheet open={selectedInvoice! !== null} onOpenChange={onCloseInvoiceView}>
+    <Sheet open={slideOverviewStatus} onOpenChange={onCloseInvoiceView}>
       <div className='my-8'>
         <Filter />
         <InvoiceCard>
