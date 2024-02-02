@@ -10,6 +10,8 @@ export class SQSProcessor {
       const body = JSON.parse(rawPayload.Body)
       const payload = body?.Message ? JSON.parse(body.Message) : body
 
+      console.log('in sqs processor --->', body.name, payload)
+
       if (body.name === Constants.JOBS.INVOICE_DATA_TO_MEDIA) {
         console.log(Constants.JOBS.INVOICE_DATA_TO_MEDIA, payload)
         return InvoiceJobsProcessor.processInvoiceDataToMedia(payload)
