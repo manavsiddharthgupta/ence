@@ -5,6 +5,7 @@ export class SQSProcessor {
   static async handleMessage(rawPayload: any) {
     try {
       if (!('Body' in rawPayload)) {
+        console.log('Invalid payload', rawPayload)
         return
       }
       const body = JSON.parse(rawPayload.Body)
