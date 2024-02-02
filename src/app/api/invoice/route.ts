@@ -157,7 +157,7 @@ export async function POST(request: Request) {
     await InvoiceJobs.createMediaFromInvoiceDataJob(
       invoiceRes.id,
       org.organizations.id,
-      body
+      invoiceRes
     )
     // Todo: create link for customer and send them based on sending method
     return Response.json({

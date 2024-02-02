@@ -4,23 +4,33 @@ import { Constants } from '../utils/constants'
 export class SQSProcessor {
   static async handleMessage(rawPayload: any) {
     try {
-      if (!('Body' in rawPayload)) {
+      if (!('body' in rawPayload)) {
         console.log('Invalid payload', rawPayload)
         return
       }
-      const body = JSON.parse(rawPayload.Body)
-      const payload = body?.Message ? JSON.parse(body.Message) : body
 
-      console.log('in sqs processor --->', body.name, payload)
+      const body = JSON.parse(rawPayload.body)
+      const messageId = rawPayload?.messageId ?? null
+      if (!body?.name) {
+        console.log('There is no body name attached in payload')
+        return
+      }
+
+      console.log(
+        'in sqs processor ---> messageId - ',
+        messageId,
+        'for Process Job ',
+        body.name
+      )
 
       if (body.name === Constants.JOBS.INVOICE_DATA_TO_MEDIA) {
-        console.log(Constants.JOBS.INVOICE_DATA_TO_MEDIA, payload)
-        return InvoiceJobsProcessor.processInvoiceDataToMedia(payload)
+        console.log(Constants.JOBS.INVOICE_DATA_TO_MEDIA, body)
+        return InvoiceJobsProcessor.processInvoiceDataToMedia(body)
       }
 
       if (body.name === Constants.JOBS.SEND_INVOICE_ON_WHATSAPP) {
-        console.log(Constants.JOBS.SEND_INVOICE_ON_WHATSAPP, payload)
-        return InvoiceJobsProcessor.processSendInvoiceToWhatsapp(payload)
+        console.log(Constants.JOBS.SEND_INVOICE_ON_WHATSAPP, body)
+        return InvoiceJobsProcessor.processSendInvoiceToWhatsapp(body)
       }
 
       if (
@@ -28,9 +38,9 @@ export class SQSProcessor {
       ) {
         console.log(
           Constants.JOBS.SEND_INVOICE_LINK_ON_ACCEPT_FOR_PAYMENT,
-          payload
+          body
         )
-        return InvoiceJobsProcessor.processSendInvoiceLinkOnWhatsapp(payload)
+        return InvoiceJobsProcessor.processSendInvoiceLinkOnWhatsapp(body)
       }
     } catch (error) {
       console.log('Error occured in worker', error, rawPayload)
