@@ -41,6 +41,8 @@ export async function PATCH(
       })
     }
 
+    const body = await request.json()
+
     const invoiceId = params.id
     const invoice = await db.invoice.findUnique({
       where: {
@@ -57,13 +59,39 @@ export async function PATCH(
       })
     }
 
+    if (!invoice?.dueAmount) {
+      return Response.json({
+        ok: false,
+        data: 'Invalid due amount.',
+        status: 409
+      })
+    }
+
+    if (invoice?.dueAmount < body?.amount || body?.amount <= 0) {
+      return Response.json({
+        ok: false,
+        data: 'Invalid amount, please enter valid amount.',
+        status: 409
+      })
+    }
+
+    if (invoice?.dueAmount - body.amount !== 0) {
+      // Todo: payment status will be partial paid
+      return Response.json({
+        ok: false,
+        data: 'Partial paid feature is not available.',
+        status: 409
+      })
+    }
+
     const response = await db.invoice.update({
       where: {
         id: invoiceId
       },
       data: {
-        paymentStatus: 'PAID',
-        dueAmount: 0
+        paymentStatus: 'PAID', // will change based on the body.amount
+        dueAmount: invoice?.dueAmount - body?.amount,
+        paymentMethod: body?.paymentType === 'cash' ? 'CASH' : 'DIGITAL_WALLET'
       }
     })
 
@@ -72,10 +100,10 @@ export async function PATCH(
         actionType: 'PAYMENT_STATUS_CHANGE',
         invoiceId: invoiceId,
         oldStatus: oldStatus,
-        newStatus: 'PAID',
+        newStatus: 'PAID', // Todo: will change based on the body.amount
         title: 'Payment Status Change',
         description:
-          'You updated the payment status of the invoice to Paid, signifies  the successful completion of the payment.'
+          'You updated the payment status of the invoice to Paid, signifies  the successful completion of the payment.' // Todo: will change based on the body.amount
       }
     })
 

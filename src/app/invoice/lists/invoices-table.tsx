@@ -21,24 +21,22 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { InvoicesResponse } from '@/types/invoice'
-import {
-  callErrorToast,
-  callSuccessToast,
-  formatAmount,
-  formatCustomerInfo,
-  formatDate
-} from '@/lib/helpers'
+import { formatAmount, formatCustomerInfo, formatDate } from '@/lib/helpers'
 import Image from 'next/image'
 import Filter from './filter'
 import createInv from '@/svgs/create-inv.svg'
 import { Sheet } from '@/components/ui/sheet'
 import Invoice from './invoice'
-import { useRouter } from 'next/navigation'
+import { Dialog, DialogTrigger } from '@/components/ui/dialog'
+import { RecordPayment } from './record-payment'
 
 const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
-  // const [invoices, setInvoices] = useState<InvoicesResponse[]>(lists)
   const [selectedInvoice, setInvoiceView] = useState<string | null>(null)
   const [slideOverviewStatus, setSlideOverview] = useState(false)
+  const [selectedInvoiceToRecordPayment, setInvoiceRecordPayment] = useState<
+    string | null
+  >(null)
+  const [recordPaymentDialogStatus, setPaymentDialogStatus] = useState(false)
   const [currentPage, setPageNumber] = useState(1)
   const invoicesPerPage = 10
   const itemOffset = (currentPage - 1) * invoicesPerPage
@@ -73,6 +71,15 @@ const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
     setSlideOverview(false)
   }
 
+  const onSelectInvoiceToRecordPayment = (invoiceId: string) => {
+    setInvoiceRecordPayment(invoiceId)
+    setPaymentDialogStatus(true)
+  }
+
+  const onClosePaymentDialog = () => {
+    setPaymentDialogStatus(false)
+  }
+
   return (
     <Sheet open={slideOverviewStatus} onOpenChange={onCloseInvoiceView}>
       <div className='my-8'>
@@ -94,6 +101,7 @@ const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
             <InvoiceBody
               onSelectInvoice={onSelectInvoice}
               invoices={currentInvoices}
+              onSelectInvoiceToRecordPayment={onSelectInvoiceToRecordPayment}
             />
           </table>
           {invoices?.length === 0 && <InvoiceEmptyState />}
@@ -108,6 +116,17 @@ const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
         )}
       </div>
       <Invoice invoiceId={selectedInvoice} />
+      <Dialog
+        open={recordPaymentDialogStatus}
+        onOpenChange={onClosePaymentDialog}
+      >
+        <RecordPayment
+          invoice={invoices.find((value) => {
+            return value.id === selectedInvoiceToRecordPayment
+          })}
+          onClosePaymentDialog={onClosePaymentDialog}
+        />
+      </Dialog>
     </Sheet>
   )
 }
@@ -116,19 +135,13 @@ export default InvoiceTable
 
 const InvoiceBody = ({
   invoices,
-  onSelectInvoice
+  onSelectInvoice,
+  onSelectInvoiceToRecordPayment
 }: {
   invoices: InvoicesResponse[]
   onSelectInvoice: (invoiceId: string) => void
+  onSelectInvoiceToRecordPayment: (invoiceId: string) => void
 }) => {
-  const router = useRouter()
-  const onChangePaymentStatus = async (invoiceId: string) => {
-    const response = await fetch(`/api/invoice/${invoiceId}/paid`, {
-      method: 'PATCH'
-    })
-    const paidRes = await response.json()
-    return paidRes
-  }
   return (
     <tbody>
       {invoices?.map((invoice, ind) => {
@@ -189,22 +202,16 @@ const InvoiceBody = ({
                   <DropdownMenuSeparator className='bg-zinc-600/20' />
                   <DropdownMenuItem>Update</DropdownMenuItem>
                   {invoice.paymentStatus !== 'PAID' && (
-                    <DropdownMenuItem
-                      className='text-green-500 hover:text-green-500'
-                      onClick={async () => {
-                        const response = await onChangePaymentStatus(invoice.id)
-                        if (!response.ok) {
-                          callErrorToast(response.data)
-                        } else {
-                          callSuccessToast(
-                            `INV-${invoice.invoiceNumber} Marked as Paid`
-                          )
-                          router.refresh()
-                        }
-                      }}
-                    >
-                      Mark as Paid
-                    </DropdownMenuItem>
+                    <DialogTrigger asChild>
+                      <DropdownMenuItem
+                        className='text-green-500 hover:text-green-500'
+                        onClick={() => {
+                          onSelectInvoiceToRecordPayment(invoice.id)
+                        }}
+                      >
+                        Record Payment
+                      </DropdownMenuItem>
+                    </DialogTrigger>
                   )}
                   <DropdownMenuItem
                     onClick={() => {
