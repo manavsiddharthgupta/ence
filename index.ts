@@ -1,4 +1,5 @@
 import { SQSEvent, Context, SQSHandler, SQSRecord } from 'aws-lambda'
+import { SQSProcessor } from './src/sqs/sqsProcessor'
 
 export const receiver: SQSHandler = async (
   event: SQSEvent,
@@ -14,7 +15,7 @@ async function processMessageAsync(message: SQSRecord): Promise<any> {
   try {
     console.log(`Processed message ${message.body}`)
     // TODO: Do interesting work based on the new message
-    // await SQSProcessor.handleMessage(message)
+    await SQSProcessor.handleMessage(message)
   } catch (err) {
     console.error('An error occurred')
     throw err
