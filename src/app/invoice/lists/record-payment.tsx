@@ -65,13 +65,21 @@ export const RecordPayment = ({
       return
     }
 
-    const response = await onChangePaymentStatus(invoice?.id)
-    if (!response.ok) {
-      callErrorToast(response.data)
-    } else {
-      callSuccessToast(`You recorded payment for INV-${invoice?.invoiceNumber}`)
-      router.refresh()
-      onClosePaymentDialog()
+    try {
+      const response = await onChangePaymentStatus(invoice?.id)
+      if (!response.ok) {
+        callErrorToast(response.data)
+      } else {
+        callSuccessToast(
+          `You recorded payment for INV-${invoice?.invoiceNumber}`
+        )
+        router.refresh()
+        setPending(false)
+        onClosePaymentDialog()
+        return
+      }
+    } catch (err) {
+      callErrorToast('Something went wrong, please try again.')
     }
     setPending(false)
   }
