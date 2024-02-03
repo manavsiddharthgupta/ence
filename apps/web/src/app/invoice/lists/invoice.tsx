@@ -60,8 +60,8 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
     if (!text) {
       return null
     }
-    const firstChar = text[0].toLocaleUpperCase()
-    const splittedText = text.slice(1).toLocaleLowerCase()
+    const firstChar = text[0]?.toUpperCase()
+    const splittedText = text?.slice(1).toLowerCase()
     if (type === 'payment-status') {
       return firstChar + splittedText
     }

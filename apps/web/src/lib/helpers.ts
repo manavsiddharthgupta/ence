@@ -50,7 +50,7 @@ export const dismissToast = (id: string) => {
 }
 
 export const formatTexttoCaps = (text: string) => {
-  const firstChar = text[0].toLocaleUpperCase()
+  const firstChar = text[0]?.toUpperCase()
   const splittedText = text.slice(1)
   return firstChar + splittedText
 }

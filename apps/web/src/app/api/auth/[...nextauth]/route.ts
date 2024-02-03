@@ -9,6 +9,9 @@ const isAllowedUser = (email: string | undefined | null) => {
     return null
   }
   const userEmailname = email.split('@')[0]
+  if (!userEmailname) {
+    return null
+  }
   console.log('your username ->', userEmailname)
   return ALLOWED_USER.includes(userEmailname)
 } // Todo: Currently in dev mode will be removed

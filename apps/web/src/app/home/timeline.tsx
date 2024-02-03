@@ -78,7 +78,7 @@ export const TimeLine = () => {
   const chartData = formatData(data?.data?.sales)
   return (
     <div className='rounded-3xl w-[54%] border border-zinc-400/20 dark:border-zinc-600/20'>
-      <Card className='ring-0 bg-transparent'>
+      {/* <Card className='ring-0 bg-transparent'>
         <h2 className='text-lg font-medium px-2'>This Week</h2>
         <AreaChart
           className='h-64 text-[10px] mt-1'
@@ -94,7 +94,7 @@ export const TimeLine = () => {
           showTooltip={false}
           curveType='monotone'
         />
-      </Card>
+      </Card> */}
     </div>
   )
 }

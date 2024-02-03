@@ -23,12 +23,12 @@ const CustomerInfo = () => {
       customerInfoDispatch({
         type: 'CUSTOMER_SET_ALL',
         payload: {
-          email: sampleCustomerDetails[0].email,
-          whatsappNumber: sampleCustomerDetails[0].whatsappNumber,
-          city: sampleCustomerDetails[0].city,
-          pincode: sampleCustomerDetails[0].pincode,
-          state: sampleCustomerDetails[0].state,
-          country: sampleCustomerDetails[0].country
+          email: sampleCustomerDetails[0]?.email,
+          whatsappNumber: sampleCustomerDetails[0]?.whatsappNumber,
+          city: sampleCustomerDetails[0]?.city,
+          pincode: sampleCustomerDetails[0]?.pincode,
+          state: sampleCustomerDetails[0]?.state,
+          country: sampleCustomerDetails[0]?.country
         }
       }) // adding sample Data
     } else {
