@@ -1,6 +1,34 @@
+import { db } from '@/lib/db'
+import { InvoiceGenerateMedia } from '@/lib/invoice/generate-media'
+import { uploadFilesToS3 } from '@/resources/s3'
+
 export class InvoiceJobsProcessor {
   static async processInvoiceDataToMedia(value: any) {
-    console.log('PROCESSING JOBS', value)
+    const payload = value.data ?? null
+    if (!payload || !payload?.id || !payload?.invoiceNumber) {
+      return
+    }
+    const bufferImage = await InvoiceGenerateMedia.generateImage({
+      ...payload,
+      customerInfo: payload?.customerInfo
+        ? JSON.parse(String(payload?.customerInfo))
+        : null // Todo: customerInfo type will change later
+    })
+
+    const fileUrl = await uploadFilesToS3(
+      'ence-invoice',
+      `INV-${payload?.invoiceNumber}`,
+      bufferImage
+    )
+    if (fileUrl) {
+      await db.invoiceRelatedDocument.create({
+        data: {
+          documentLink: fileUrl,
+          name: 'MAIN_IMAGE',
+          invoiceId: payload?.id
+        }
+      })
+    }
   }
 
   static async processSendInvoiceToWhatsapp(value: any) {}

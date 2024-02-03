@@ -151,6 +151,32 @@ export async function POST(request: Request) {
             data: items
           }
         }
+      },
+      select: {
+        id: true,
+        invoiceNumber: true,
+        dateIssue: true,
+        dueDate: true,
+        customerInfo: true,
+        items: {
+          select: {
+            id: true,
+            name: true,
+            unit: true,
+            price: true,
+            quantity: true,
+            total: true
+          }
+        },
+        subTotal: true,
+        discount: true,
+        adjustmentFee: true,
+        lateCharge: true,
+        invoiceTotal: true,
+        packagingCharge: true,
+        shippingCharge: true,
+        totalAmount: true,
+        notes: true
       }
     })
 
@@ -164,9 +190,6 @@ export async function POST(request: Request) {
       ok: true,
       data: {
         invoiceNumber: invoiceRes.invoiceNumber,
-        sendingMethod: invoiceRes.sendingMethod,
-        paymentStatus: invoiceRes.paymentStatus,
-        dueAmount: invoiceRes.dueAmount,
         dueDate: invoiceRes.dueDate
       },
       status: 200

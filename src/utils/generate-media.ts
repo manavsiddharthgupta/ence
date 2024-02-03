@@ -1,12 +1,25 @@
 import puppeteer from 'puppeteer'
 import fs from 'fs'
 import hbs from 'handlebars'
+import { formatAmount, formatDate, numTowords } from '@/lib/helpers'
 
 const compile = async (templatePath: string, data: any) => {
   const htmlContent = await fs.promises.readFile(templatePath, 'utf8')
 
   return hbs.compile(htmlContent)(data)
 }
+hbs.registerHelper('formatDate', function (value) {
+  return formatDate(value)
+})
+hbs.registerHelper('formatAmount', function (value) {
+  return formatAmount(value || 0)
+})
+
+hbs.registerHelper('formatAmountInwords', function (value) {
+  return numTowords.convert(value || 0, {
+    currency: true
+  })
+})
 
 export const generateMedia = async (
   templateName: string,
@@ -26,8 +39,12 @@ export const generateMedia = async (
   await page.setContent(content)
 
   if (type === 'IMAGE') {
+    await page.setViewport({ width: 630, height: 891, deviceScaleFactor: 2 })
+    // await page.setViewport({ width: 840, height: 1188, deviceScaleFactor: 2 })
     const imgBuffer = await page.screenshot({
-      fullPage: true
+      fullPage: true,
+      type: 'png',
+      encoding: 'base64'
     })
     await page.close()
     await browser.close()
