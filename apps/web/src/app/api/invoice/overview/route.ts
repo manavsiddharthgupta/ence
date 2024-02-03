@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth'
 import { db } from '@/lib/db'
 import { authOptions } from '../../auth/[...nextauth]/route'
-import { Invoice } from '@prisma/client'
+import { Invoice } from 'database'
 export const dynamic = 'force-dynamic'
 export async function GET() {
   try {

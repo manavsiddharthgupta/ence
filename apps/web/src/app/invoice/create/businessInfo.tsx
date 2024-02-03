@@ -1,7 +1,7 @@
 import InputPullback from '@/components/inputPullback'
 import { Skeleton } from '@/components/ui/skeleton'
 import { OrganizationAddress } from '@/types/organization'
-import { Organization } from '@prisma/client'
+import { Organization } from 'database'
 // Todo: remove sampleDetails
 const BusinessInfo = ({
   organizationDetails,

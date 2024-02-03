@@ -1,5 +1,5 @@
 import { db } from '@/lib/db'
-import { Invoice } from '@prisma/client'
+import { Invoice } from 'database'
 export const getInvoices = async (email: string | null | undefined) => {
   try {
     if (!email) {

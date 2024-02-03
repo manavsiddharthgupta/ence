@@ -1,4 +1,4 @@
-import { AuditTrail } from '@prisma/client'
+import { AuditTrail } from 'database'
 
 export type Option = {
   id: number

@@ -4,13 +4,24 @@
   "pipeline": {
     "build": {
       "dotEnv": [".env"],
+      "dependsOn": ["^db:generate"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "dev": {
       "dotEnv": [".env"],
+      "dependsOn": ["^db:generate"],
       "cache": false,
       "persistent": true
     },
-    "type-check": {}
+    "type-check": {},
+    "db:generate": {
+      "cache": false
+    },
+    "db:push": {
+      "cache": false
+    },
+    "db:migrate:dev": {
+      "cache": false
+    }
   }
 }

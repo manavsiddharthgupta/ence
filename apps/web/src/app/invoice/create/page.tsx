@@ -18,7 +18,7 @@ import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Loader2Icon } from 'lucide-react'
-import { Organization } from '@prisma/client'
+import { Organization } from 'database'
 import { Skeleton } from '@/components/ui/skeleton'
 import { toast } from 'sonner'
 
