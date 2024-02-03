@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer'
-import fs from 'fs'
-import hbs from 'handlebars'
+import * as fs from 'fs'
+import * as hbs from 'handlebars'
 import { formatAmount, formatDate, numTowords } from '../lib/helpers'
 
 const compile = async (templatePath: string, data: any) => {
