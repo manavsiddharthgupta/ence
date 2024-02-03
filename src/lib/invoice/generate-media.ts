@@ -1,4 +1,4 @@
-import { generateMedia } from '@/utils/generate-media'
+import { generateMedia } from '../../utils/generate-media'
 const template = 'default'
 const category = 'invoices'
 export class InvoiceGenerateMedia {
