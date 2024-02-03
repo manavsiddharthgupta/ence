@@ -67,7 +67,7 @@ export const ImageMagnifier = ({
           left: `${x - magnifieWidth / 2}px`,
           opacity: '1',
           border: '1px solid lightgray',
-          backgroundColor: 'white',
+          backgroundColor: 'transparent',
           backgroundImage: `url('${blobUrl}')`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: `${imgWidth * zoomLevel}px ${

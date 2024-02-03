@@ -36,4 +36,25 @@ const invoiceSchema = z.object({
   service_charge: z.number().nullable()
 })
 
-export { merchantSchema, customerSchema, itemSchema, invoiceSchema }
+const paymentRecord = z.object({
+  amount: z.number({
+    required_error: 'Amount is required',
+    invalid_type_error: 'Amount must be greater than 0'
+  }),
+  paymentDate: z.date({
+    required_error: 'Date is required',
+    invalid_type_error: 'Date should be valid'
+  }),
+  paymentType: z.string({
+    required_error: 'Payment Type is required',
+    invalid_type_error: 'Payment Type should be valid'
+  })
+})
+
+export {
+  merchantSchema,
+  customerSchema,
+  itemSchema,
+  invoiceSchema,
+  paymentRecord
+}

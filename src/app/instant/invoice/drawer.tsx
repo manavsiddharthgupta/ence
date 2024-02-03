@@ -41,16 +41,10 @@ import {
   instantInvoiceReducers
 } from '@/reducers/createInstant'
 import { toast } from 'sonner'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious
-} from '@/components/ui/carousel'
 import { InstantInvoiceItemsAction } from '@/types/instant'
-import { Loader2Icon } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Loader2Icon } from 'lucide-react'
 import { ImageMagnifier } from '@/components/img-magnifier'
+import { motion } from 'framer-motion'
 
 const InstantDrawer = ({
   blobUrl,
@@ -72,6 +66,27 @@ const InstantDrawer = ({
     instantInvoiceItemsReducers,
     InitialInstantInvoiceItemsState
   )
+
+  useEffect(() => {
+    instantInvoiceDispatch({
+      type: 'UPDATE',
+      payload: {
+        customerName: null,
+        invoiceTotal: null,
+        invoiceNumber: null,
+        subTotal: null,
+        email: null,
+        whatsappNumber: null
+      }
+    })
+    instantInvoiceItemsDispatch({
+      type: 'ADD_NEW_ITEM',
+      payload: {
+        index: instantInvoiceItems.length,
+        value: ''
+      }
+    })
+  }, [blobUrl])
 
   return (
     <InstantInvoiceProvider
@@ -103,21 +118,20 @@ const InstantDrawer = ({
             </DrawerHeader>
             <div className='p-4 flex gap-4 justify-between items-center mt-2 relative'>
               {loading && (
-                <div className='w-[calc(100%-320px)] absolute top-0 z-10 -left-5 bg-zinc-50/90 dark:bg-zinc-800/90 dark:text-white text-black h-full rounded-2xl flex justify-center items-center'>
+                <div className='w-[calc(100%-320px)] absolute top-0 z-10 -left-5 bg-zinc-50/50 dark:bg-zinc-900/50 dark:text-white text-black h-full rounded-2xl flex justify-center items-center backdrop-blur-sm'>
                   <div className='w-fit h-fit flex items-center gap-2'>
                     <Loader2Icon className='animate-spin' />
                     <p className='text-sm font-semibold'>Scanning document</p>
                   </div>
                 </div>
               )}
-              <Carousel className='w-[calc(100%-320px)] z-0'>
+              <div className='w-[calc(100%-320px)] z-0 relative'>
                 <InvoiceCarouselContent
                   blobUrl={blobUrl}
                   setLoading={setLoadng}
+                  isScanning={loading}
                 />
-                <CarouselPrevious className='dark:bg-zinc-800/30 hover:dark:bg-zinc-800/90 bg-zinc-100 hover:bg-zinc-200/80 dark:border-zinc-700 border-zinc-300' />
-                <CarouselNext className='dark:bg-zinc-800/30 hover:dark:bg-zinc-800/90 bg-zinc-100 hover:bg-zinc-200/80 dark:border-zinc-700 border-zinc-300' />
-              </Carousel>
+              </div>
 
               {blobUrl && (
                 <ImageMagnifier
@@ -145,19 +159,54 @@ const InstantDrawer = ({
 
 export default InstantDrawer
 
+const steps = [
+  {
+    id: 'Step 1',
+    name: 'Invoice Info',
+    fields: []
+  },
+  {
+    id: 'Step 2',
+    name: 'Items Info',
+    fields: []
+  }
+]
+
 const InvoiceCarouselContent = ({
   blobUrl,
-  setLoading
+  setLoading,
+  isScanning
 }: {
   blobUrl: string | null
   setLoading: Dispatch<SetStateAction<boolean>>
+  isScanning: boolean
 }) => {
+  const [previousStep, setPreviousStep] = useState(0)
+  const [currentStep, setCurrentStep] = useState(0)
+
+  const delta = currentStep - previousStep
   const {
     instantInvoiceDispatch,
     instantInvoiceItemsDispatch,
     setPaymentTerm,
     setSendingMethod
   } = useInstantInvoiceContext()
+
+  const next = async () => {
+    if (currentStep < steps.length - 1) {
+      if (currentStep === steps.length - 2) {
+      }
+      setPreviousStep(currentStep)
+      setCurrentStep((step) => step + 1)
+    }
+  }
+
+  const prev = () => {
+    if (currentStep > 0) {
+      setPreviousStep(currentStep)
+      setCurrentStep((step) => step - 1)
+    }
+  }
 
   const getLastInvoiceNumber = useCallback(async () => {
     const response = await fetch('/api/invoice/last')
@@ -212,10 +261,10 @@ const InvoiceCarouselContent = ({
           payload: {
             customerName: parsedData?.data?.customer?.customerName || '',
             dateIssue: new Date(),
-            invoiceTotal: parsedData?.data?.total || 0, // will change
-            subTotal: parsedData?.data?.total || 0, // will change
+            invoiceTotal: +parsedData?.data?.total || 0, // will change
+            subTotal: +parsedData?.data?.total || 0, // will change
             email: parsedData?.data?.customer?.customerEmail || '',
-            whatsappNumber: parsedData?.data?.customer?.customerNumber || ''
+            whatsappNumber: +parsedData?.data?.customer?.customerNumber || ''
           }
         })
         instantInvoiceItemsDispatch({
@@ -242,14 +291,42 @@ const InvoiceCarouselContent = ({
   }, [blobUrl])
 
   return (
-    <CarouselContent>
-      <CarouselItem key={1}>
-        <InvoiceInfo />
-      </CarouselItem>
-      <CarouselItem key={2}>
-        <InvoiceItems />
-      </CarouselItem>
-    </CarouselContent>
+    <>
+      {currentStep === 0 && (
+        <motion.div
+          initial={{ x: delta >= 0 ? '30%' : '-30%', opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
+          <InvoiceInfo />
+        </motion.div>
+      )}
+      {currentStep === 1 && (
+        <motion.div
+          initial={{ x: delta >= 0 ? '30%' : '-30%', opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
+          <InvoiceItems />
+        </motion.div>
+      )}
+      <Button
+        variant='outline'
+        disabled={isScanning}
+        onClick={next}
+        className='w-8 h-8 p-0 text-zinc-900/70 dark:text-white/70 cursor-pointer rounded-full dark:bg-zinc-800/30 hover:dark:bg-zinc-800/90 bg-zinc-100 hover:bg-zinc-200/80 dark:border-zinc-700 border-zinc-300 absolute top-1/2 -right-10'
+      >
+        <ChevronRight size={16} />
+      </Button>
+      <Button
+        variant='outline'
+        disabled={isScanning}
+        onClick={prev}
+        className='w-8 h-8 p-0 text-zinc-900/70 dark:text-white/70 cursor-pointer rounded-full dark:bg-zinc-800/30 hover:dark:bg-zinc-800/90 bg-zinc-100 hover:bg-zinc-200/80 dark:border-zinc-700 border-zinc-300 absolute top-1/2 -left-20'
+      >
+        <ChevronLeft size={16} />
+      </Button>
+    </>
   )
 }
 
@@ -410,18 +487,30 @@ const InvoiceItems = () => {
   const { instantInvoiceItems, instantInvoiceItemsDispatch } =
     useInstantInvoiceContext()
 
-  useEffect(() => {
-    instantInvoiceItemsDispatch({
-      type: 'ADD_NEW_ITEM',
-      payload: {
-        index: instantInvoiceItems.length,
-        value: ''
-      }
-    })
-  }, [])
-
   return (
-    <div className='h-60 overflow-y-auto'>
+    <div className='h-56 overflow-y-auto'>
+      <div className='flex mb-4 px-2 mt-2 justify-start gap-2 w-full items-center'>
+        <div className='w-[13%]'>
+          <p className='text-xs font-normal pl-2 text-zinc-900/40 dark:text-white/30'>
+            Qty
+          </p>
+        </div>
+        <div className='w-[40%]'>
+          <p className='text-xs font-normal pl-2 text-zinc-900/40 dark:text-white/30'>
+            Items
+          </p>
+        </div>
+        <div className='w-[18%]'>
+          <p className='text-xs font-normal pl-2 text-zinc-900/40 dark:text-white/30'>
+            Price
+          </p>
+        </div>
+        <div className='w-[18%]'>
+          <p className='text-xs font-normal pl-2 text-zinc-900/40 dark:text-white/30'>
+            Total
+          </p>
+        </div>
+      </div>
       {instantInvoiceItems.map((item, index) => {
         return (
           <Item
@@ -552,8 +641,7 @@ const Footer = ({
     instantInvoiceItems,
     paymentMethod,
     paymentTerm,
-    sendingMethod,
-    instantInvoiceDispatch
+    sendingMethod
   } = useInstantInvoiceContext()
 
   const onCreateInstantInvoice = async () => {
@@ -592,17 +680,6 @@ const Footer = ({
         id: loadingToastId
       })
       onReset()
-      instantInvoiceDispatch({
-        type: 'UPDATE',
-        payload: {
-          customerName: null,
-          invoiceTotal: null,
-          invoiceNumber: null,
-          subTotal: null,
-          email: null,
-          whatsappNumber: null
-        }
-      })
     } else {
       setLoading(false)
       toast.error('Something went wrong while creating invoice', {

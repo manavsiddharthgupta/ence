@@ -81,9 +81,7 @@ export const formatDate = (inputDate: Date | undefined) => {
 
   const formattedDate = `${day
     .toString()
-    .padStart(2, '0')} ${monthAbbreviation} '${year
-    .toString()
-    .padStart(2, '0')}`
+    .padStart(2, '0')} ${monthAbbreviation} ${year.toString().padStart(2, '0')}`
   return formattedDate
 }
 

@@ -6,8 +6,7 @@ import {
   FileUp,
   GitCompare,
   Loader2Icon,
-  ScanText,
-  Zap
+  ScanText
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import Image from 'next/image'
@@ -98,9 +97,9 @@ const InvoiceUploader = ({ onSetUrl }: { onSetUrl: (url: string) => void }) => {
   }
 
   return (
-    <div className='h-80 relative'>
+    <div className='h-72 relative'>
       {loading && (
-        <div className='absolute top-0 left-0 border border-dashed dark:border-zinc-600 border-zinc-400 bg-zinc-50/95 dark:bg-zinc-800/95 dark:text-white text-black w-full h-full rounded-2xl flex justify-center items-center'>
+        <div className='absolute top-0 left-0 border border-dashed dark:border-zinc-600 border-zinc-400 bg-zinc-50/95 dark:bg-zinc-800/95 dark:text-white text-black w-full h-full rounded-2xl flex justify-center items-center z-10'>
           <div className='w-fit h-fit flex items-center gap-2 '>
             <Loader2Icon className='animate-spin' />
             <p className='text-sm font-semibold'>Uploading document</p>
@@ -117,7 +116,7 @@ const InvoiceUploader = ({ onSetUrl }: { onSetUrl: (url: string) => void }) => {
             src={createInv}
             className='mx-auto'
             alt='empty-inv'
-            width={156}
+            width={140}
             priority
           />
           <p className='text-xs font-light text-black dark:text-white max-w-[200px] mx-auto '>
