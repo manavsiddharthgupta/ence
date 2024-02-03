@@ -8,11 +8,11 @@ import {
   PaymentStatus,
   PaymentTerms,
   SendMethods
-} from '../types/invoice'
-import { OrganizationBody, OrganizationState } from '../types/organization'
+} from '@/types/invoice'
+import { OrganizationBody, OrganizationState } from '@/types/organization'
 import { ToWords } from 'to-words'
 import { toast } from 'sonner'
-import { InstantInvoice, InstantInvoiceItems } from '../types/instant'
+import { InstantInvoice, InstantInvoiceItems } from '@/types/instant'
 export const formatAmount = (amount: number) => {
   const formattedNumber = amount.toLocaleString('en-IN', {
     maximumFractionDigits: 2

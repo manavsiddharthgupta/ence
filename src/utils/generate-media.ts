@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer'
-import * as fs from 'fs'
-import * as hbs from 'handlebars'
-import { formatAmount, formatDate, numTowords } from '../lib/helpers'
+import fs from 'fs'
+import hbs from 'handlebars'
+import { formatAmount, formatDate, numTowords } from '@/lib/helpers'
 
 const compile = async (templatePath: string, data: any) => {
   const htmlContent = await fs.promises.readFile(templatePath, 'utf8')
