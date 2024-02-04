@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator'
 import { SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { formatAmount, formatDate } from '@/lib/helpers'
+import { formatAmount, formatDate } from 'helper/format'
 import { InvoiceBody } from '@/types/invoice'
 import {
   Banknote,

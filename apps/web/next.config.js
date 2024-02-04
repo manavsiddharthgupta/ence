@@ -9,7 +9,8 @@ const nextConfig = {
       handlebars: 'handlebars/dist/handlebars.js'
     }
     return config
-  }
+  },
+  transpilePackages: ['helper']
 }
 
 module.exports = nextConfig

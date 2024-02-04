@@ -6,7 +6,7 @@ import {
   CollapsibleTrigger
 } from '@/components/ui/collapsible'
 import { useInvoiceContext } from '@/context/invoice'
-import { formatAmount } from '@/lib/helpers'
+import { formatAmount } from 'helper/format'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { useState } from 'react'
 const CollapsiblePurchasedItems = () => {

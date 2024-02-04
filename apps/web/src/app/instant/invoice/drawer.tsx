@@ -14,9 +14,9 @@ import { Label } from '@/components/ui/label'
 import {
   callLoadingToast,
   checkOnDemandValidation,
-  formatAmount,
   formatInstantInvoiceData
 } from '@/lib/helpers'
+import { formatAmount } from 'helper/format'
 import {
   Dispatch,
   SetStateAction,

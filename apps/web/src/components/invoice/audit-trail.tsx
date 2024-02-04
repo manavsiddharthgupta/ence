@@ -1,4 +1,4 @@
-import { formatDateTime } from '@/lib/helpers'
+import { formatDateTime } from 'helper/format'
 import { InvoiceAuditTrail } from '@/types/invoice'
 import {
   FilePlus2,

@@ -1,6 +1,6 @@
 'use client'
 
-import { formatDateTime } from '@/lib/helpers'
+import { formatDateTime } from 'helper/format'
 
 export const Desc = ({
   desc,

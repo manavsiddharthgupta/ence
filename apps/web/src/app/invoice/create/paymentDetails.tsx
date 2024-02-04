@@ -4,7 +4,8 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import UploadFile from '@/components/upload-files'
 import { useInvoiceContext } from '@/context/invoice'
-import { callInfoToast, formatAmount } from '@/lib/helpers'
+import { callInfoToast } from '@/lib/helpers'
+import { formatAmount } from 'helper/format'
 import { HelpCircle } from 'lucide-react'
 import {
   PAYMENT_TERMS as paymentTermsOptions,

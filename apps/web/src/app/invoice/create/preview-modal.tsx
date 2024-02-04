@@ -15,17 +15,12 @@ import {
 } from '@/components/ui/tooltip'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Banknote, Calendar, Info, Loader2Icon } from 'lucide-react'
-import {
-  callErrorToast,
-  formatAmount,
-  formatDate,
-  numTowords
-} from '@/lib/helpers'
+import { formatAmount, formatDate, numTowords } from 'helper/format'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { StatusBadge } from '@/components/status-badge'
 import CollapsiblePurchasedItems from './purchased-items'
 import { useInvoiceContext } from '@/context/invoice'
-import { formatTexttoCaps } from '@/lib/helpers'
+import { formatTextToCaps } from 'helper/format'
 import { Organization } from 'database'
 import { OrganizationAddress } from '@/types/organization'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -84,7 +79,7 @@ const PreviewModal = ({
                 : '-'}
             </span>
           </p>
-          <StatusBadge status={formatTexttoCaps(paymentInfoState.status)} />
+          <StatusBadge status={formatTextToCaps(paymentInfoState.status)} />
         </DialogTitle>
         <Tabs defaultValue='digital' className='w-full'>
           <TabsList className='grid w-full grid-cols-2'>
@@ -97,7 +92,7 @@ const PreviewModal = ({
                 <Badge className='flex gap-1.5 items-center bg-green-500 hover:bg-green-600'>
                   <Banknote size={20} className='text-white' />
                   <p className='text-xs font-semibold text-white'>
-                    {formatTexttoCaps(paymentInfoState.method)}
+                    {formatTextToCaps(paymentInfoState.method)}
                   </p>
                 </Badge>
                 <Badge className='flex gap-1.5 items-center py-0.5'>

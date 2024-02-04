@@ -1,0 +1,10 @@
+{
+  "name": "helper",
+  "version": "0.1.0",
+  "exports": {
+    "./format": "./src/format.ts"
+  },
+  "dependencies": {
+    "to-words": "^4.0.0"
+  }
+}

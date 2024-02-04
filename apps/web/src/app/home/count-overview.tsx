@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge'
-import { formatAmount } from '@/lib/helpers'
+import { formatAmount } from 'helper/format'
 import { Banknote, Coins, TrendingUp, Wallet2 } from 'lucide-react'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'

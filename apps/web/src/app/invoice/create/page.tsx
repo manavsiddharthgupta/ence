@@ -8,9 +8,9 @@ import ItemsInfo from './itemsInfo'
 import {
   callErrorToast,
   callLoadingToast,
-  formatAmount,
   formatInvoiceData
 } from '@/lib/helpers'
+import { formatAmount } from 'helper/format'
 import { Button } from '@/components/ui/button'
 import { useInvoiceContext } from '@/context/invoice'
 import PreviewModal from './preview-modal'
