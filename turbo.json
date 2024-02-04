@@ -37,7 +37,7 @@
     "db:push": {
       "cache": false
     },
-    "db:migrate:dev": {
+    "db:migrate:deploy": {
       "cache": false
     }
   }
