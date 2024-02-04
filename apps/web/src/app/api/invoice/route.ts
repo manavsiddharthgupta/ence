@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '../auth/[...nextauth]/route'
 import { db } from '@/lib/db'
 import { InvoiceBody } from '@/types/invoice'
-import { InvoiceJobs } from '@/sqs/events/invoice-job'
+import { InvoiceJobs } from 'events/invoice'
 
 export async function GET() {
   try {

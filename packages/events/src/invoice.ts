@@ -1,5 +1,5 @@
-import { WorkerQueue } from '@/sqs/queues/worker'
-import { Constants } from '@/utils/constants'
+import { WorkerQueue } from '../sqs/worker'
+import { INVOICE_CONSTANTS } from '../constants'
 
 export class InvoiceJobs {
   static async createMediaFromInvoiceDataJob(
@@ -8,7 +8,7 @@ export class InvoiceJobs {
     data: any
   ) {
     const job = {
-      name: Constants.JOBS.INVOICE_DATA_TO_MEDIA,
+      name: INVOICE_CONSTANTS.JOBS.INVOICE_DATA_TO_MEDIA,
       invoiceId: invoiceId,
       orgId: orgId,
       data: data
@@ -18,14 +18,14 @@ export class InvoiceJobs {
 
   static async sendInvoiceOnWhatsappJob() {
     const job = {
-      name: Constants.JOBS.SEND_INVOICE_ON_WHATSAPP
+      name: INVOICE_CONSTANTS.JOBS.SEND_INVOICE_ON_WHATSAPP
     }
     return WorkerQueue.push(job)
   }
 
   static async sendInvoiceLinkOnAcceptForPaymentJob() {
     const job = {
-      name: Constants.JOBS.SEND_INVOICE_LINK_ON_ACCEPT_FOR_PAYMENT
+      name: INVOICE_CONSTANTS.JOBS.SEND_INVOICE_LINK_ON_ACCEPT_FOR_PAYMENT
     }
     return WorkerQueue.push(job)
   }

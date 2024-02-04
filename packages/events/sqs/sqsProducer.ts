@@ -1,5 +1,4 @@
 import { SQS } from 'aws-sdk'
-import autoBind from 'auto-bind'
 
 export class SqsProducer {
   public region: string
@@ -19,7 +18,5 @@ export class SqsProducer {
       credentials: this.credentials
     })
     this.queueUrl = options.URL
-
-    autoBind(this)
   }
 }

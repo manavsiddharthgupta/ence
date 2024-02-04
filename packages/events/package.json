@@ -1,0 +1,10 @@
+{
+  "name": "events",
+  "version": "0.1.0",
+  "exports": {
+    "./invoice": "./src/invoice.ts"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1550.0"
+  }
+}
