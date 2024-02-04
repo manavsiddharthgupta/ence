@@ -1,0 +1,23 @@
+service: worker-sqs
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+
+functions:
+  receiver:
+    handler: index.receiver
+    timeout: 30
+
+package:
+  exclude:
+    - .next/**
+    - node_modules/**
+    - public/**
+    - Dockerfile/**
+    - src/app/**
+    - src/components/**
+    - src/context/**
+    - src/crud/**
+    - src/reducers/**

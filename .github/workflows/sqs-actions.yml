@@ -1,0 +1,27 @@
+name: Ence SQS Pipeline
+
+on:
+  push:
+    branches:
+      - test
+jobs:
+  Deploy-SQS:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Making Runtime File for AWS Lambda
+        run: |
+          npm install -g typescript  # Install TypeScript globally
+          tsc index.ts
+
+      - name: Deploy using Serverless
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          SLS_INTERACTIVE_SETUP_ENABLE: 1
+        run: npx serverless deploy
