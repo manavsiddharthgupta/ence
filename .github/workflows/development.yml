@@ -24,7 +24,7 @@ jobs:
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Apply all pending migrations to the database
-        run: db:migrate:deploy
+        run: npx prisma migrate deploy --schema
         env:
           DATABASE_URL: ${{ secrets.DEV_DATABASE_URL }}
 
