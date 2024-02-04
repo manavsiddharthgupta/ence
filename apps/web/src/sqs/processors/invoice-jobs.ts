@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
-import { InvoiceGenerateMedia } from '@/lib/invoice/generate-media'
 import { uploadFilesToS3 } from '@/resources/s3'
+import { InvoiceGenerateMedia } from 'media-generator'
 
 export class InvoiceJobsProcessor {
   static async processInvoiceDataToMedia(value: any) {
