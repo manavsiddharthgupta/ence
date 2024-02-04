@@ -1,5 +1,5 @@
-import { db } from '@/lib/db'
-import { uploadFilesToS3 } from '@/resources/s3'
+import { db } from '../db'
+import { uploadFilesToS3 } from 'helper/s3'
 import { InvoiceGenerateMedia } from 'media-generator'
 
 export class InvoiceJobsProcessor {

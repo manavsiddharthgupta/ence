@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../../auth/[...nextauth]/route'
 import { db } from '../../../../lib/db'
-import { uploadFilesToS3 } from '@/resources/s3'
+import { uploadFilesToS3 } from 'helper/s3'
 import { streamToBuffer } from '@/utils/buffer'
 
 export async function POST(request: Request) {
