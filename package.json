@@ -17,5 +17,8 @@
   },
   "dependencies": {
     "dotenv-cli": "^7.3.0"
+  },
+  "prisma": {
+    "schema": "packages/db/prisma/schema.prisma"
   }
 }
