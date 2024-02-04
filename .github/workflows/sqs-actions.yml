@@ -3,8 +3,7 @@ name: Ence SQS Pipeline
 on:
   push:
     branches:
-      - use-sqs
-
+      - uwuwe
 jobs:
   Deploy-SQS:
     runs-on: ubuntu-latest
