@@ -1,8 +1,10 @@
 'use client'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useTheme } from '@/context/theme'
 import { WEEK_VALUES as getWeekName } from '@/lib/constants'
 import { useQuery } from '@tanstack/react-query'
-import { Card, AreaChart } from '@tremor/react'
+import { formatCompactNumber } from 'helper/format'
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts'
 
 const baseurl = process.env.NEXT_PUBLIC_API_URL
 
@@ -55,6 +57,7 @@ const formatData = (sales: any) => {
 }
 
 export const TimeLine = () => {
+  const { theme } = useTheme()
   const { isPending, error, data } = useQuery({
     queryKey: ['repoData'],
     queryFn: () =>
@@ -77,38 +80,46 @@ export const TimeLine = () => {
 
   const chartData = formatData(data?.data?.sales)
   return (
-    <div className='rounded-3xl w-[54%] border border-zinc-400/20 dark:border-zinc-600/20'>
-      {/* <Card className='ring-0 bg-transparent'>
-        <h2 className='text-lg font-medium px-2'>This Week</h2>
-        <AreaChart
-          className='h-64 text-[10px] mt-1'
+    <div className='rounded-3xl w-[54%] border border-zinc-400/20 dark:border-zinc-600/20 px-4 pb-4 h-[400px] pt-6'>
+      <h2 className='text-lg px-4 font-medium mb-6'>Sales this Week</h2>
+      <ResponsiveContainer width='100%' height='86%'>
+        <BarChart
+          width={500}
+          height={300}
           data={chartData}
-          categories={['Sales', 'Expense']}
-          index='Week'
-          colors={['sky', 'yellow']}
-          valueFormatter={(number: number) =>
-            `₹ ${formatCompactNumber(number)}`
-          }
-          yAxisWidth={60}
-          showGridLines={false}
-          showTooltip={false}
-          curveType='monotone'
-        />
-      </Card> */}
+          margin={{
+            top: 0,
+            right: 0,
+            left: 0,
+            bottom: 0
+          }}
+        >
+          <XAxis
+            dataKey='Week'
+            tickLine={false}
+            fontSize='10px'
+            axisLine={false}
+            color={`${theme === 'Dark' ? 'black' : 'white'}`}
+            padding={{ left: 10 }}
+          />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            padding={{ bottom: 10 }}
+            color={`${theme === 'Dark' ? '#f4f4f5' : '#18181b'}`}
+            tickFormatter={(number: number) =>
+              `₹ ${formatCompactNumber(number)}`
+            }
+            fontSize='10px'
+          />
+          <Bar
+            dataKey='Sales'
+            fill={`${theme === 'Dark' ? '#f4f4f5' : '#18181b'}`}
+            opacity={0.9}
+          />
+          {/* <Bar dataKey='Expense' fill='red' opacity={0.5} /> */}
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   )
-}
-
-function formatCompactNumber(number: number) {
-  if (number < 1000) {
-    return number
-  } else if (number >= 1000 && number < 1_000_000) {
-    return (number / 1000).toFixed(1) + 'K'
-  } else if (number >= 1_000_000 && number < 1_000_000_000) {
-    return (number / 1_000_000).toFixed(1) + 'M'
-  } else if (number >= 1_000_000_000 && number < 1_000_000_000_000) {
-    return (number / 1_000_000_000).toFixed(1) + 'B'
-  } else if (number >= 1_000_000_000_000 && number < 1_000_000_000_000_000) {
-    return (number / 1_000_000_000_000).toFixed(1) + 'T'
-  }
 }
