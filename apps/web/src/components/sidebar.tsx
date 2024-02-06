@@ -74,14 +74,12 @@ const Sidebar = ({
             <PopoverContent
               side='top'
               align='start'
-              className='w-fit flex flex-col p-1 dark:border-zinc-800 border-zinc-200 dark:bg-zinc-900/30 bg-white/30 shadow-none'
-            >
+              className='w-fit flex flex-col p-1 dark:border-zinc-800 border-zinc-200 dark:bg-zinc-900/30 bg-white/30 shadow-none'>
               <Button
                 asChild
                 className='w-fit bg-transparent border-none hover:bg-white hover:dark:bg-zinc-900 justify-start gap-2 text-xs font-medium hover:text-sky-500'
                 variant='outline'
-                size='sm'
-              >
+                size='sm'>
                 <Link href='/instant/invoice'>
                   <FilePlus2 size={14} strokeWidth={2} />
                   <p>Invoice</p>
@@ -91,8 +89,7 @@ const Sidebar = ({
                 className='w-fit bg-transparent border-none hover:bg-white hover:dark:bg-zinc-900 justify-start gap-2 text-xs font-medium hover:text-sky-500'
                 variant='outline'
                 size='sm'
-                disabled
-              >
+                disabled>
                 <Link className='flex gap-2' href='/instant/expense'>
                   <FileMinus2 size={14} strokeWidth={2} />
                   <p>Expense</p>
@@ -115,20 +112,20 @@ const Sidebar = ({
               </Avatar>
             </PopoverTrigger>
             <PopoverContent className='w-52 dark:border-zinc-600 border-zinc-400 dark:bg-zinc-900 bg-white'>
-              <Button
-                className='w-full bg-transparent border-none hover:bg-zinc-100/80 hover:dark:bg-zinc-800/50 justify-start gap-4'
-                variant='outline'
-                size='sm'
-              >
-                <Settings size='16px' />
-                <span className='text-xs font-medium'>Manage</span>
-              </Button>
+              <Link href='/settings/account'>
+                <Button
+                  className='w-full bg-transparent border-none hover:bg-zinc-100/80 hover:dark:bg-zinc-800/50 justify-start gap-4'
+                  variant='outline'
+                  size='sm'>
+                  <Settings size='16px' />
+                  <span className='text-xs font-medium'>Manage</span>
+                </Button>
+              </Link>
               <Button
                 onClick={() => signOut()}
                 className='w-full bg-transparent border-none hover:bg-zinc-100/80 hover:dark:bg-zinc-800/50 justify-start gap-4'
                 variant='outline'
-                size='sm'
-              >
+                size='sm'>
                 <LogOut size='16px' />
                 <span className='text-xs font-medium'>SignOut</span>
               </Button>
@@ -202,7 +199,7 @@ const SideItems = () => {
 
   return (
     <ul className='flex flex-col gap-3'>
-      {items.map((item) => {
+      {items.map(item => {
         if (item.subType?.status) {
           return (
             <li key={item.label}>
@@ -214,8 +211,7 @@ const SideItems = () => {
                   } else {
                     setCollapse(item.to)
                   }
-                }}
-              >
+                }}>
                 <div className='flex items-center gap-2'>
                   {item.icon}
                   <span>{item.label}</span>
@@ -223,12 +219,11 @@ const SideItems = () => {
                 {item.to === collapse ? <MinusIcon /> : <PlusIcon />}
               </div>
               {item.to === collapse &&
-                item.subType.values.map((subItem) => {
+                item.subType.values.map(subItem => {
                   return (
                     <div
                       key={subItem.label}
-                      className='flex gap-4 items-center px-3 text-sm mt-2'
-                    >
+                      className='flex gap-4 items-center px-3 text-sm mt-2'>
                       <CornerBottomLeftIcon />
                       <div
                         className={`w-[calc(100%-31px)] text-left px-3 py-2 cursor-pointer rounded-md font-medium flex items-center gap-2 ${
@@ -236,8 +231,7 @@ const SideItems = () => {
                             ? 'dark:bg-white dark:text-black bg-black text-white'
                             : 'hover:dark:bg-zinc-600/20 hover:bg-zinc-200/50'
                         }`}
-                        onClick={() => router.push(subItem.to)}
-                      >
+                        onClick={() => router.push(subItem.to)}>
                         <span>{subItem.label}</span>
                         {subItem.to === '/invoice/lists' && <Beta />}
                       </div>
@@ -255,8 +249,7 @@ const SideItems = () => {
                   ? 'dark:bg-white dark:text-black bg-black text-white'
                   : 'hover:dark:bg-zinc-600/20 hover:bg-zinc-200/50'
               }`}
-              onClick={() => router.push(item.to)}
-            >
+              onClick={() => router.push(item.to)}>
               {item.icon}
               <span>{item.label}</span>
               {item.to === '/home' && <Beta />}

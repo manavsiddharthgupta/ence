@@ -128,8 +128,8 @@ const createInvoice = () => {
           <BackBtn />
           <h1 className='mt-2 text-2xl font-semibold'>New Invoice</h1>
           <p className='text-xs font-medium mt-2'>
-            Fill in the fields, preview invoice and send it emailed or whatsapp
-            directly to client.
+            Complete the form, preview the invoice, and send it via email or
+            WhatsApp to the client.
           </p>
         </div>
         {/* <div className='w-full flex justify-between items-center'>
@@ -178,8 +178,7 @@ const createInvoice = () => {
               <DialogTrigger asChild>
                 <Button
                   variant='ghost'
-                  className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50'
-                >
+                  className='dark:bg-zinc-900 dark:hover:bg-zinc-800/50'>
                   Preview
                 </Button>
               </DialogTrigger>
@@ -194,8 +193,7 @@ const createInvoice = () => {
               variant='default'
               className='bg-sky-600 text-white hover:bg-sky-700 min-w-[150px]'
               disabled={isLoading !== null}
-              onClick={onCreateInvoice}
-            >
+              onClick={onCreateInvoice}>
               {isLoading === 'sending' ? (
                 <Loader2Icon className='animate-spin' />
               ) : (
