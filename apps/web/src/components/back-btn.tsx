@@ -4,20 +4,20 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { MoveLeft } from 'lucide-react'
 
-const HomeBtn = () => {
+const BackBtn = () => {
   const router = useRouter()
 
   return (
     <Button
       onClick={() => {
-        router.push('/home')
+        router.back()
       }}
       className='h-fit py-1 px-4 rounded-full font-normal'
     >
       <MoveLeft size={16} strokeWidth={1.5} className='mr-2' />
-      home
+      back
     </Button>
   )
 }
 
-export default HomeBtn
+export default BackBtn
