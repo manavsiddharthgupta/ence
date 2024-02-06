@@ -68,7 +68,7 @@ export const TimeLine = () => {
 
   if (isPending)
     return (
-      <Skeleton className='rounded-3xl  w-[54%] h-[336px] bg-gray-500/10' />
+      <Skeleton className='rounded-3xl  w-[54%]  h-[400px] bg-gray-500/10' />
     )
 
   if (error)

@@ -91,5 +91,6 @@ module.exports = {
         textColor: ['dark']
       }
     }
-  }
+  },
+  plugins: [require('tailwindcss-animate')]
 }
