@@ -1,4 +1,4 @@
-import { PrismaClient } from 'database'
+import { PrismaClient } from '../../../packages/db/src/index'
 
 declare global {
   // eslint-disable-next-line no-var, no-unused-vars
