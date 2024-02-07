@@ -5,7 +5,7 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "module": "ESNext",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "nodenext",
     "preserveWatchOutput": true,
     "skipLibCheck": true,
     "noEmit": true,
