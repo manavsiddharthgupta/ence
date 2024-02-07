@@ -18,7 +18,7 @@ jobs:
         working-directory: services/event-process/
         run: |
           npm install -g typescript  
-          tsc index.ts --target es2017
+          tsc index.ts --target esnext
 
       - name: Deploy using Serverless
         working-directory: services/event-process/

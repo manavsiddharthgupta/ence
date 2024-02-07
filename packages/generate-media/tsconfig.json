@@ -4,12 +4,15 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "module": "NodeNext",
-    // "moduleResolution": "Node",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "preserveWatchOutput": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "strict": true
+    "strict": true,
+    "paths": {
+      "event-process/*": ["../services/event-process/*"]
+    }
   },
   "exclude": ["node_modules"]
 }
