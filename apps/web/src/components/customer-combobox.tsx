@@ -1,4 +1,4 @@
-import { Dispatch, Fragment, SetStateAction, useState } from 'react'
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
 import { Option } from '@/types/invoice'
 import { SheetTrigger } from '@/components/ui/sheet'
@@ -17,18 +17,39 @@ function InputCombobox({
 }) {
   const [query, setQuery] = useState('')
   const [focused, setIfFocused] = useState(false)
+  const [isPending, setPending] = useState(false)
+  const [error, setError] = useState(false)
+  const [options, setOptions] = useState<Option[]>([])
 
   const [debouncedSearchInput] = useDebounce(query, 600)
 
-  const { isPending, error, data } = useQuery({
-    queryKey: ['customers', { searchInput: debouncedSearchInput }],
-    queryFn: () =>
-      fetch(
-        `${baseurl}/api/customer/search?query=${debouncedSearchInput}`
-      ).then((res) => res.json())
-  })
+  useEffect(() => {
+    const searchCustomer = async () => {
+      setPending(true)
+      const res = await fetch(
+        `/api/customer/search?query=${debouncedSearchInput}`
+      )
+      const data = await res.json()
+      if (!data.ok) {
+        setError(true)
+      } else {
+        const customers = await data.data
+        setOptions(customers)
+      }
+      setPending(false)
+    }
+    searchCustomer()
+  }, [debouncedSearchInput])
 
-  const options: Option[] = data?.data || []
+  // const { isPending, error, data } = useQuery({
+  //   queryKey: ['customers', { searchInput: debouncedSearchInput }],
+  //   queryFn: () =>
+  //     fetch(
+  //       `${baseurl}/api/customer/search?query=${debouncedSearchInput}`
+  //     ).then((res) => res.json())
+  // })
+
+  // const options: Option[] = data?.data || []
 
   const focusedInput =
     focused || selectedValue?.legalName !== undefined
