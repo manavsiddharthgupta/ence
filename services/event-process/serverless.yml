@@ -9,3 +9,7 @@ functions:
   receiver:
     handler: index.receiver
     timeout: 30
+
+package:
+  include:
+    - node_modules/**
