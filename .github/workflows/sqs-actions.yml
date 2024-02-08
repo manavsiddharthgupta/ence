@@ -15,6 +15,9 @@ jobs:
         working-directory: services/event-process/
         run: npm install
 
+      - name: Create node_modules directory
+        run: mkdir -p services/event-process/node_modules
+
       - name: Copy Database Module
         run: cp -R node_modules/database services/event-process/node_modules/
 
