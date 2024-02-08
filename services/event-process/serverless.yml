@@ -13,3 +13,5 @@ functions:
 package:
   include:
     - node_modules/**
+
+useServerlessTraceTarget: true
