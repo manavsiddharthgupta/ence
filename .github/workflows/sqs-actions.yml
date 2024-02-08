@@ -24,10 +24,10 @@ jobs:
           for pkg in db helpers generate-media; do
             cd ../../
             cd packages/$pkg && pwd && npm install && npm link && cd ../../services/event-process/
-            pwd
             npm link $pkg
+            pwd
+            cat package.json
           done
-          cat package.json
           npm install
 
       - name: Making Runtime File for AWS Lambda
