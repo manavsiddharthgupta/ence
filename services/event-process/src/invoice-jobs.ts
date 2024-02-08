@@ -1,6 +1,6 @@
 import { db } from '../utils/db'
-import { uploadFilesToS3 } from '../../../packages/helpers/src/s3'
-import { InvoiceGenerateMedia } from '../../../packages/generate-media/src/index'
+import { uploadFilesToS3 } from 'helper/s3'
+import { InvoiceGenerateMedia } from 'media-generator'
 
 export class InvoiceJobsProcessor {
   static async processInvoiceDataToMedia(value: any) {
