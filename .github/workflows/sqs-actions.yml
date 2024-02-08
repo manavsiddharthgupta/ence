@@ -18,15 +18,13 @@ jobs:
           cd helpers && npm install && npm link && cd ../
           cd generate-media && npm install && npm link && cd ../
 
-      - name: Add Linked Dependencies to package.json of services/event-process
+      - name: Update package.json of service with local dependencies
         working-directory: services/event-process/
         run: |
+          pwd
           for pkg in db helpers generate-media; do
-            cd ../../
-            cd packages/$pkg && pwd && npm install && npm link && cd ../../services/event-process/
-            npm link $pkg
             pwd
-            cat package.json
+            npm install --save ../packages/$pkg
           done
           npm install
 
