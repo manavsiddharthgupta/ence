@@ -6,23 +6,12 @@ import { Option } from '@/types/invoice'
 import { useEffect, useState } from 'react'
 
 const CustomerInfo = () => {
-  const [customers, setCustomers] = useState<Option[]>([])
   const {
     customerInfoState,
     customerInfoDispatch,
     customerLegalName,
     setCustomerLegalName
   } = useInvoiceContext()
-
-  useEffect(() => {
-    const getCustomers = async () => {
-      const res = await fetch('/api/customer')
-      const resData = await res.json()
-      const customersData = await resData.data
-      setCustomers(customersData)
-    }
-    getCustomers()
-  }, [])
 
   // useEffect(() => {
   //   // set Customer Info using Id
@@ -64,7 +53,6 @@ const CustomerInfo = () => {
         <InputCombobox
           selectedValue={customerLegalName}
           setSelectedValue={setCustomerLegalName}
-          options={customers}
         />
       </div>
       <CustomerForm />

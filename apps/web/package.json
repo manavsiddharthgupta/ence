@@ -57,6 +57,7 @@
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "twilio": "^4.20.0",
+    "use-debounce": "^10.0.0",
     "uuid": "^9.0.1",
     "vaul": "^0.8.0",
     "zod": "^3.22.4"

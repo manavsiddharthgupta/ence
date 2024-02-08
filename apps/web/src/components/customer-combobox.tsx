@@ -2,25 +2,34 @@ import { Dispatch, Fragment, SetStateAction, useState } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
 import { Option } from '@/types/invoice'
 import { SheetTrigger } from '@/components/ui/sheet'
+import { Loader } from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { useDebounce } from 'use-debounce'
+
+const baseurl = process.env.NEXT_PUBLIC_API_URL
 
 function InputCombobox({
   selectedValue,
-  setSelectedValue,
-  options
+  setSelectedValue
 }: {
   selectedValue: Option | null
   setSelectedValue: Dispatch<SetStateAction<Option | null>>
-  options: Option[]
 }) {
   const [query, setQuery] = useState('')
   const [focused, setIfFocused] = useState(false)
 
-  const filteredPeople =
-    query === ''
-      ? options
-      : options.filter((option) => {
-          return option?.legalName.toLowerCase().includes(query.toLowerCase())
-        })
+  const [debouncedSearchInput] = useDebounce(query, 400)
+  console.log(debouncedSearchInput)
+
+  const { isPending, error, data } = useQuery({
+    queryKey: ['customers', { searchInput: debouncedSearchInput }],
+    queryFn: () =>
+      fetch(
+        `${baseurl}/api/customer/search?query=${debouncedSearchInput}`
+      ).then((res) => res.json())
+  })
+
+  const options: Option[] = data?.data || []
 
   const focusedInput =
     focused || selectedValue?.legalName !== undefined
@@ -57,16 +66,18 @@ function InputCombobox({
           leaveTo='opacity-0'
           afterLeave={() => setQuery('')}
         >
-          <Combobox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md dark:bg-zinc-700 bg-zinc-300 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-20'>
+          <Combobox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md dark:bg-zinc-700 bg-zinc-300 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-50'>
             {query.length > 0 && (
               <Combobox.Option
                 value={null}
                 className='relative cursor-default select-none py-2 px-4 text-black dark:text-white'
               >
-                <SheetTrigger>Click here to create "{query}"</SheetTrigger>
+                <SheetTrigger className='underline'>
+                  Click here to create "{query}"
+                </SheetTrigger>
               </Combobox.Option>
             )}
-            {filteredPeople.map((option) => (
+            {options.map((option) => (
               <Combobox.Option
                 key={option.id}
                 value={option}
@@ -79,8 +90,23 @@ function InputCombobox({
                 }
               >
                 {option.legalName}
+                <span className='text-xs font-semibold'>
+                  {'  -  '}
+                  {option.email}
+                </span>
               </Combobox.Option>
             ))}
+            {isPending && (
+              <Loader size={18} className='mx-auto animate-spin my-2' />
+            )}
+            {!isPending && options.length === 0 && (
+              <p className='py-2 mx-auto w-fit'>No customer to show</p>
+            )}
+            {!isPending && error && (
+              <p className='py-2 mx-auto w-fit text-red-500'>
+                Something went wrong
+              </p>
+            )}
           </Combobox.Options>
         </Transition>
       </div>

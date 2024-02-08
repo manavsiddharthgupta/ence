@@ -8,7 +8,7 @@ import {
   SheetHeader,
   SheetTitle
 } from '@/components/ui/sheet'
-import { callErrorToast, callLoadingToast } from '@/lib/helpers'
+import { callErrorToast } from '@/lib/helpers'
 import { Customer } from '@/types/invoice'
 import { Loader } from 'lucide-react'
 import { useState } from 'react'
@@ -26,7 +26,6 @@ export const CustomerForm = () => {
       return
     }
     setLoading(true)
-    const loadingToastId = callLoadingToast('Creating customer...')
     const body: Customer = {
       email: email,
       legalName: legalName,
@@ -38,16 +37,12 @@ export const CustomerForm = () => {
     })
     const customerRes = await response.json()
     if (customerRes.ok) {
-      toast.success('🎉 Customer created successfully!', {
-        id: loadingToastId
-      })
+      toast.success('🎉 Customer created successfully!')
       setEmail(undefined)
       setWhatsApp(undefined)
       setLegalName(undefined)
     } else {
-      toast.error('Something went wrong while creating customer', {
-        id: loadingToastId
-      })
+      toast.error('Something went wrong while creating customer')
     }
     setLoading(false)
   }
