@@ -21,8 +21,8 @@ jobs:
       - name: Add Linked Dependencies to package.json of services/event-process
         working-directory: services/event-process/
         run: |
-          for pkg in db helpers generate-media; do
-            npm link "$pkg"
+          for pkg in database helper media-generator; do
+             npm install --save ../packages/$pkg
           done
           npm install
           cat package.json
