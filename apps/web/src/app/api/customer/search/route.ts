@@ -1,9 +1,8 @@
 import { db } from '@/lib/db'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../../auth/[...nextauth]/route'
-import { type NextRequest } from 'next/server'
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions)
     const email = session?.user?.email
@@ -31,8 +30,7 @@ export async function GET(request: NextRequest) {
       console.error('Error:', 'Organization Not Found')
       return Response.json({ ok: false, data: null, status: 404 })
     }
-
-    const searchParams = request.nextUrl.searchParams
+    const { searchParams } = new URL(request.url)
     const query = searchParams.get('query')
     const response = await db.customerInfo.findMany({
       where: {
