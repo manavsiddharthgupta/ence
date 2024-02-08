@@ -4,7 +4,8 @@
   "dependencies": {
     "aws-lambda": "^1.0.7",
     "database": "*",
-    "helper": "*"
+    "helper": "*",
+    "media-generator": "*"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.133"
