@@ -17,7 +17,6 @@ jobs:
           cd db && npm install && npm link && cd ../
           cd helpers && npm install && npm link && cd ../
           cd generate-media && npm install && npm link && cd ../
-          pwd
           npm i
 
       - name: Making Runtime File for AWS Lambda
@@ -25,6 +24,7 @@ jobs:
         run: |
           npm install -g typescript  
           tsc index.ts --target esnext --module NodeNext --moduleResolution NodeNext
+          cat package.json
 
       - name: Deploy using Serverless
         working-directory: services/event-process/
