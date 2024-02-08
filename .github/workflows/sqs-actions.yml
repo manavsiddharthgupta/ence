@@ -14,9 +14,9 @@ jobs:
       - name: Install and Link Local Dependencies
         working-directory: services/event-process/
         run: |
-          npm link ../db
-          npm link ../helpers
-          npm link ../generate-media
+          npm link ./db
+          npm link ./helpers
+          npm link ./generate-media
           npm install
 
       - name: Making Runtime File for AWS Lambda
