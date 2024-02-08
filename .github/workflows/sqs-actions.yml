@@ -24,6 +24,7 @@ jobs:
           for pkg in db helpers generate-media; do
             cd ../../
             cd packages/$pkg && pwd && npm install && npm link && cd ../../services/event-process/
+            npm link $pkg
           done
           cat package.json
           npm install
