@@ -1,0 +1,254 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum BusinessType {
+  RETAIL
+  SERVICE
+  MANUFACTURING
+}
+
+enum CurrencyType {
+  USD
+  EUR
+  JPY
+  GBP
+  AUD
+  CAD
+  CHF
+  CNY
+  SEK
+  NZD
+  NOK
+  SGD
+  KRW
+  INR
+  BRL
+  ZAR
+  AED
+  HKD
+  THB
+  MXN
+}
+
+enum StateType {
+  ACTIVE
+  INACTIVE
+}
+
+enum SendMethods {
+  MAIL
+  WHATSAPP
+}
+
+enum PaymentStatus {
+  PAID
+  DUE
+  PARTIALLY_PAID
+  OVERDUE
+}
+
+enum PaymentMethods {
+  CASH
+  DIGITAL_WALLET
+}
+
+enum PaymentTerms {
+  IMMEDIATE
+  NET_15
+  NET_30
+  NET_60
+  NET_90
+  CUSTOM
+}
+
+enum InvoiceApprovalStatus {
+  UNAPPROVED
+  APPROVED
+  REJECTED
+}
+
+enum ReceiptSendStatus {
+  SENT
+  NOT_SENT
+  FAILED
+}
+
+enum ItemsUnitType {
+  ITEM
+  HOUR
+  DAY
+  WEEK
+  MONTH
+  PROJECT
+  KILO
+  GRAM
+  LITRE
+  METER
+  SQUARE_FEET
+  CASE
+  BAG
+  BOX
+  PACKS
+  BOTTLE
+}
+
+enum RelatedDocName {
+  MAIN_PDF
+  MAIN_IMAGE
+  DOWNLOAD_PDF
+  OTHERS
+}
+
+model User {
+  id            String        @id @default(uuid())
+  name          String? // Todo: Divide Firstname + LastName
+  emailVerified Boolean?
+  email         String        @unique
+  image         String?
+  state         StateType     @default(ACTIVE)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  organizations Organization?
+  accounts      Account[]
+  session       Session[]
+}
+
+model Organization {
+  id                         String         @id @default(uuid())
+  orgName                    String
+  whatsappNumber             BigInt?
+  businessType               BusinessType?
+  businessRegistrationNumber String?
+  email                      String?
+  website                    String?
+  logo                       String?
+  address                    Json?
+  gstin                      String?
+  pan                        String?
+  currencyType               CurrencyType?
+  state                      StateType      @default(ACTIVE)
+  createdAt                  DateTime       @default(now())
+  updatedAt                  DateTime       @updatedAt
+  createdBy                  User           @relation(fields: [createdById], references: [id])
+  createdById                String         @unique
+  invoices                   Invoice[]
+  customerInfos              CustomerInfo[]
+}
+
+model Invoice {
+  id                 String                   @id @default(uuid())
+  invoiceNumber      Int
+  instantInvoiceLink String?
+  sendingMethod      SendMethods              @default(MAIL)
+  customerId         String
+  customerInfo       CustomerInfo             @relation(fields: [customerId], references: [id])
+  dateIssue          DateTime
+  dueDate            DateTime
+  shippingCharge     Float?
+  packagingCharge    Float?
+  lateCharge         Float?
+  tax                Float?
+  adjustmentFee      Float?
+  discount           Float?
+  paymentMethod      PaymentMethods           @default(CASH)
+  paymentStatus      PaymentStatus            @default(DUE)
+  paymentTerms       PaymentTerms             @default(IMMEDIATE)
+  notes              String?
+  items              InvoiceItem[]
+  subTotal           Float?
+  invoiceTotal       Float?
+  totalAmount        Float
+  dueAmount          Float
+  approvalStatus     InvoiceApprovalStatus    @default(UNAPPROVED)
+  receiptSendStatus  ReceiptSendStatus        @default(NOT_SENT)
+  auditTrailEntries  AuditTrail[]
+  relatedDocuments   InvoiceRelatedDocument[]
+  organizationId     String
+  organization       Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+}
+
+model CustomerInfo {
+  id             String       @id @default(uuid())
+  legalName      String
+  whatsAppNumber String       @unique
+  email          String       @unique
+  invoices       Invoice[]
+  organization   Organization @relation(fields: [organisationId], references: [id])
+  organisationId String
+}
+
+model InvoiceRelatedDocument {
+  id           String         @id @default(uuid())
+  documentLink String
+  name         RelatedDocName
+  invoiceId    String
+  invoice      Invoice        @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+model InvoiceItem {
+  id        String        @unique
+  invoice   Invoice       @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoiceId String
+  name      String?
+  unit      ItemsUnitType @default(ITEM)
+  price     Float?
+  quantity  Float?
+  total     Float?
+}
+
+model AuditTrail {
+  id          String     @id @default(uuid())
+  createdAt   DateTime   @default(now())
+  actionType  ActionType
+  title       String?
+  description String?
+  oldStatus   String?
+  newStatus   String?
+  invoiceId   String
+  invoice     Invoice    @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+enum ActionType {
+  MANUAL_CREATION
+  INSTANT_CREATION
+  APPROVAL_ACTION
+  PAYMENT_STATUS_CHANGE
+  RECEIPT_SEND_STATUS_CHANGE
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
