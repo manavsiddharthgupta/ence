@@ -25,9 +25,8 @@ jobs:
             cd ../../
             cd packages/$pkg && pwd && npm install && npm link && cd ../../services/event-process/
           done
-          pwd
-          npm install
           cat package.json
+          npm install
 
       - name: Making Runtime File for AWS Lambda
         working-directory: services/event-process/
