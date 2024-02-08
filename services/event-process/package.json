@@ -2,7 +2,10 @@
   "name": "event-process",
   "version": "0.1.0",
   "dependencies": {
-    "aws-lambda": "^1.0.7"
+    "aws-lambda": "^1.0.7",
+    "database": "file:db",
+    "helper": "file:helpers",
+    "media-generator": "file:generate-media"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.133"
