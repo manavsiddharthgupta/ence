@@ -27,8 +27,6 @@ function InputCombobox({
       ? 'text-[8px] left-2.5 top-1 transition-all duration-100 ease-out'
       : 'top-1/2 left-2.5 -translate-y-1/2 text-xs transition-all duration-100 ease-out'
 
-  console.log(selectedValue)
-
   return (
     <Combobox value={selectedValue} onChange={setSelectedValue}>
       <div className='relative w-full'>

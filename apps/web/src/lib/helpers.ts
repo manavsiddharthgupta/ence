@@ -166,7 +166,7 @@ export const formatInstantInvoiceData = (
     }
   )
   const formattedData: InvoiceBody = {
-    customerId: '',
+    customerId: instantInvoiceDetails.customerId!,
     dateIssue: instantInvoiceDetails.dateIssue!,
     dueDate: dueDate,
     invoiceNumber: +instantInvoiceDetails.invoiceNumber!,
@@ -221,7 +221,8 @@ export const checkOnDemandValidation = (
   if (
     !instantInvoiceDetails.customerName ||
     !instantInvoiceDetails.invoiceTotal ||
-    !instantInvoiceDetails.dateIssue
+    !instantInvoiceDetails.dateIssue ||
+    !instantInvoiceDetails.customerId
   ) {
     toast.error('Please fill invoice total and customer name', {
       position: 'bottom-center'
