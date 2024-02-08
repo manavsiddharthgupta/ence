@@ -165,7 +165,7 @@ const InvoiceBody = ({
                   </AvatarFallback>
                 </Avatar>
                 <span className='font-semibold w-[calc(100%-6)]'>
-                  {formatCustomerInfo(invoice.customerInfo)}
+                  {invoice.customerInfo?.legalName || '-'}
                 </span>
               </div>
             </td>

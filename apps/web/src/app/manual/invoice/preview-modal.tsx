@@ -38,19 +38,10 @@ const PreviewModal = ({
   loading: boolean
 }) => {
   // Todo: Will have to revamp the code structure
-  const {
-    invoiceInfoState,
-    subTotal,
-    customerInfoState,
-    paymentInfoState,
-    customerLegalName
-  } = useInvoiceContext()
+  const { invoiceInfoState, subTotal, customerLegalName, paymentInfoState } =
+    useInvoiceContext()
 
-  const stringifiedCustomerName = JSON.stringify(customerLegalName)
-  const customerName: {
-    id: null | number
-    value: string
-  } = JSON.parse(stringifiedCustomerName)
+  const customerName = customerLegalName?.legalName || '-'
 
   const orgsAddress: OrganizationAddress = organizationDetails?.address
     ? JSON.parse(organizationDetails?.address.toString())
@@ -61,11 +52,7 @@ const PreviewModal = ({
     (orgsAddress?.state ? ', ' + orgsAddress?.state : '') +
     (orgsAddress?.country ? ', ' + orgsAddress?.country : '')
 
-  const toAddress =
-    (customerName?.value ? customerName?.value : '-') +
-    (customerInfoState?.state ? ', ' + customerInfoState?.state : '') +
-    (customerInfoState?.country ? ', ' + customerInfoState?.country : '')
-
+  const toAddress = customerLegalName?.legalName || '-'
   return (
     <DialogContent className='bg-white dark:bg-zinc-900 dark:border-zinc-800 border-zinc-200 max-w-2xl shadow-none'>
       <DialogHeader>
@@ -156,7 +143,7 @@ const PreviewModal = ({
           <TabsContent value='paper'>
             <div className='overflow-y-auto h-[290px]'>
               <InvoiceFormat
-                customerName={customerName.value}
+                customerName={customerName}
                 organizationDetails={organizationDetails}
               />
             </div>
@@ -227,15 +214,12 @@ export const InvoiceFormat = ({
   const {
     invoiceInfoState,
     subTotal,
-    customerInfoState,
+    customerLegalName,
     paymentInfoState,
     itemsInfoState
   } = useInvoiceContext()
 
-  const customerAddress =
-    (customerInfoState?.city ? customerInfoState?.city : '-') +
-    (customerInfoState?.state ? ', ' + customerInfoState?.state : '') +
-    (customerInfoState?.country ? ', ' + customerInfoState?.country : '')
+  const customerAddress = customerLegalName?.email || '-'
 
   const adjustmentFee =
     +paymentInfoState.adjustmentFee >= 0
@@ -282,7 +266,7 @@ export const InvoiceFormat = ({
             <span className='font-normal ml-2'>{customerName}</span>
           </p>
           <p className='font-semibold'>
-            Customer Address:{' '}
+            Customer Email:{' '}
             <span className='font-normal ml-2'>{customerAddress}</span>
           </p>
         </div>

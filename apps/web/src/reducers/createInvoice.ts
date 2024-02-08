@@ -11,12 +11,8 @@ import {
 import { v4 as uuidv4 } from 'uuid'
 
 export const CustomerInfoInitialState: CustomerInfoState = {
-  email: null,
-  whatsappNumber: null,
-  city: null,
-  pincode: null,
-  state: null,
-  country: null
+  id: null,
+  legalName: null
 }
 
 export const InvoiceInfoInitialState: InvoiceInfoState = {
@@ -53,26 +49,6 @@ export const customerInfoReducers = (
         ...action.payload
       }
     case 'CUSTOMER_WHATSAPP_NUMBER':
-      return {
-        ...state,
-        ...action.payload
-      }
-    case 'CUSTOMER_CITY':
-      return {
-        ...state,
-        ...action.payload
-      }
-    case 'CUSTOMER_PINCODE':
-      return {
-        ...state,
-        ...action.payload
-      }
-    case 'CUSTOMER_STATE':
-      return {
-        ...state,
-        ...action.payload
-      }
-    case 'CUSTOMER_COUNTRY':
       return {
         ...state,
         ...action.payload

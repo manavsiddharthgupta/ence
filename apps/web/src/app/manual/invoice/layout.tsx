@@ -10,6 +10,7 @@ import {
   PaymentInfoInitailState,
   paymentInfoReducers
 } from '@/reducers/createInvoice'
+import { Option } from '@/types/invoice'
 import { useReducer, useState } from 'react'
 
 export default function CreateInvoiceLayout({
@@ -17,7 +18,9 @@ export default function CreateInvoiceLayout({
 }: {
   children: React.ReactNode
 }) {
-  const [customerLegalName, setCustomerLegalName] = useState('')
+  const [customerLegalName, setCustomerLegalName] = useState<Option | null>(
+    null
+  )
   const [subTotal, setSubTotal] = useState(0)
   const [customerInfoState, customerInfoDispatch] = useReducer(
     customerInfoReducers,
