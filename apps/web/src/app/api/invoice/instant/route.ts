@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     const {
       dateIssue,
       dueDate,
-      customerInfo,
+      customerId,
       invoiceNumber,
       paymentMethod,
       paymentStatus,
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
 
     const invoiceRes = await db.invoice.create({
       data: {
-        customerInfo: customerInfo,
+        customerId: customerId,
         dateIssue: dateIssue,
         dueDate: dueDate,
         invoiceNumber: invoiceNumber,
