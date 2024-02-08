@@ -11,14 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: npm ci
-
       - name: Making Runtime File for AWS Lambda
         working-directory: services/event-process/
         run: |
           npm install -g typescript  
           tsc index.ts --target esnext --module NodeNext --moduleResolution NodeNext
+          npm ci
 
       - name: Deploy using Serverless
         working-directory: services/event-process/
