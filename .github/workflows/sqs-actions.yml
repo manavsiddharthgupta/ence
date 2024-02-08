@@ -15,7 +15,7 @@ jobs:
         working-directory: services/event-process/
         run: |
           cd database && npm install && npm link && cd ../
-          cd helper && npm install && npm link  && cd ../
+          cd helper && npm install && npm link && cd ../
           cd media-generator && npm install && npm link && cd ../
           npm install
 
