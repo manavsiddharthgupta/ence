@@ -22,7 +22,8 @@ jobs:
         working-directory: services/event-process/
         run: |
           for pkg in db helpers generate-media; do
-            cd ../packages/$pkg && npm install && npm link && cd ../../services/event-process/
+            pwd
+            cd ../packages/$pkg && pwd && npm install && npm link && cd ../../services/event-process/
           done
           npm install
           cat package.json
