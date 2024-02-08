@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install and Link Local Dependencies
-        working-directory: packages/
+        working-directory: services/event-process/
         run: |
           cd db && npm install && npm link && cd ../
           cd helpers && npm install && npm link && cd ../
@@ -23,7 +23,7 @@ jobs:
         run: |
           for pkg in db helpers generate-media; do
             pwd
-            npm install --save ../../packages/$pkg
+            npm install --save ./$pkg
           done
           npm install
 
