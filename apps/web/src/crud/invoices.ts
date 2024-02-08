@@ -33,7 +33,13 @@ export const getInvoices = async (email: string | null | undefined) => {
       select: {
         id: true,
         invoiceNumber: true,
-        customerInfo: true,
+        customerInfo: {
+          select: {
+            legalName: true,
+            email: true,
+            whatsAppNumber: true
+          }
+        },
         dateIssue: true,
         dueDate: true,
         paymentStatus: true,

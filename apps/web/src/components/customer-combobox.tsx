@@ -1,14 +1,15 @@
 import { Dispatch, Fragment, SetStateAction, useState } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
 import { Option } from '@/types/invoice'
+import { SheetTrigger } from '@/components/ui/sheet'
 
 function InputCombobox({
   selectedValue,
   setSelectedValue,
   options
 }: {
-  selectedValue: string
-  setSelectedValue: Dispatch<SetStateAction<string>>
+  selectedValue: Option | null
+  setSelectedValue: Dispatch<SetStateAction<Option | null>>
   options: Option[]
 }) {
   const [query, setQuery] = useState('')
@@ -18,25 +19,27 @@ function InputCombobox({
     query === ''
       ? options
       : options.filter((option) => {
-          return option.value.toLowerCase().includes(query.toLowerCase())
+          return option?.legalName.toLowerCase().includes(query.toLowerCase())
         })
 
   const focusedInput =
-    focused || selectedValue !== ''
+    focused || selectedValue?.legalName !== undefined
       ? 'text-[8px] left-2.5 top-1 transition-all duration-100 ease-out'
       : 'top-1/2 left-2.5 -translate-y-1/2 text-xs transition-all duration-100 ease-out'
+
+  console.log(selectedValue)
 
   return (
     <Combobox value={selectedValue} onChange={setSelectedValue}>
       <div className='relative w-full'>
         <div className='w-full h-10 relative'>
           <Combobox.Input
-            className='w-full h-full border-[1px] dark:border-zinc-600 border-zinc-400 bg-transparent outline-none text-xs z-10 absolute left-0 top-0 px-2.5 pt-1.5 rounded-md'
+            className='w-full h-full border-[1px] dark:border-zinc-600/30 border-zinc-400/30 bg-transparent outline-none text-xs z-10 absolute left-0 top-0 px-2.5 pt-1.5 rounded-md'
             onChange={(event) => setQuery(event.target.value)}
-            displayValue={(option: Option) => option.value}
+            displayValue={(option: Option) => option?.legalName}
             onFocus={() => setIfFocused(true)}
             onBlur={(e) => {
-              if (selectedValue === '') {
+              if (selectedValue?.legalName === undefined) {
                 setTimeout(() => {
                   setIfFocused(false)
                 }, 200)
@@ -59,10 +62,10 @@ function InputCombobox({
           <Combobox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md dark:bg-zinc-700 bg-zinc-300 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-20'>
             {query.length > 0 && (
               <Combobox.Option
-                value={{ id: null, value: query }}
+                value={null}
                 className='relative cursor-default select-none py-2 px-4 text-black dark:text-white'
               >
-                Create "{query}"
+                <SheetTrigger>Click here to create "{query}"</SheetTrigger>
               </Combobox.Option>
             )}
             {filteredPeople.map((option) => (
@@ -77,7 +80,7 @@ function InputCombobox({
                   }`
                 }
               >
-                {option.value}
+                {option.legalName}
               </Combobox.Option>
             ))}
           </Combobox.Options>
