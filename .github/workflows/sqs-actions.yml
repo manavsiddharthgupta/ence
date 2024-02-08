@@ -15,9 +15,6 @@ jobs:
         working-directory: services/event-process/
         run: npm install
 
-      - name: Copy Database Module
-        run: cp -R node_modules/database services/event-process/
-
       - name: Making Runtime File for AWS Lambda
         working-directory: services/event-process/
         run: |
@@ -31,5 +28,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SLS_INTERACTIVE_SETUP_ENABLE: 1
         run: |
-          npm i 
           npx serverless deploy
