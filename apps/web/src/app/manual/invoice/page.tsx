@@ -66,7 +66,6 @@ const createInvoice = () => {
         ? customerLegalName?.whatsAppNumber
         : customerLegalName?.email
 
-    console.log(customerCommunicationValid, customerLegalName?.id)
     if (
       !invoiceInfoState.invoiceNumber ||
       !customerCommunicationValid ||

@@ -34,7 +34,6 @@ export async function GET(request: NextRequest) {
 
     const searchParams = request.nextUrl.searchParams
     const query = searchParams.get('query')
-    console.log(query)
     const response = await db.customerInfo.findMany({
       where: {
         organisationId: organization.id,
