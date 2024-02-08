@@ -9,5 +9,8 @@
     "puppeteer": "^21.11.0",
     "typescript": "^5.3.3",
     "helper": "*"
+  },
+  "scripts": {
+    "postinstall": "npm install --save handlebars puppeteer typescript"
   }
 }
