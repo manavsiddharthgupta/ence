@@ -3,11 +3,14 @@
   "version": "0.1.0",
   "dependencies": {
     "aws-lambda": "^1.0.7",
-    "database": "file:../database",
-    "helper": "file:../helper",
-    "media-generator": "file:../media-generator"
+    "database": "*",
+    "helper": "*",
+    "media-generator": "*"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.133"
+  },
+  "scripts": {
+    "install-local-deps": "cd ../../packages/db && npm install && npm link && cd ../helpers && npm install && npm link && cd ../generate-media && npm install && npm link && cd ../../services"
   }
 }
