@@ -15,18 +15,11 @@ jobs:
         working-directory: services/event-process/
         run: npm install
 
-      - name: Create node_modules directory
-        run: mkdir -p services/event-process/node_modules
-
-      - name: Copy Database Module
-        run: cp -R node_modules/database services/event-process/node_modules/
-
       - name: Making Runtime File for AWS Lambda
         working-directory: services/event-process/
         run: |
           npm install -g typescript  
           tsc index.ts --target esnext --module NodeNext --moduleResolution NodeNext
-          npm i
 
       - name: Deploy using Serverless
         working-directory: services/event-process/
@@ -34,4 +27,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SLS_INTERACTIVE_SETUP_ENABLE: 1
-        run: npx serverless deploy
+        run: |
+          npm i 
+          npx serverless deploy
