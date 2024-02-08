@@ -21,10 +21,9 @@ jobs:
       - name: Update package.json of service with local dependencies
         working-directory: services/event-process/
         run: |
-          pwd
           for pkg in db helpers generate-media; do
             pwd
-            npm install --save ../packages/$pkg
+            npm install --save ../../packages/$pkg
           done
           npm install
 
