@@ -23,7 +23,7 @@ jobs:
         run: |
           for pkg in db helpers generate-media; do
             pwd
-            npm install --save $pkg
+            npm install --save ./$pkg
           done
           npm install
 
