@@ -37,9 +37,10 @@ export async function GET(request: NextRequest) {
     const response = await db.customerInfo.findMany({
       where: {
         organisationId: organization.id,
-        legalName: {
-          contains: query || ''
-        }
+        OR: [
+          { legalName: { contains: query || '', mode: 'insensitive' } },
+          { email: { contains: query || '', mode: 'insensitive' } }
+        ]
       },
       select: {
         id: true,

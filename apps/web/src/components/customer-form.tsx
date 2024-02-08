@@ -8,7 +8,6 @@ import {
   SheetHeader,
   SheetTitle
 } from '@/components/ui/sheet'
-import { callErrorToast } from '@/lib/helpers'
 import { Customer } from '@/types/invoice'
 import { Loader } from 'lucide-react'
 import { useState } from 'react'
@@ -22,7 +21,7 @@ export const CustomerForm = () => {
 
   const onCreateCustomer = async () => {
     if (!legalName || !email || !whatsAppNumber) {
-      callErrorToast('Invalid customer data')
+      toast.error('Invalid customer data')
       return
     }
     setLoading(true)
@@ -51,7 +50,7 @@ export const CustomerForm = () => {
       <SheetHeader>
         <SheetTitle>Create Customer</SheetTitle>
         <SheetDescription>
-          Make changes to your profile here. Click create when you're done.
+          Fill in the field and click create to create customer profile.
         </SheetDescription>
       </SheetHeader>
       <div className='grid gap-4 py-4'>

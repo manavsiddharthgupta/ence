@@ -18,7 +18,7 @@ function InputCombobox({
   const [query, setQuery] = useState('')
   const [focused, setIfFocused] = useState(false)
 
-  const [debouncedSearchInput] = useDebounce(query, 400)
+  const [debouncedSearchInput] = useDebounce(query, 600)
 
   const { isPending, error, data } = useQuery({
     queryKey: ['customers', { searchInput: debouncedSearchInput }],
