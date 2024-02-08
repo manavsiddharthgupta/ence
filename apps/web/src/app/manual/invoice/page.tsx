@@ -21,6 +21,7 @@ import { Loader2Icon } from 'lucide-react'
 import { Organization } from 'database'
 import { Skeleton } from '@/components/ui/skeleton'
 import { toast } from 'sonner'
+import BackBtn from '@/components/back-btn'
 
 const createInvoice = () => {
   const [isLoading, setLoading] = useState<string | null>(null)
@@ -124,16 +125,17 @@ const createInvoice = () => {
     <div className='relative w-full'>
       <div className='max-w-4xl w-full mx-auto pb-8'>
         <div className='mb-6'>
-          <h1 className='text-4xl font-semibold'>Create your invoice</h1>
+          <BackBtn />
+          <h1 className='mt-2 text-2xl font-semibold'>New Invoice</h1>
           <p className='text-xs font-medium mt-2'>
-            Fill in the fields, preview your invoice and get it emailed or
-            whatsapp directly to you.
+            Fill in the fields, preview invoice and send it emailed or whatsapp
+            directly to client.
           </p>
         </div>
-        <div className='w-full flex justify-between items-center'>
+        {/* <div className='w-full flex justify-between items-center'>
           {organizationName}
         </div>
-        <Separator className='my-4 dark:bg-zinc-700 bg-zinc-300' />
+        <Separator className='my-4 dark:bg-zinc-700 bg-zinc-300' /> */}
         <div className='flex justify-between'>
           <div className='w-[45%]'>
             <BusinessInfo
@@ -158,7 +160,7 @@ const createInvoice = () => {
           <PaymentDetails />
         </div>
       </div>
-      <div className='fixed w-[calc(100%-14rem)] bottom-0 left-56 dark:bg-zinc-900 bg-white z-40 px-4'>
+      <div className='fixed w-full bottom-0 left-0 dark:bg-zinc-900 bg-white z-40'>
         <Separator className='h-0.5 dark:bg-zinc-800/90 bg-zinc-200/90' />
         <div className='flex items-center justify-between max-w-4xl w-full mx-auto py-4'>
           <div>

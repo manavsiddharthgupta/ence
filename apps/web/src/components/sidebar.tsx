@@ -151,11 +151,24 @@ const Sidebar = ({
 }
 export default Sidebar
 
+type SidebarItems = {
+  label: string
+  to: string
+  icon: JSX.Element
+  subType?: {
+    status: boolean
+    values: {
+      label: string
+      to: string
+    }[]
+  }
+}[]
+
 const SideItems = () => {
   const [collapse, setCollapse] = useState<null | string>()
   const router = useRouter()
   const pathname = usePathname()
-  const items = [
+  const items: SidebarItems = [
     {
       label: 'Home',
       to: '/home',
@@ -163,15 +176,15 @@ const SideItems = () => {
     },
     {
       label: 'Invoice',
-      to: '/invoice',
-      icon: <FileTextIcon />,
-      subType: {
-        status: true,
-        values: [
-          { label: 'Lists', to: '/invoice/lists' },
-          { label: 'Create', to: '/invoice/create' }
-        ]
-      }
+      to: '/invoice/lists',
+      icon: <FileTextIcon />
+      // subType: {
+      //   status: true,
+      //   values: [
+      //     { label: 'Lists', to: '/invoice/lists' },
+      //     { label: 'Create', to: '/invoice/create' }
+      //   ]
+      // }
     }
     // {
     //   label: 'Customer',

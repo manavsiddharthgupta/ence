@@ -297,7 +297,7 @@ export const getActivity = async (email: string | null | undefined) => {
       orderBy: {
         createdAt: 'desc'
       },
-      take: 3
+      take: 4
     })
 
     return JSON.stringify({

@@ -60,6 +60,19 @@ const Card = ({ children }: { children: React.ReactNode }) => {
     )
   }
 
+  if (pathname.startsWith('/manual')) {
+    return (
+      <ThemeProvider value={{ theme: theme, setTheme: onSetTheme }}>
+        <body className={className}>
+          <main className='px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
+            {children}
+          </main>
+          <Toaster />
+        </body>
+      </ThemeProvider>
+    )
+  }
+
   return (
     <ThemeProvider value={{ theme: theme, setTheme: onSetTheme }}>
       <body className={className}>
