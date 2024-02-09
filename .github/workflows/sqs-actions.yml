@@ -11,13 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # - name: Install and Link Local Dependencies
-      #   working-directory: services/event-process/
-      #   run: |
-      #     cd db && npm install && npm link && cd ../
-      #     cd helpers && npm install && npm link && cd ../
-      #     cd generate-media && npm install && npm link && cd ../
-      #     npm i
+      - name: Install and Link Local Dependencies
+        working-directory: services/event-process/
+        run: |
+          cd db && npm install && npm link && cd ../
+          cd helpers && npm install && npm link && cd ../
+          cd generate-media && npm install && npm link && cd ../
+          npm i
 
       - name: Making Runtime File for AWS Lambda
         working-directory: services/event-process/
