@@ -29,4 +29,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           SLS_INTERACTIVE_SETUP_ENABLE: 1
         run: |
-          npx serverless deploy --force
+          npx serverless package && npx serverless deploy --force

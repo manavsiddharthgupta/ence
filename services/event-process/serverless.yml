@@ -10,9 +10,5 @@ functions:
     handler: index.receiver
     timeout: 30
 
-package:
-  include:
-    - node_modules/**
-
-inputs:
-  useServerlessTraceTarget: true
+plugins:
+  - serverless-dotenv-plugin
