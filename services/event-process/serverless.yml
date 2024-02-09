@@ -12,3 +12,7 @@ functions:
 
 plugins:
   - serverless-dotenv-plugin
+
+packages:
+  include:
+    - node_modules/**
