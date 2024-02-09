@@ -11,5 +11,7 @@ functions:
     timeout: 30
 
 package:
-  exclude:
+  include:
     - node_modules/**
+
+useServerlessTraceTarget: true
