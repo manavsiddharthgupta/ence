@@ -22,7 +22,7 @@ jobs:
           npm install -g typescript  
           tsc index.ts --target esnext --module NodeNext --moduleResolution NodeNext
           npm install
-          npm install -g @prisma/cli
+          npm install -g @prisma/client
 
       - name: Deploy using Serverless
         working-directory: services/event-process/
