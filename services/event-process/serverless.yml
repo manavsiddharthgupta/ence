@@ -8,7 +8,4 @@ provider:
 functions:
   receiver:
     handler: index.receiver
-    timeout: 30
-
-plugins:
-  - serverless-dotenv-plugin
+    timeout: 30s
