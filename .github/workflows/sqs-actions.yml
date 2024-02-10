@@ -27,6 +27,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          DATABASE_URL: ${{ secrets.DEV_DATABASE_URL }}
           SLS_INTERACTIVE_SETUP_ENABLE: 1
         run: |
-          npx serverless package && npx serverless deploy --force
+          npx serverless deploy --force
