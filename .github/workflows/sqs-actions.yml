@@ -21,6 +21,8 @@ jobs:
         run: |
           npm install -g typescript  
           tsc index.ts --target esnext --module NodeNext --moduleResolution NodeNext
+          npm install
+          npm install -g @prisma/cli
 
       - name: Deploy using Serverless
         working-directory: services/event-process/
@@ -30,4 +32,4 @@ jobs:
           DATABASE_URL: ${{ secrets.DEV_DATABASE_URL }}
           SLS_INTERACTIVE_SETUP_ENABLE: 1
         run: |
-          npm i && npx serverless package && ls && npx serverless deploy --force
+          npx serverless deploy --force
