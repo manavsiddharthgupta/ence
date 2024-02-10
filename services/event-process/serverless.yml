@@ -8,4 +8,4 @@ provider:
 functions:
   receiver:
     handler: index.receiver
-    timeout: 30s
+    timeout: 30
