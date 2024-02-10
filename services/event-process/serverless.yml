@@ -9,3 +9,15 @@ functions:
   receiver:
     handler: index.receiver
     timeout: 30
+
+plugins:
+  - serverless-webpack
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules: true
+    packager: 'yarn'
+    packagerOptions:
+      scripts:
+        - prisma generate
