@@ -1,10 +1,17 @@
 import { SQSEvent, Context, SQSHandler, SQSRecord } from 'aws-lambda'
 import { SQSProcessor } from './sqs/sqsProcessor'
 
-export const receiver: SQSHandler = async (
-  event: SQSEvent,
-  context: Context
-): Promise<void> => {
+// export const receiver: SQSHandler = async (
+//   event: SQSEvent,
+//   context: Context
+// ): Promise<void> => {
+//   for (const message of event.Records) {
+//     await processMessageAsync(message)
+//   }
+//   console.info('done')
+// }
+
+exports.receiver = async (event: SQSEvent, context: Context) => {
   for (const message of event.Records) {
     await processMessageAsync(message)
   }
