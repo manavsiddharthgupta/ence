@@ -20,7 +20,8 @@ jobs:
         working-directory: services/event-process/
         run: |
           npm install -g typescript  
-          tsc index.ts --target esnext --module commonjs --moduleResolution node
+          npm install
+          tsc index.ts --target es2017 --module commonjs --moduleResolution node
 
       - name: Deploy using Serverless
         working-directory: services/event-process/
