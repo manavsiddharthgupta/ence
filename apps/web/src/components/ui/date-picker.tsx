@@ -16,20 +16,23 @@ import {
 export function DatePicker({
   className,
   date = new Date(),
-  setDate
+  setDate,
+  disabled
 }: {
   className?: string
   date: Date | undefined
   setDate: React.Dispatch<React.SetStateAction<Date | undefined>>
+  disabled?: boolean
 }) {
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger disabled={disabled} asChild>
         <Button
           variant={'outline'}
           className={cn(
             'w-[200px] justify-start text-left font-normal text-sm bg-transparent dark:border-zinc-700 border-zinc-300/60 dark:hover:bg-zinc-800/40',
-            !date && 'text-muted-foreground'
+            !date && 'text-muted-foreground',
+            className
           )}
         >
           <CalendarIcon className='mr-2 h-4 w-4' />

@@ -87,14 +87,14 @@ export const RecordPayment = ({
   }, [invoice])
 
   return (
-    <DialogContent className='bg-white dark:bg-zinc-950 dark:border-zinc-800 border-zinc-200 max-w-2xl shadow-none sm:max-w-[575px] '>
+    <DialogContent className='bg-white dark:bg-zinc-950 dark:border-zinc-800 border-zinc-200 max-w-2xl shadow-sm sm:max-w-[575px] '>
       <div className='flex justify-between items-end'>
         <div>
-          <h1 className='text-xl font-bold mb-1'>
+          <h1 className='text-xl font-bold mb-0.5'>
             Record Payment for{' '}
             <span className='text-sky-500'>INV-{invoice?.invoiceNumber}</span>
           </h1>
-          <div className='flex items-center gap-0.5 text-zinc-900/60 dark:text-white/60 text-xs font-medium'>
+          <div className='flex items-center gap-0.5 text-zinc-900/50 dark:text-white/50 text-[11px] font-semibold'>
             <p>Created on {formatDate(invoice?.dateIssue)}</p>
             <Dot size={16} strokeWidth={5} className='text-zinc-500/40' />
             <p>Due on {formatDate(invoice?.dueDate)}</p>
@@ -113,12 +113,12 @@ export const RecordPayment = ({
           <div className='relative'>
             <IndianRupee
               className='absolute left-3 top-1/2 -translate-y-1/2'
-              size={14}
-              strokeWidth={1.5}
+              size={12}
+              strokeWidth={2}
             />
             <Input
               value={amountToPay}
-              className={`border-[1px] outline-none bg-transparent ${
+              className={`border-[1px] text-xs font-medium outline-none bg-transparent ${
                 +amountToPay > 0 &&
                 +amountToPay <= (invoice?.dueAmount ?? Math.max())
                   ? 'dark:border-zinc-700 border-zinc-200'
@@ -140,9 +140,10 @@ export const RecordPayment = ({
             </Label>
             <DatePicker
               key='payment-date'
-              className='text-sm'
+              className='text-xs'
               date={paymentDate}
               setDate={setPaymnetDate}
+              disabled
             />
           </div>
           <div className='grid w-1/2 items-center gap-2'>
@@ -153,6 +154,7 @@ export const RecordPayment = ({
               value={paymentType}
               setValue={setPaymentType}
               options={paymentOption}
+              className='text-xs'
             />
           </div>
         </div>

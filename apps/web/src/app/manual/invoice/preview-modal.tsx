@@ -14,7 +14,7 @@ import {
   TooltipTrigger
 } from '@/components/ui/tooltip'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Banknote, Calendar, Info, Loader2Icon } from 'lucide-react'
+import { Banknote, Calendar, Info, Loader } from 'lucide-react'
 import { formatAmount, formatDate, numTowords } from 'helper/format'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { StatusBadge } from '@/components/status-badge'
@@ -164,14 +164,13 @@ const PreviewModal = ({
           <Button
             onClick={onCreateInvoice}
             variant='default'
-            className='bg-sky-600 text-white hover:bg-sky-700 min-w-[150px]'
+            className='bg-sky-600 text-white hover:bg-sky-700 w-fit px-8'
             disabled={isLoadingState !== null}
           >
-            {isLoadingState === 'sending' ? (
-              <Loader2Icon className='animate-spin' />
-            ) : (
-              'Save & Send' // todo: change to send when send functionality is implemented
+            {isLoadingState === 'sending' && (
+              <Loader size={18} className='animate-spin mr-1.5' />
             )}
+            Save & Send
           </Button>
         </div>
       </DialogFooter>

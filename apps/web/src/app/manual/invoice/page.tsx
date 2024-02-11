@@ -17,7 +17,7 @@ import PreviewModal from './preview-modal'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Loader2Icon } from 'lucide-react'
+import { Loader } from 'lucide-react'
 import { Organization } from 'database'
 import { toast } from 'sonner'
 import BackBtn from '@/components/back-btn'
@@ -182,15 +182,14 @@ const createInvoice = () => {
               </Dialog>
               <Button
                 variant='default'
-                className='bg-sky-600 text-white hover:bg-sky-700 min-w-[150px]'
+                className='bg-sky-600 text-white hover:bg-sky-700 w-fit px-8'
                 disabled={isLoading !== null}
                 onClick={onCreateInvoice}
               >
-                {isLoading === 'sending' ? (
-                  <Loader2Icon className='animate-spin' />
-                ) : (
-                  'Save & Send' // todo: chnage to send when send functionality is implemented
+                {isLoading === 'sending' && (
+                  <Loader size={18} className='animate-spin mr-1.5' />
                 )}
+                Save & Send
               </Button>
             </div>
           </div>

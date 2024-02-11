@@ -80,7 +80,7 @@ export const TimeLine = () => {
 
   const chartData = formatData(data?.data?.sales)
   return (
-    <div className='rounded-3xl w-[54%] border border-zinc-400/20 dark:border-zinc-600/20 px-4 pb-4 h-[400px] pt-6'>
+    <div className='rounded-3xl w-[54%] border border-zinc-400/20 dark:border-zinc-600/20 px-3 pb-4 h-[400px] pt-6'>
       <h2 className='text-lg px-4 font-medium mb-6'>Sales this Week</h2>
       <ResponsiveContainer width='100%' height='86%'>
         <BarChart
@@ -105,6 +105,7 @@ export const TimeLine = () => {
           <YAxis
             axisLine={false}
             tickLine={false}
+            width={65}
             padding={{ bottom: 10 }}
             color={`${theme === 'Dark' ? '#f4f4f5' : '#18181b'}`}
             tickFormatter={(number: number) =>
