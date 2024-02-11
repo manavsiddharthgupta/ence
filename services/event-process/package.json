@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "dependencies": {
     "aws-lambda": "^1.0.7",
-    "database": "*",
-    "helper": "*",
-    "media-generator": "*"
+    "database": "workspace:*",
+    "helper": "workspace:*",
+    "media-generator": "workspace:*"
   }
 }

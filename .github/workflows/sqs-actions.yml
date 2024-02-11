@@ -21,7 +21,7 @@ jobs:
         run: |
           npm install -g typescript  
           npm install
-          tsc index.ts --target esnext --module NodeNext --moduleResolution NodeNext
+          tsc index.ts
 
       - name: Deploy using Serverless
         working-directory: services/event-process/
