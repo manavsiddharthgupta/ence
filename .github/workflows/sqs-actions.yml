@@ -14,9 +14,9 @@ jobs:
       - name: Making Runtime File for AWS Lambda
         working-directory: services/event-process/
         run: |
-          npm i
           npm install -g typescript  
-          tsc index.ts
+          npm install
+          tsc index.ts --target esnext --module NodeNext --moduleResolution NodeNext
 
       - name: Deploy using Serverless
         working-directory: services/event-process/
