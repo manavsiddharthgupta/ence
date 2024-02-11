@@ -6,6 +6,6 @@ provider:
   region: us-east-1
 
 functions:
-  handler:
-    handler: index.handler
+  receiver:
+    handler: index.receiver
     timeout: 30
