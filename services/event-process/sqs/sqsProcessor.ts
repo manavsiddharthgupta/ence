@@ -1,5 +1,5 @@
-import { InvoiceJobsProcessor } from '../src/invoice-jobs'
-import { Constants } from '../utils/constants'
+import { InvoiceJobsProcessor } from '../src/invoice-jobs.js'
+import { Constants } from '../utils/constants.js'
 
 export class SQSProcessor {
   static async handleMessage(rawPayload: any) {

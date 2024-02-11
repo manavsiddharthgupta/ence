@@ -6,5 +6,6 @@
     "database": "*",
     "helper": "*",
     "media-generator": "*"
-  }
+  },
+  "type": "module"
 }

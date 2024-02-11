@@ -1,5 +1,5 @@
 import { SQSEvent, Context, SQSHandler, SQSRecord } from 'aws-lambda'
-import { SQSProcessor } from './sqs/sqsProcessor'
+import { SQSProcessor } from './sqs/sqsProcessor.js'
 
 export const handler: SQSHandler = async (
   event: SQSEvent,

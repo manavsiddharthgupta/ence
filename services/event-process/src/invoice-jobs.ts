@@ -1,4 +1,4 @@
-import { db } from '../utils/db'
+import { db } from '../utils/db.js'
 import { uploadFilesToS3 } from 'helper/s3'
 import { InvoiceGenerateMedia } from 'media-generator'
 
