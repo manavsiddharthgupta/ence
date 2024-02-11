@@ -7,5 +7,5 @@ provider:
 
 functions:
   receiver:
-    handler: index.receiver
+    handler: index.handler
     timeout: 30
