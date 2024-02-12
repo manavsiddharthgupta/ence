@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -22,6 +23,21 @@ export const CustomerForm = () => {
   const onCreateCustomer = async () => {
     if (!legalName || !email || !whatsAppNumber) {
       toast.error('Invalid customer data')
+      return
+    }
+    const emailSchema = z.string().email()
+    const numberSchema = z.string().min(10).max(30)
+    try {
+      emailSchema.parse(email)
+    } catch (err) {
+      toast.error('Invalid email id')
+      return
+    }
+
+    try {
+      numberSchema.parse(whatsAppNumber + '')
+    } catch (err) {
+      toast.error('Invalid whatsapp number')
       return
     }
     setLoading(true)

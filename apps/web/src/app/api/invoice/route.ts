@@ -126,19 +126,11 @@ export async function POST(request: Request) {
                 description: 'You manually created a new invoice.',
                 oldStatus: 'N/A',
                 newStatus: 'Unapproved'
-              },
-              {
-                actionType: 'APPROVAL_ACTION',
-                title: 'Customer Approval of Invoice',
-                description: 'Customer has officially approved the invoice.',
-                oldStatus: 'Unapproved',
-                newStatus: 'Approved'
-              } // Todo: rmv, this will be done by customer
+              }
             ]
           }
         },
         paymentMethod: paymentMethod,
-        approvalStatus: 'APPROVED', // Todo: rmv, this will be done by customer
         paymentStatus: paymentStatus,
         paymentTerms: paymentTerms,
         sendingMethod: sendingMethod,
@@ -180,11 +172,11 @@ export async function POST(request: Request) {
       }
     })
 
-    await InvoiceJobs.createMediaFromInvoiceDataJob(
-      invoiceRes.id,
-      org.organizations.id,
-      invoiceRes
-    )
+    // await InvoiceJobs.createMediaFromInvoiceDataJob(
+    //   invoiceRes.id,
+    //   org.organizations.id,
+    //   invoiceRes
+    // )
     // Todo: create link for customer and send them based on sending method
     return Response.json({
       ok: true,

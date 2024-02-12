@@ -59,6 +59,14 @@ export async function PATCH(
       })
     }
 
+    if (invoice?.approvalStatus !== 'APPROVED') {
+      return Response.json({
+        ok: false,
+        data: 'Invoice is not yet approved.',
+        status: 409
+      })
+    }
+
     if (!invoice?.dueAmount) {
       return Response.json({
         ok: false,
