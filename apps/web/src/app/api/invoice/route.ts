@@ -3,6 +3,7 @@ import { authOptions } from '../auth/[...nextauth]/route'
 import { db } from '@/lib/db'
 import { InvoiceBody } from '@/types/invoice'
 import { InvoiceJobs } from 'events/invoice'
+import { sendInvoiceThroughMail } from '@/lib/resend/send-invoice'
 
 export async function GET() {
   try {
@@ -150,6 +151,7 @@ export async function POST(request: Request) {
         dateIssue: true,
         dueDate: true,
         customerInfo: true,
+        organization: { select: { orgName: true } },
         items: {
           select: {
             id: true,
@@ -172,12 +174,8 @@ export async function POST(request: Request) {
       }
     })
 
-    // await InvoiceJobs.createMediaFromInvoiceDataJob(
-    //   invoiceRes.id,
-    //   org.organizations.id,
-    //   invoiceRes
-    // )
-    // Todo: create link for customer and send them based on sending method
+    await sendInvoiceThroughMail(invoiceRes.customerInfo.email, invoiceRes)
+
     return Response.json({
       ok: true,
       data: {

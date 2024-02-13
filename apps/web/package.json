@@ -29,6 +29,7 @@
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@react-email/components": "0.0.14",
     "@tanstack/react-query": "^5.17.19",
     "@upstash/redis": "^1.25.2",
     "@vercel/blob": "^0.16.1",
@@ -42,6 +43,7 @@
     "events": "*",
     "framer-motion": "^11.0.3",
     "helper": "*",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.323.0",
     "media-generator": "*",
     "next": "13.5.6",
@@ -51,6 +53,7 @@
     "react": "^18",
     "react-day-picker": "^8.9.1",
     "react-dom": "^18",
+    "react-email": "2.0.0",
     "recharts": "^2.8.0",
     "resend": "^3.1.0",
     "sharp": "^0.33.1",
@@ -64,6 +67,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20",
     "@types/react": "^18.2.52",
     "@types/react-dom": "^18",
