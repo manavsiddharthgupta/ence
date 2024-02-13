@@ -1,6 +1,7 @@
 import { db } from '@/lib/db'
 import jwt from 'jsonwebtoken'
 
+export const dynamic = 'force-dynamic'
 export async function GET(request: Request) {
   try {
     const secret = process.env.INVOICE_APPROVAL_SECRET_KEY || ''
