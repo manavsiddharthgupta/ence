@@ -25,7 +25,9 @@
         "RESEND_API_KEY",
         "INVOICE_APPROVAL_SECRET_KEY",
         "QSTASH_URL",
-        "QSTASH_TOKEN"
+        "QSTASH_TOKEN",
+        "QSTASH_CURRENT_SIGNING_KEY",
+        "QSTASH_NEXT_SIGNING_KEY"
       ],
       "outputs": [".next/**", "!.next/cache/**"]
     },

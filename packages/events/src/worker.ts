@@ -5,12 +5,16 @@ const q = new Client({
   retry: false // will change later
 })
 
+const url =
+  process.env.QSTASH_URL! +
+  process.env.NEXT_PUBLIC_API_URL! +
+  '/api/events/invoice'
 export class WorkerQueue {
   static async push(value: any) {
     console.log('Job to be pushed to the Q_STASH', value)
     try {
       const result = await q.publish({
-        url: 'https://ence.requestcatcher.com/test',
+        url: url,
         body: JSON.stringify(value)
       })
 
