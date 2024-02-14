@@ -148,11 +148,11 @@ export async function POST(request: Request) {
       }
     })
 
-    await InvoiceJobs.createMediaFromInvoiceDataJob(
-      invoiceRes.id,
-      orgId,
-      invoiceRes
-    )
+    // await InvoiceJobs.createMediaFromInvoiceDataJob(
+    //   invoiceRes.id,
+    //   orgId,
+    //   invoiceRes
+    // )
 
     // await sendInvoiceThroughMail(invoiceRes.customerInfo.email, invoiceRes)
 
