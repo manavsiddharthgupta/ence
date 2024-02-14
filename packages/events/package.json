@@ -5,6 +5,7 @@
     "./invoice": "./src/invoice.ts"
   },
   "dependencies": {
+    "@upstash/qstash": "^2.3.0",
     "aws-sdk": "^2.1550.0"
   }
 }

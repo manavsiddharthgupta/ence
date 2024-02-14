@@ -24,10 +24,10 @@ export async function GET(request: Request) {
         status: 500
       })
     }
-    const isCustomer = decode?.customer
-    const invoiceId = decode?.invoiceId
-    const status = decode?.status
-    if (!isCustomer || !status || !invoiceId) {
+    const orgId = decode?.orgId ?? null
+    const invoiceId = decode?.invoiceId ?? null
+    const status = decode?.status ?? null
+    if (!orgId || !status || !invoiceId) {
       return Response.json({
         ok: false,
         data: 'You are not authorized.',
@@ -64,7 +64,7 @@ export async function GET(request: Request) {
     const oldStatus = invoice?.approvalStatus
     if (oldStatus !== 'UNAPPROVED') {
       return Response.json({
-        ok: false,
+        ok: true,
         data: { ...invoice, fresh: false },
         status: 409
       })
@@ -107,7 +107,7 @@ export async function GET(request: Request) {
     console.error('Error:', error)
     return Response.json({
       ok: false,
-      data: 'Error while updating status',
+      data: 'Error while updating status.',
       status: 500
     })
   }

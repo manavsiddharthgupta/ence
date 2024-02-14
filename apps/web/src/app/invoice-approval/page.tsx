@@ -14,14 +14,16 @@ const InvoiceApproval = () => {
   if (!token) {
     return notFound()
   }
-  const { isPending, error, data } = useQuery({
+  const {
+    isPending,
+    error,
+    data: res
+  } = useQuery({
     queryKey: ['customer-approval'],
     queryFn: () =>
-      fetch(`${baseURI}/api/magiclinks/invoice?token=${token}`)
-        .then((res) => res.json())
-        .then((res) => {
-          return res?.data
-        })
+      fetch(`${baseURI}/api/magiclinks/invoice?token=${token}`).then((res) =>
+        res.json()
+      )
   })
 
   if (isPending) {
@@ -45,19 +47,22 @@ const InvoiceApproval = () => {
 
   if (error) {
     return (
-      <div className='w-fit bg-white'>
-        <Alert variant='destructive'>
-          <AlertTriangle size={18} />
-          <AlertTitle className='text-sm'>Something went wrong :(</AlertTitle>
-          <AlertDescription className='text-xs'>
-            {error?.message || 'Please try again later.'}
-          </AlertDescription>
-        </Alert>
-      </div>
+      <ErrorCard
+        title='Something went wrong :('
+        description={error?.message || 'Please try again later.'}
+      />
     )
   }
 
-  console.log(data)
+  if (!res?.ok) {
+    return (
+      <ErrorCard
+        title='Something went wrong :('
+        description={res?.data + ' Please try again later.'}
+      />
+    )
+  }
+  const data = res?.data
 
   return (
     <div className='bg-white shadow-lg rounded-2xl p-6 w-full max-w-96 text-black'>
@@ -148,3 +153,21 @@ const InvoiceApproval = () => {
 }
 
 export default InvoiceApproval
+
+const ErrorCard = ({
+  title,
+  description
+}: {
+  title: string
+  description: string
+}) => {
+  return (
+    <div className='w-fit bg-white min-w-[320px]'>
+      <Alert variant='destructive'>
+        <AlertTriangle size={18} />
+        <AlertTitle className='text-sm'>{title}</AlertTitle>
+        <AlertDescription className='text-xs'>{description}</AlertDescription>
+      </Alert>
+    </div>
+  )
+}

@@ -151,7 +151,7 @@ export async function POST(request: Request) {
         dateIssue: true,
         dueDate: true,
         customerInfo: true,
-        organization: { select: { orgName: true } },
+        organization: { select: { orgName: true, id: true } },
         items: {
           select: {
             id: true,
@@ -174,7 +174,13 @@ export async function POST(request: Request) {
       }
     })
 
-    await sendInvoiceThroughMail(invoiceRes.customerInfo.email, invoiceRes)
+    // await InvoiceJobs.createMediaFromInvoiceDataJob(
+    //   invoiceRes.id,
+    //   org.organizations.id,
+    //   invoiceRes
+    // )
+
+    // await sendInvoiceThroughMail(invoiceRes.customerInfo.email, invoiceRes)
 
     return Response.json({
       ok: true,

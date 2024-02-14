@@ -24,13 +24,21 @@ const baseURI = process.env.NEXT_PUBLIC_API_URL
 
 export const EmailTemplate = ({ invoiceData }: EmailTemplateProps) => {
   const tokenForApprove = jwt.sign(
-    { invoiceId: invoiceData.id, status: 'APPROVED', customer: true },
+    {
+      invoiceId: invoiceData.id,
+      status: 'APPROVED',
+      orgId: invoiceData?.organization?.id
+    },
     process.env.INVOICE_APPROVAL_SECRET_KEY || '',
     { expiresIn: '24h' }
   )
 
   const tokenForReject = jwt.sign(
-    { invoiceId: invoiceData.id, status: 'REJECTED', customer: true },
+    {
+      invoiceId: invoiceData.id,
+      status: 'REJECTED',
+      orgId: invoiceData?.organization?.id
+    },
     process.env.INVOICE_APPROVAL_SECRET_KEY || '',
     { expiresIn: '24h' }
   )
@@ -110,12 +118,12 @@ export const EmailTemplate = ({ invoiceData }: EmailTemplateProps) => {
                     href={
                       baseURI +
                       '/invoice-approval?token=' +
-                      tokenForApprove +
-                      '&status=approve'
+                      tokenForReject +
+                      '&status=reject'
                     }
                     className='bg-[#000000] rounded text-white text-[12px] font-semibold no-underline text-center px-5 py-3'
                   >
-                    Approve Invoice
+                    Reject Invoice
                   </Button>
                 </Column>
                 <Column align='right' style={{ width: '50%' }} colSpan={1}>
@@ -123,12 +131,12 @@ export const EmailTemplate = ({ invoiceData }: EmailTemplateProps) => {
                     href={
                       baseURI +
                       '/invoice-approval?token=' +
-                      tokenForReject +
-                      '&status=reject'
+                      tokenForApprove +
+                      '&status=approve'
                     }
                     className='bg-[#000000] rounded text-white text-[12px] font-semibold no-underline text-center px-5 py-3'
                   >
-                    Reject Invoice
+                    Approve Invoice
                   </Button>
                 </Column>
               </Row>
