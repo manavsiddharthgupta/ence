@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '../../auth/[...nextauth]/route'
 import { db } from '@/lib/db'
 import { InvoiceBody } from '@/types/invoice'
+import { getOrgId } from '@/crud/organization'
 
 export async function POST(request: Request) {
   try {
@@ -13,22 +14,9 @@ export async function POST(request: Request) {
       return Response.json({ ok: false, data: null, status: 401 })
     }
 
-    const org = await db.user.findUnique({
-      where: {
-        email: email
-      },
-      select: {
-        email: true,
-        organizations: {
-          select: {
-            id: true,
-            orgName: true
-          }
-        }
-      }
-    })
+    const orgId = await getOrgId(email)
 
-    if (!org?.organizations?.id) {
+    if (!orgId) {
       console.error('Error:', 'Organization Not Found')
       return Response.json({ ok: false, data: null, status: 404 })
     }
@@ -57,7 +45,7 @@ export async function POST(request: Request) {
         dateIssue: dateIssue,
         dueDate: dueDate,
         invoiceNumber: invoiceNumber,
-        organizationId: org.organizations.id,
+        organizationId: orgId,
         dueAmount: dueAmount,
         totalAmount: totalAmount,
         invoiceTotal: invoiceTotal,

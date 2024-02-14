@@ -2,6 +2,7 @@ import { db } from '@/lib/db'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '../auth/[...nextauth]/route'
 import { Customer } from '@/types/invoice'
+import { getOrgId } from '@/crud/organization'
 
 export async function GET() {
   try {
@@ -11,30 +12,16 @@ export async function GET() {
       console.error('Error:', 'Not Authorized')
       return Response.json({ ok: false, data: null, status: 401 })
     }
-    const user = await db.user.findUnique({
-      where: {
-        email: email
-      }
-    })
-    const id = user?.id
-    if (!id) {
-      console.error('Error:', 'User Not Found')
-      return Response.json({ ok: false, data: null, status: 404 })
-    }
-    const organization = await db.organization.findUnique({
-      where: {
-        createdById: id
-      }
-    })
+    const orgId = await getOrgId(email)
 
-    if (!organization) {
+    if (!orgId) {
       console.error('Error:', 'Organization Not Found')
       return Response.json({ ok: false, data: null, status: 404 })
     }
 
     const response = await db.customerInfo.findMany({
       where: {
-        organisationId: organization.id
+        organisationId: orgId
       },
       select: {
         id: true,
@@ -59,30 +46,17 @@ export async function POST(request: Request) {
       console.error('Error:', 'Not Authorized')
       return Response.json({ ok: false, data: null, status: 401 })
     }
-    const user = await db.user.findUnique({
-      where: {
-        email: email
-      }
-    })
-    const id = user?.id
-    if (!id) {
-      console.error('Error:', 'User Not Found')
-      return Response.json({ ok: false, data: null, status: 404 })
-    }
-    const organization = await db.organization.findUnique({
-      where: {
-        createdById: id
-      }
-    })
+    const orgId = await getOrgId(email)
 
-    if (!organization) {
+    if (!orgId) {
       console.error('Error:', 'Organization Not Found')
       return Response.json({ ok: false, data: null, status: 404 })
     }
+
     const data: Customer = await request.json()
     const customerRes = await db.customerInfo.create({
       data: {
-        organisationId: organization.id,
+        organisationId: orgId,
         legalName: data.legalName,
         email: data.email,
         whatsAppNumber: data.whatsAppNumber
