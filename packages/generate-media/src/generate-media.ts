@@ -42,9 +42,7 @@ export const generateMedia = async (
     await page.setViewport({ width: 630, height: 891, deviceScaleFactor: 2 })
     // await page.setViewport({ width: 840, height: 1188, deviceScaleFactor: 2 })
     const imgBuffer = await page.screenshot({
-      fullPage: true,
-      type: 'png',
-      encoding: 'base64'
+      fullPage: true
     })
     await page.close()
     await browser.close()

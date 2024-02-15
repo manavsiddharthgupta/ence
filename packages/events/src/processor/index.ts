@@ -17,7 +17,7 @@ export class Processor {
 
       return
     } catch (error) {
-      console.log('Error occured in worker', error, payload)
+      console.log('Error occurred in worker', error, payload)
     }
   }
 }
