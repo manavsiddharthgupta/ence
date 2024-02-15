@@ -3,7 +3,6 @@ import { authOptions } from '../auth/[...nextauth]/route'
 import { db } from '@/lib/db'
 import { InvoiceBody } from '@/types/invoice'
 import { InvoiceJobs } from 'events/jobs-publisher'
-import { sendInvoiceThroughMail } from '@/lib/resend/send-invoice'
 import { getOrgId } from '@/crud/organization'
 
 export async function GET() {
@@ -153,8 +152,6 @@ export async function POST(request: Request) {
       orgId,
       invoiceRes
     )
-
-    // await sendInvoiceThroughMail(invoiceRes.customerInfo.email, invoiceRes)
 
     return Response.json({
       ok: true,

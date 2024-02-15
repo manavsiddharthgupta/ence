@@ -8,24 +8,10 @@ export class InvoiceJobs {
     data: any
   ) {
     const job = {
-      name: Constants.JOBS.INVOICE_DATA_TO_MEDIA,
+      name: Constants.JOBS.PROCESS_INVOICE_DATA,
       invoiceId: invoiceId,
       orgId: orgId,
       data: data
-    }
-    return WorkerQueue.push(job)
-  }
-
-  static async sendInvoiceOnWhatsappJob() {
-    const job = {
-      name: Constants.JOBS.SEND_INVOICE_ON_WHATSAPP
-    }
-    return WorkerQueue.push(job)
-  }
-
-  static async sendInvoiceLinkOnAcceptForPaymentJob() {
-    const job = {
-      name: Constants.JOBS.SEND_INVOICE_LINK_ON_ACCEPT_FOR_PAYMENT
     }
     return WorkerQueue.push(job)
   }

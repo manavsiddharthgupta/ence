@@ -1,4 +1,4 @@
-import { EmailTemplate } from '@/components/invoice/send-email'
+import { EmailTemplate } from '../res/invoice-email'
 import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
