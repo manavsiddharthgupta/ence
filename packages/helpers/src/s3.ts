@@ -14,9 +14,7 @@ export async function uploadFilesToS3(
   const uploadParams = {
     Bucket: bucket,
     Key: key,
-    Body: body,
-    ContentEncoding: 'base64',
-    ContentType: 'image/png'
+    Body: body
   }
 
   const data = await s3.upload(uploadParams).promise()
