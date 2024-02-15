@@ -43,7 +43,6 @@
     "events": "*",
     "framer-motion": "^11.0.3",
     "helper": "*",
-    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.323.0",
     "media-generator": "*",
     "next": "13.5.6",
@@ -53,9 +52,7 @@
     "react": "^18",
     "react-day-picker": "^8.9.1",
     "react-dom": "^18",
-    "react-email": "2.0.0",
     "recharts": "^2.8.0",
-    "resend": "^3.1.0",
     "sharp": "^0.33.1",
     "sonner": "^1.3.1",
     "tailwind-merge": "^1.14.0",
@@ -67,7 +64,6 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20",
     "@types/react": "^18.2.52",
     "@types/react-dom": "^18",

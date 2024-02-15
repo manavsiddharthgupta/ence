@@ -9,6 +9,7 @@
     "@upstash/qstash": "^2.3.0",
     "aws-sdk": "^2.1550.0",
     "database": "*",
-    "helper": "*"
+    "helper": "*",
+    "send-media": "*"
   }
 }
