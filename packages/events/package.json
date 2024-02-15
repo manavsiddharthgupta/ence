@@ -2,10 +2,13 @@
   "name": "events",
   "version": "0.1.0",
   "exports": {
-    "./invoice": "./src/invoice.ts"
+    "./jobs-publisher": "./src/publisher/invoice.ts",
+    "./jobs-processor": "./src/processor/index.ts"
   },
   "dependencies": {
     "@upstash/qstash": "^2.3.0",
-    "aws-sdk": "^2.1550.0"
+    "aws-sdk": "^2.1550.0",
+    "database": "*",
+    "helper": "*"
   }
 }

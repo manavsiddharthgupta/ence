@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '../auth/[...nextauth]/route'
 import { db } from '@/lib/db'
 import { InvoiceBody } from '@/types/invoice'
-import { InvoiceJobs } from 'events/invoice'
+import { InvoiceJobs } from 'events/jobs-publisher'
 import { sendInvoiceThroughMail } from '@/lib/resend/send-invoice'
 import { getOrgId } from '@/crud/organization'
 
@@ -148,11 +148,11 @@ export async function POST(request: Request) {
       }
     })
 
-    // await InvoiceJobs.createMediaFromInvoiceDataJob(
-    //   invoiceRes.id,
-    //   orgId,
-    //   invoiceRes
-    // )
+    await InvoiceJobs.createMediaFromInvoiceDataJob(
+      invoiceRes.id,
+      orgId,
+      invoiceRes
+    )
 
     // await sendInvoiceThroughMail(invoiceRes.customerInfo.email, invoiceRes)
 
