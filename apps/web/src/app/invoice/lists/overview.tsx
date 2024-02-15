@@ -11,7 +11,7 @@ const Overview = ({
   overview: InvoicesOverview | null
 }) => {
   return (
-    <div className='my-6 w-full border-[1.5px] dark:border-zinc-700/60 border-zinc-300/60 rounded-lg bg-zinc-300/20 dark:bg-zinc-600/5 backdrop-blur-xl py-6 flex justify-between'>
+    <div className='mt-6 mb-12 w-full border-[1px] dark:border-zinc-700/60 border-zinc-300/60 rounded-2xl bg-zinc-100/20 dark:bg-zinc-800/10 py-6 flex justify-between'>
       <InvoiceOverviewCard invoiceOverview={invoiceOverview} />
     </div>
   )
@@ -71,7 +71,7 @@ const InvoiceTypeOverview = ({
     <div
       className={
         isLast === false
-          ? 'border-r-2 border-zinc-300 dark:border-zinc-700 w-[24%] pl-8'
+          ? 'border-r-2 border-zinc-200/60 dark:border-zinc-700/60 w-[24%] pl-8'
           : 'w-[24%] pl-8'
       }
     >

@@ -16,16 +16,18 @@ import { Dispatch, SetStateAction } from 'react'
 export function DatePickerWithRange({
   className,
   date,
-  setDate
+  setDate,
+  disabled
 }: {
   className?: string
   date: DateRange | undefined
   setDate: Dispatch<SetStateAction<DateRange | undefined>>
+  disabled?: boolean
 }) {
   return (
     <div className={cn('grid gap-2', className)}>
       <Popover>
-        <PopoverTrigger asChild>
+        <PopoverTrigger disabled={disabled} asChild>
           <Button
             id='date'
             variant={'outline'}

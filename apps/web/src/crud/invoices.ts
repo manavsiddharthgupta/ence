@@ -1,39 +1,33 @@
 import { db } from '@/lib/db'
 import { Invoice } from 'database'
+import { getOrgId } from '@/crud/organization'
 export const getInvoices = async (email: string | null | undefined) => {
   try {
     if (!email) {
       console.error('Error:', 'Not Authorized')
       return JSON.stringify({ ok: false, data: null, status: 401 })
     }
-    const org = await db.user.findUnique({
-      where: {
-        email: email
-      },
-      select: {
-        email: true,
-        organizations: {
-          select: {
-            id: true,
-            orgName: true
-          }
-        }
-      }
-    })
+    const orgId = await getOrgId(email)
 
-    if (!org?.organizations?.id) {
+    if (!orgId) {
       console.error('Error:', 'Organization Not Found')
       return JSON.stringify({ ok: false, data: null, status: 404 })
     }
 
     const response = await db.invoice.findMany({
       where: {
-        organizationId: org.organizations.id
+        organizationId: orgId
       },
       select: {
         id: true,
         invoiceNumber: true,
-        customerInfo: true,
+        customerInfo: {
+          select: {
+            legalName: true,
+            email: true,
+            whatsAppNumber: true
+          }
+        },
         dateIssue: true,
         dueDate: true,
         paymentStatus: true,
@@ -56,35 +50,22 @@ export const getInvoicesOverview = async (email: string | null | undefined) => {
       console.error('Error:', 'Not Authorized')
       return JSON.stringify({ ok: false, data: null, status: 401 })
     }
-    const org = await db.user.findUnique({
-      where: {
-        email: email
-      },
-      select: {
-        email: true,
-        organizations: {
-          select: {
-            id: true,
-            orgName: true
-          }
-        }
-      }
-    })
+    const orgId = await getOrgId(email)
 
-    if (!org?.organizations?.id) {
+    if (!orgId) {
       console.error('Error:', 'Organization Not Found')
       return JSON.stringify({ ok: false, data: null, status: 404 })
     }
 
     const allInvoices: Invoice[] = await db.invoice.findMany({
       where: {
-        organizationId: org.organizations.id
+        organizationId: orgId
       }
     })
 
     const currentWeekInvoices: Invoice[] = await db.invoice.findMany({
       where: {
-        organizationId: org.organizations.id,
+        organizationId: orgId,
         dateIssue: {
           gte: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000) // Last 7 days
         }
@@ -297,7 +278,7 @@ export const getActivity = async (email: string | null | undefined) => {
       orderBy: {
         createdAt: 'desc'
       },
-      take: 3
+      take: 4
     })
 
     return JSON.stringify({

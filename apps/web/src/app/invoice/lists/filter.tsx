@@ -43,7 +43,7 @@ const Filter = () => {
 
   const statusTypes = ['Paid', 'Unpaid', 'Pending', 'Partially'] // todo: remove (get from api)
   return (
-    <div className='flex justify-between items-center mb-2'>
+    <div className='flex justify-between items-center mb-4'>
       <div className='flex gap-2'>
         <Input
           placeholder='Filter Invoices ...'
@@ -105,7 +105,7 @@ const Filter = () => {
         </Popover>
       </div>
 
-      <DatePickerWithRange date={date} setDate={setDate} />
+      <DatePickerWithRange disabled date={date} setDate={setDate} />
     </div>
   )
 }

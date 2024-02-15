@@ -1,27 +1,14 @@
-import { InvoiceJobsProcessor } from '../src/invoice-jobs'
-import { Constants } from '../utils/constants'
+import { InvoiceJobsProcessor } from './invoice-jobs'
+import { Constants } from '../../constants'
 
-export class SQSProcessor {
+export class Processor {
   static async handleMessage(rawPayload: any) {
     try {
-      if (!('body' in rawPayload)) {
-        console.log('Invalid payload', rawPayload)
-        return
-      }
-
-      const body = JSON.parse(rawPayload.body)
-      const messageId = rawPayload?.messageId ?? null
+      const body = JSON.parse(rawPayload)
       if (!body?.name) {
         console.log('There is no body name attached in payload')
         return
       }
-
-      console.log(
-        'in sqs processor ---> messageId - ',
-        messageId,
-        'for Process Job ',
-        body.name
-      )
 
       if (body.name === Constants.JOBS.INVOICE_DATA_TO_MEDIA) {
         console.log(Constants.JOBS.INVOICE_DATA_TO_MEDIA, body)

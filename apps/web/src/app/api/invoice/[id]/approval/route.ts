@@ -1,5 +1,3 @@
-import { getServerSession } from 'next-auth'
-import { authOptions } from '../../../auth/[...nextauth]/route'
 import { db } from '@/lib/db'
 
 export async function PATCH(
@@ -7,40 +5,6 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions)
-    const email = session?.user?.email
-    if (!email) {
-      console.error('Error:', 'Not Authorized')
-      return Response.json({
-        ok: false,
-        data: 'You are not authorized',
-        status: 401
-      })
-    }
-    const org = await db.user.findUnique({
-      where: {
-        email: email
-      },
-      select: {
-        email: true,
-        organizations: {
-          select: {
-            id: true,
-            orgName: true
-          }
-        }
-      }
-    })
-
-    if (!org?.organizations?.id) {
-      console.error('Error:', 'Organization Not Found')
-      return Response.json({
-        ok: false,
-        data: 'Organization not found',
-        status: 404
-      })
-    }
-
     const invoiceId = params.id
     const body = await request.json()
     const { status } = body
@@ -50,6 +14,13 @@ export async function PATCH(
         id: invoiceId
       }
     })
+    if (!invoice?.id) {
+      return Response.json({
+        ok: false,
+        data: 'Invalid invoice, please check your invoice id.',
+        status: 500
+      })
+    }
 
     const oldStatus = invoice?.approvalStatus
     if (status === oldStatus) {
@@ -72,13 +43,22 @@ export async function PATCH(
     await db.auditTrail.create({
       data: {
         actionType: 'APPROVAL_ACTION',
+        title: 'Customer Approval of Invoice',
+        description: 'Customer has officially approved the invoice.',
         invoiceId: invoiceId,
         oldStatus: oldStatus,
         newStatus: status === 'APPROVED' ? 'APPROVED' : 'REJECTED'
       }
     })
 
-    return Response.json({ ok: true, data: response, status: 200 })
+    return Response.json({
+      ok: true,
+      data:
+        'Congratulation you have approved the invoice. Your Invoice no. is INV-' +
+        response.invoiceNumber +
+        '. Pay the invoice before due date.',
+      status: 200
+    })
   } catch (error) {
     console.error('Error:', error)
     return Response.json({

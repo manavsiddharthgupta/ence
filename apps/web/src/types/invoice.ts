@@ -1,17 +1,17 @@
-import { AuditTrail } from 'database'
+import { AuditTrail, CustomerInfo } from 'database'
 
 export type Option = {
-  id: number
-  value: string
+  id: string
+  legalName: string
+  email?: string
+  whatsAppNumber?: string | number
 }
 
 export interface CustomerInfoState {
-  email: string | null
-  whatsappNumber: string | number | null
-  city: string | null
-  pincode: string | number | null
-  state: string | null
-  country: string | null
+  id: string | null
+  legalName: string | null
+  email?: string
+  whatsappNumber?: string | number
 }
 
 export interface CustomerInfoAction {
@@ -71,8 +71,15 @@ export type MenuOptions = {
   label: string
 }
 
+export type Customer = {
+  legalName: string
+  whatsAppNumber: string
+  email: string
+}
+
 export type InvoiceBody = {
-  customerInfo: string
+  customerId: string
+  customerInfo?: CustomerInfo
   dateIssue: Date
   dueDate: Date
   invoiceNumber: number
@@ -147,7 +154,7 @@ export enum PaymentTerms {
 }
 
 export type InvoicesResponse = {
-  customerInfo: string
+  customerInfo: Customer
   dateIssue: Date
   dueAmount: number
   approvalStatus: 'UNAPPROVED' | 'APPROVED' | 'REJECTED'

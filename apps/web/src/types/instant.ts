@@ -1,4 +1,5 @@
 export interface InstantInvoice {
+  customerId: string | null
   customerName: string | null
   dateIssue: Date | undefined
   invoiceNumber: string | null

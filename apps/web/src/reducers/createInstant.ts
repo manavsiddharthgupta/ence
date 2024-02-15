@@ -7,6 +7,7 @@ import {
 } from '@/types/instant'
 
 export const InitialInstantInvoiceDetails: InstantInvoice = {
+  customerId: null,
   customerName: null,
   dateIssue: undefined,
   invoiceNumber: null,

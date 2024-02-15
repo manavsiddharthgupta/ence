@@ -68,9 +68,9 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
     return firstChar + splittedText
   }
 
-  const formatCustomerName = (text: string) => {
+  const formatCustomerName = (text: string | undefined) => {
     if (!text) {
-      return null
+      return '-'
     }
     if (text.length < 15) {
       return text
@@ -78,9 +78,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
     return text.slice(0, 15) + '...'
   }
 
-  const customerInfo = invoiceInfo?.customerInfo
-    ? JSON.parse(invoiceInfo.customerInfo)
-    : null
+  const customerInfo = invoiceInfo?.customerInfo?.legalName
 
   const invoiceDetail = invoiceInfo
     ? {
@@ -88,7 +86,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
         issueDate: formatDate(invoiceInfo.dateIssue),
         dueDate: formatDate(invoiceInfo.dueDate),
         paymentStatus: formatTextToCamelCase(invoiceInfo.paymentStatus),
-        customer: formatCustomerName(customerInfo.customerLegalName.value),
+        customer: formatCustomerName(customerInfo),
         auditTrail: invoiceInfo.auditTrailEntries,
         paymentTerm: formatTextToCamelCase(invoiceInfo.paymentTerms),
         paymentMethod: formatTextToCamelCase(invoiceInfo.paymentMethod),

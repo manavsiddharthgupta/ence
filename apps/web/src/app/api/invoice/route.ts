@@ -2,7 +2,9 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '../auth/[...nextauth]/route'
 import { db } from '@/lib/db'
 import { InvoiceBody } from '@/types/invoice'
-import { InvoiceJobs } from 'events/invoice'
+import { InvoiceJobs } from 'events/jobs-publisher'
+import { sendInvoiceThroughMail } from '@/lib/resend/send-invoice'
+import { getOrgId } from '@/crud/organization'
 
 export async function GET() {
   try {
@@ -12,29 +14,16 @@ export async function GET() {
       console.error('Error:', 'Not Authorized')
       return Response.json({ ok: false, data: null, status: 401 })
     }
-    const org = await db.user.findUnique({
-      where: {
-        email: email
-      },
-      select: {
-        email: true,
-        organizations: {
-          select: {
-            id: true,
-            orgName: true
-          }
-        }
-      }
-    })
+    const orgId = await getOrgId(email)
 
-    if (!org?.organizations?.id) {
+    if (!orgId) {
       console.error('Error:', 'Organization Not Found')
       return Response.json({ ok: false, data: null, status: 404 })
     }
 
     const response = await db.invoice.findMany({
       where: {
-        organizationId: org.organizations.id
+        organizationId: orgId
       },
       select: {
         id: true,
@@ -64,23 +53,9 @@ export async function POST(request: Request) {
       console.error('Error:', 'Not Authorized')
       return Response.json({ ok: false, data: null, status: 401 })
     }
+    const orgId = await getOrgId(email)
 
-    const org = await db.user.findUnique({
-      where: {
-        email: email
-      },
-      select: {
-        email: true,
-        organizations: {
-          select: {
-            id: true,
-            orgName: true
-          }
-        }
-      }
-    })
-
-    if (!org?.organizations?.id) {
+    if (!orgId) {
       console.error('Error:', 'Organization Not Found')
       return Response.json({ ok: false, data: null, status: 404 })
     }
@@ -89,7 +64,7 @@ export async function POST(request: Request) {
     const {
       dateIssue,
       dueDate,
-      customerInfo,
+      customerId,
       invoiceNumber,
       notes,
       paymentMethod,
@@ -108,11 +83,11 @@ export async function POST(request: Request) {
 
     const invoiceRes = await db.invoice.create({
       data: {
-        customerInfo: customerInfo,
+        customerId: customerId,
         dateIssue: dateIssue,
         dueDate: dueDate,
         invoiceNumber: invoiceNumber,
-        organizationId: org.organizations.id,
+        organizationId: orgId,
         dueAmount: dueAmount,
         totalAmount: totalAmount,
         invoiceTotal: invoiceTotal,
@@ -126,19 +101,11 @@ export async function POST(request: Request) {
                 description: 'You manually created a new invoice.',
                 oldStatus: 'N/A',
                 newStatus: 'Unapproved'
-              },
-              {
-                actionType: 'APPROVAL_ACTION',
-                title: 'Customer Approval of Invoice',
-                description: 'Customer has officially approved the invoice.',
-                oldStatus: 'Unapproved',
-                newStatus: 'Approved'
-              } // Todo: rmv, this will be done by customer
+              }
             ]
           }
         },
         paymentMethod: paymentMethod,
-        approvalStatus: 'APPROVED', // Todo: rmv, this will be done by customer
         paymentStatus: paymentStatus,
         paymentTerms: paymentTerms,
         sendingMethod: sendingMethod,
@@ -158,6 +125,7 @@ export async function POST(request: Request) {
         dateIssue: true,
         dueDate: true,
         customerInfo: true,
+        organization: { select: { orgName: true, id: true } },
         items: {
           select: {
             id: true,
@@ -182,10 +150,12 @@ export async function POST(request: Request) {
 
     await InvoiceJobs.createMediaFromInvoiceDataJob(
       invoiceRes.id,
-      org.organizations.id,
+      orgId,
       invoiceRes
     )
-    // Todo: create link for customer and send them based on sending method
+
+    // await sendInvoiceThroughMail(invoiceRes.customerInfo.email, invoiceRes)
+
     return Response.json({
       ok: true,
       data: {

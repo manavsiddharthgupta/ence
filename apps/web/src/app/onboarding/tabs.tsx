@@ -38,7 +38,7 @@ const OnboardingTabs = () => {
       }
     }
     getOrganization()
-  })
+  }, [])
   const tabs = [1, 2, 3, 4]
   const search = useSearchParams()
   const router = useRouter()

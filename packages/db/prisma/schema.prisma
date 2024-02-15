@@ -2,8 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-  binaryTargets   = ["native", "rhel-openssl-1.0.x"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
@@ -124,7 +124,7 @@ model User {
 }
 
 model Organization {
-  id                         String        @id @default(uuid())
+  id                         String         @id @default(uuid())
   orgName                    String
   whatsappNumber             BigInt?
   businessType               BusinessType?
@@ -136,12 +136,13 @@ model Organization {
   gstin                      String?
   pan                        String?
   currencyType               CurrencyType?
-  state                      StateType     @default(ACTIVE)
-  createdAt                  DateTime      @default(now())
-  updatedAt                  DateTime      @updatedAt
-  createdBy                  User          @relation(fields: [createdById], references: [id])
-  createdById                String        @unique
+  state                      StateType      @default(ACTIVE)
+  createdAt                  DateTime       @default(now())
+  updatedAt                  DateTime       @updatedAt
+  createdBy                  User           @relation(fields: [createdById], references: [id])
+  createdById                String         @unique
   invoices                   Invoice[]
+  customerInfos              CustomerInfo[]
 }
 
 model Invoice {
@@ -149,7 +150,8 @@ model Invoice {
   invoiceNumber      Int
   instantInvoiceLink String?
   sendingMethod      SendMethods              @default(MAIL)
-  customerInfo       Json
+  customerId         String
+  customerInfo       CustomerInfo             @relation(fields: [customerId], references: [id])
   dateIssue          DateTime
   dueDate            DateTime
   shippingCharge     Float?
@@ -175,12 +177,22 @@ model Invoice {
   organization       Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 }
 
+model CustomerInfo {
+  id             String       @id @default(uuid())
+  legalName      String
+  whatsAppNumber String       @unique
+  email          String       @unique
+  invoices       Invoice[]
+  organization   Organization @relation(fields: [organisationId], references: [id])
+  organisationId String
+}
+
 model InvoiceRelatedDocument {
-  id                String    @id @default(uuid())
-  documentLink      String
-  name              RelatedDocName
-  invoiceId         String
-  invoice           Invoice   @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  id           String         @id @default(uuid())
+  documentLink String
+  name         RelatedDocName
+  invoiceId    String
+  invoice      Invoice        @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
 }
 
 model InvoiceItem {

@@ -165,7 +165,7 @@ const InvoiceBody = ({
                   </AvatarFallback>
                 </Avatar>
                 <span className='font-semibold w-[calc(100%-6)]'>
-                  {formatCustomerInfo(invoice.customerInfo)}
+                  {invoice.customerInfo?.legalName || '-'}
                 </span>
               </div>
             </td>
@@ -193,27 +193,32 @@ const InvoiceBody = ({
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant='ghost'
-                    className='flex h-8 w-8 p-0 data-[state=open]:bg-zinc-600/20 hover:bg-zinc-600/10'
+                    className='flex h-8 w-8 p-0 data-[state=open]:bg-zinc-500/10 hover:bg-zinc-500/10'
                   >
                     <DotsHorizontalIcon />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className='dark:border-zinc-700/60 border-zinc-300/60 bg-white dark:bg-zinc-900'>
+                <DropdownMenuContent
+                  align='start'
+                  side='left'
+                  className='dark:border-zinc-700/60 border-zinc-300/60 bg-white dark:bg-zinc-950'
+                >
                   <DropdownMenuLabel>Invoice Action</DropdownMenuLabel>
                   <DropdownMenuSeparator className='bg-zinc-600/20' />
                   <DropdownMenuItem>Update</DropdownMenuItem>
-                  {invoice.paymentStatus !== 'PAID' && (
-                    <DialogTrigger asChild>
-                      <DropdownMenuItem
-                        className='text-green-500 hover:text-green-500'
-                        onClick={() => {
-                          onSelectInvoiceToRecordPayment(invoice.id)
-                        }}
-                      >
-                        Record Payment
-                      </DropdownMenuItem>
-                    </DialogTrigger>
-                  )}
+                  {invoice.paymentStatus !== 'PAID' &&
+                    invoice.approvalStatus === 'APPROVED' && (
+                      <DialogTrigger asChild>
+                        <DropdownMenuItem
+                          className='text-green-500 hover:text-green-500'
+                          onClick={() => {
+                            onSelectInvoiceToRecordPayment(invoice.id)
+                          }}
+                        >
+                          Record Payment
+                        </DropdownMenuItem>
+                      </DialogTrigger>
+                    )}
                   <DropdownMenuItem
                     onClick={() => {
                       onSelectInvoice(invoice.id)
@@ -235,7 +240,7 @@ const InvoiceBody = ({
 
 const InvoiceCard = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className='dark:bg-zinc-600/5 bg-zinc-300/20 border-[1.5px] dark:border-zinc-700/60 border-zinc-300/60 px-4 py-2 rounded-lg'>
+    <div className='dark:bg-zinc-800/10 bg-zinc-100/20 border-[1px] dark:border-zinc-700/60 border-zinc-300/60 px-4 py-2 rounded-2xl'>
       {children}
     </div>
   )
