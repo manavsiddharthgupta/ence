@@ -5,8 +5,9 @@ import SidebarItem from './sidebar'
 import { ChevronRight, Loader2, AlertTriangle } from 'lucide-react'
 import AccountDetails from './accountDetails'
 import { Separator } from '@/components/ui/separator'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import OrganizationDetails from './organizationDetails'
 
 const AccountPage = () => {
   const [selectedItem, setSelectedItem] = useState('Account Details')
@@ -15,17 +16,22 @@ const AccountPage = () => {
   const [userName, setUserName] = useState('')
 
   const {
-    isFetching: isPending,
+    isLoading,
     error,
     data: userDetails
   } = useQuery({
     queryKey: ['accountDetails'],
-    queryFn: () => fetchAccountDetails()
+    queryFn: fetchAccountDetails
   })
 
-  const fetchAccountDetails = async () => {
+  async function fetchAccountDetails() {
     const response = await fetch('/api/account')
+    if (!response.ok) {
+      throw new Error('Failed to fetch account details')
+    }
     const userDetailsResponse = await response.json()
+    setOrgName(userDetailsResponse.data.organizationName)
+    setUserName(userDetailsResponse.data.userName)
     return userDetailsResponse.data
   }
 
@@ -38,13 +44,49 @@ const AccountPage = () => {
     )
   }
 
-  if (isPending) {
+  if (isLoading || !userDetails) {
     return (
       <div className='flex gap-2 items-center'>
         <Loader2 className='animate-spin' />
         <p className='font-medium'>Fetching Account Details</p>
       </div>
     )
+  }
+
+  const renderContent = () => {
+    if (selectedItem === 'Account Details') {
+      return (
+        <AccountDetails
+          isEditing={isEditing}
+          orgName={orgName}
+          userName={userName}
+          profileImage={userDetails?.profilePic}
+          emailAddress={userDetails?.emailAddress}
+          handleUpdate={handleUpdate}
+          handleOrgNameChange={handleOrgNameChange}
+          handleUserNameChange={handleUserNameChange}
+          handleSave={handleSave}
+        />
+      )
+    }
+
+    if (selectedItem === 'Organization Details') {
+      return (
+        <OrganizationDetails
+          isEditing={isEditing}
+          orgName={orgName}
+          userName={userName}
+          profileImage={userDetails?.profilePic}
+          emailAddress={userDetails?.emailAddress}
+          handleUpdate={handleUpdate}
+          handleOrgNameChange={handleOrgNameChange}
+          handleUserNameChange={handleUserNameChange}
+          handleSave={handleSave}
+        />
+      )
+    }
+
+    return null
   }
 
   const handleOrgNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +103,7 @@ const AccountPage = () => {
         method: 'PATCH',
         body: JSON.stringify({
           organizationName: orgName,
-          userName: userName
+          userName
         })
       })
       if (response.ok) {
@@ -99,27 +141,19 @@ const AccountPage = () => {
               selected={selectedItem === 'Account Details'}
               onClick={() => setSelectedItem('Account Details')}
             />
-            {/* <SidebarItem
-              label='Integration'
-              selected={selectedItem === 'Integration'}
-              onClick={() => setSelectedItem('Integration')}
-            /> */}
+            <SidebarItem
+              label='Organization Details'
+              selected={selectedItem === 'Organization Details'}
+              onClick={() => setSelectedItem('Organization Details')}
+            />
           </ul>
         </div>
         <Separator orientation='vertical' className='mx-4' />
-        <div className='p-4 border border-r-2 rounded-md shadow-xl dark:shadow-zinc-800'>
-          <AccountDetails
-            isEditing={isEditing}
-            orgName={userDetails?.organizationName}
-            userName={userDetails?.userName}
-            profileImage={userDetails?.profilePic}
-            emailAddress={userDetails?.emailAddress}
-            handleUpdate={handleUpdate}
-            handleOrgNameChange={handleOrgNameChange}
-            handleUserNameChange={handleUserNameChange}
-            handleSave={handleSave}
-          />
-        </div>
+        {userDetails && (
+          <div className='p-4 border rounded-md dark:shadow-zinc-800'>
+            {renderContent()}
+          </div>
+        )}
       </div>
     </>
   )

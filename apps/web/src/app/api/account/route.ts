@@ -49,7 +49,6 @@ export async function GET() {
       profilePic: user?.image
     }
 
-    console.log('----------->', accountDetails)
     return Response.json({ ok: true, data: accountDetails, status: 200 })
   } catch (error) {
     console.error('Error fetching user details', error)
@@ -65,7 +64,6 @@ export async function PATCH(request: Request) {
       return Response.json({ ok: false, data: null, status: 401 })
     }
     const { organizationName, userName } = await request.json()
-
     console.log('organizationName:', organizationName)
     console.log('userName:', userName)
 

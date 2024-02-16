@@ -17,7 +17,7 @@ interface Props {
   handleSave: () => void
 }
 
-const AccountDetails: React.FC<Props> = ({
+const OrganizationDetails: React.FC<Props> = ({
   isEditing,
   orgName,
   userName,
@@ -40,7 +40,7 @@ const AccountDetails: React.FC<Props> = ({
 
   return (
     <>
-      <h1 className='text-lg font-semibold'>Your Profile</h1>
+      <h1 className='text-lg font-semibold'>Your Organization </h1>
 
       <div className='flex p-11'>
         <div className='flex space-x-5'>
@@ -100,4 +100,4 @@ const AccountDetails: React.FC<Props> = ({
   )
 }
 
-export default AccountDetails
+export default OrganizationDetails
