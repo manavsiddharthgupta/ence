@@ -180,11 +180,13 @@ model Invoice {
 model CustomerInfo {
   id             String       @id @default(uuid())
   legalName      String
-  whatsAppNumber String       @unique
-  email          String       @unique
+  whatsAppNumber String
+  email          String
   invoices       Invoice[]
   organization   Organization @relation(fields: [organisationId], references: [id])
   organisationId String
+
+  @@unique([whatsAppNumber, email, organisationId], name: "unique_whatsapp_email_org")
 }
 
 model InvoiceRelatedDocument {

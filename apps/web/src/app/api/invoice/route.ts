@@ -124,7 +124,9 @@ export async function POST(request: Request) {
         dateIssue: true,
         dueDate: true,
         customerInfo: true,
-        organization: { select: { orgName: true, id: true } },
+        organization: {
+          select: { orgName: true, id: true, email: true, whatsappNumber: true }
+        },
         items: {
           select: {
             id: true,

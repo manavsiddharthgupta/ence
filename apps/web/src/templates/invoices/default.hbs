@@ -14,58 +14,54 @@
       >
         <div>
           <!--  Company logo  -->
-          <h1 style='font-size:xx-large; font-weight:800;'>ENCE</h1>
+          <h1
+            style='font-size:xx-large; font-weight:800;'
+          >{{organization.orgName}}</h1>
         </div>
 
         <div style='text-align: right;'>
           <p>
-            Ence Inc.
+            {{organization.orgName}}
           </p>
           <p style='color: #718096; font-size: 0.875rem;'>
-            info@ence.com
+            {{organization.email}}
           </p>
           <p style='color: #718096; font-size: 0.875rem; margin-top: 0.15rem;'>
-            +91-6207337493
+            {{#if organization?.whatsappNumber}}
+              +91-{{organization?.whatsappNumber}}
+            {{else}}
+              +91-0000-0000-00
+            {{/if}}
           </p>
         </div>
       </div>
 
       <!-- Client info -->
       <div
-        style='display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; margin-top: 2rem;'
+        style='display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; margin-top: 1rem;'
       >
         <div>
           <p style='font-weight: bold; color: #2d3748;'>
             Bill to :
           </p>
           <p style='color: #718096; font-size: 0.850rem; font-weight: 500; '>
-            {{#if customerInfo.customerLegalName.value}}
-              {{customerInfo.customerLegalName.value}}
+            {{#if customerInfo.legalName}}
+              {{customerInfo.legalName}}
             {{else}}
               -
             {{/if}}
             <br />
-            {{#if customerInfo.city}}
-              {{customerInfo.city}},
+            {{#if customerInfo.email}}
+              {{customerInfo.whatsAppNumber}}
             {{else}}
-              -
-            {{/if}}
-            {{#if customerInfo.state}}
-              {{customerInfo.state}},
-            {{else}}
-              -
-            {{/if}}
-            {{#if customerInfo.country}}
-              {{customerInfo.country}}
-            {{else}}
-              -
+              {{customerInfo.email}}
             {{/if}}
           </p>
           <p style='color: #718096; font-size: 0.850rem; font-weight: 500; '>
             {{#if customerInfo.email}}
               {{customerInfo.email}}
             {{else}}
-              {{customerInfo.whatsappNumber}}
+              {{customerInfo.whatsAppNumber}}
             {{/if}}
           </p>
         </div>
@@ -214,7 +210,7 @@
         </table>
         <div>
           <p
-            style='color: #718096; text-align: right; font-size: 0.5rem; font-weight: 500; margin-top: 1rem;'
+            style='color: #718096; text-align: right; font-size: 0.8rem; font-weight: 500; margin-top: 1rem;'
           ><span style='color: black; font-weight-800'>Total Amount (in words) :
             </span>
             {{formatAmountInwords totalAmount}}</p>
