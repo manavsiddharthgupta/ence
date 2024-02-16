@@ -9,7 +9,6 @@
     "handlebars": "^4.7.8",
     "helper": "*",
     "playwright": "^1.41.2",
-    "playwright-core": "^1.41.2",
     "typescript": "^5.3.3"
   }
 }

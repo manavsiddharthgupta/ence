@@ -1,5 +1,4 @@
-import chromium from '@sparticuz/chromium'
-import playwright from 'playwright-core'
+import { chromium } from 'playwright'
 import fs from 'fs'
 import hbs from 'handlebars'
 import { formatAmount, formatDate, numTowords } from 'helper/format'
@@ -28,11 +27,10 @@ export const generateMedia = async (
   data: any,
   type: 'PDF' | 'IMAGE'
 ) => {
-  const executablePath = await chromium.executablePath()
-  const browser = await playwright.chromium.launch({
+  const executablePath = chromium.executablePath()
+  const browser = await chromium.launch({
     executablePath,
-    headless: true,
-    args: chromium.args
+    headless: true
   })
   const page = await browser.newPage()
 
