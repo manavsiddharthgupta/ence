@@ -29,7 +29,6 @@ export const generateMedia = async (
 ) => {
   const browser = await puppeteer.launch()
   const page = await browser.newPage()
-  await page.setCacheEnabled(false)
 
   const content = await compile(
     `src/templates/${category}/${templateName}.hbs`,
