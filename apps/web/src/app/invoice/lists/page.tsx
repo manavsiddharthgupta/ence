@@ -31,7 +31,7 @@ const Invoices = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
-              className='rounded-full bg-transparent hover:bg-transparent dark:text-white text-black border dark:border-zinc-700/40 border-zinc-300/60 font-semibold'
+              className='rounded-full bg-transparent hover:bg-transparent dark:text-white text-black border-2 dark:border-zinc-700/50 border-zinc-300/50 font-semibold'
               variant='default'
             >
               New Invoice

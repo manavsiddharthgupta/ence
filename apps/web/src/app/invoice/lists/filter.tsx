@@ -105,7 +105,7 @@ const Filter = () => {
         </Popover>
       </div>
 
-      <DatePickerWithRange date={date} setDate={setDate} />
+      <DatePickerWithRange disabled date={date} setDate={setDate} />
     </div>
   )
 }

@@ -4,8 +4,7 @@
   "private": true,
   "workspaces": [
     "apps/*",
-    "packages/*",
-    "services/*"
+    "packages/*"
   ],
   "scripts": {
     "build": "dotenv -- turbo build",

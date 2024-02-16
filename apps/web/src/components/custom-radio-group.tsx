@@ -1,16 +1,19 @@
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { cn } from '@/lib/utils'
 import { CheckCircle2 } from 'lucide-react'
 import { Dispatch, SetStateAction } from 'react'
 
 export function CustomRadioGroup({
   value,
   setValue,
-  options
+  options,
+  className
 }: {
   value: string
   setValue: Dispatch<SetStateAction<string>>
   options: { label: string; value: string }[]
+  className?: string
 }) {
   return (
     <RadioGroup
@@ -29,11 +32,14 @@ export function CustomRadioGroup({
               id={option.value}
             ></RadioGroupItem>
             <Label
-              className={`${
-                value === option.value
-                  ? 'border border-zinc-400/40 dark:border-zinc-600/40 py-2 px-3 rounded-full flex gap-1'
-                  : 'font-normal'
-              } px-3 py-2 cursor-pointer`}
+              className={cn(
+                `${
+                  value === option.value
+                    ? 'border border-zinc-400/40 dark:border-zinc-600/40 py-2 px-3 rounded-full flex gap-1'
+                    : 'font-normal'
+                } px-3 py-2 cursor-pointer`,
+                className
+              )}
               htmlFor={option.value}
             >
               {value === option.value && (

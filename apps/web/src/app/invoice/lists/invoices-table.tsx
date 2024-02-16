@@ -165,7 +165,7 @@ const InvoiceBody = ({
                   </AvatarFallback>
                 </Avatar>
                 <span className='font-semibold w-[calc(100%-6)]'>
-                  {formatCustomerInfo(invoice.customerInfo)}
+                  {invoice.customerInfo?.legalName || '-'}
                 </span>
               </div>
             </td>
@@ -206,18 +206,19 @@ const InvoiceBody = ({
                   <DropdownMenuLabel>Invoice Action</DropdownMenuLabel>
                   <DropdownMenuSeparator className='bg-zinc-600/20' />
                   <DropdownMenuItem>Update</DropdownMenuItem>
-                  {invoice.paymentStatus !== 'PAID' && (
-                    <DialogTrigger asChild>
-                      <DropdownMenuItem
-                        className='text-green-500 hover:text-green-500'
-                        onClick={() => {
-                          onSelectInvoiceToRecordPayment(invoice.id)
-                        }}
-                      >
-                        Record Payment
-                      </DropdownMenuItem>
-                    </DialogTrigger>
-                  )}
+                  {invoice.paymentStatus !== 'PAID' &&
+                    invoice.approvalStatus === 'APPROVED' && (
+                      <DialogTrigger asChild>
+                        <DropdownMenuItem
+                          className='text-green-500 hover:text-green-500'
+                          onClick={() => {
+                            onSelectInvoiceToRecordPayment(invoice.id)
+                          }}
+                        >
+                          Record Payment
+                        </DropdownMenuItem>
+                      </DialogTrigger>
+                    )}
                   <DropdownMenuItem
                     onClick={() => {
                       onSelectInvoice(invoice.id)

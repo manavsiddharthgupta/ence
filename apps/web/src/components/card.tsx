@@ -73,6 +73,17 @@ const Card = ({ children }: { children: React.ReactNode }) => {
     )
   }
 
+  if (pathname.startsWith('/invoice-approval')) {
+    return (
+      <body>
+        <main className='px-4 py-8 min-h-screen bg-white overflow-x-auto flex justify-center items-center dot bg-[radial-gradient(black_1px,transparent_0)]'>
+          {children}
+        </main>
+        <Toaster />
+      </body>
+    )
+  }
+
   return (
     <ThemeProvider value={{ theme: theme, setTheme: onSetTheme }}>
       <body className={className}>

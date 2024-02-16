@@ -12,9 +12,9 @@ const BackBtn = () => {
       onClick={() => {
         router.back()
       }}
-      className='h-fit py-1 px-4 rounded-full font-normal'
+      className='h-fit py-1 px-4 rounded-full font-medium'
     >
-      <MoveLeft size={16} strokeWidth={1.5} className='mr-2' />
+      <MoveLeft size={18} strokeWidth={2} className='mr-2' />
       back
     </Button>
   )

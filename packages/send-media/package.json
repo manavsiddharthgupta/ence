@@ -1,0 +1,17 @@
+{
+  "name": "send-media",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "helper": "*",
+    "jsonwebtoken": "^9.0.2",
+    "react-email": "^2.0.0",
+    "resend": "^3.2.0",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.5"
+  }
+}

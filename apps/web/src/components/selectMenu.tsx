@@ -38,7 +38,7 @@ export function SelectMenu({
           variant='outline'
           role='combobox'
           aria-expanded={open}
-          className='w-full justify-between bg-transparent dark:border-zinc-600 border-zinc-400 hover:bg-transparent rounded-md shadow-none font-normal h-10 text-xs'
+          className='w-full justify-between bg-transparent dark:border-zinc-600/30 border-zinc-400/30 hover:bg-transparent rounded-md shadow-none font-normal h-10 text-xs'
           size='sm'
           disabled={disabled}
         >

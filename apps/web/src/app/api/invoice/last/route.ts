@@ -1,6 +1,7 @@
 import { getServerSession } from 'next-auth'
 import { db } from '@/lib/db'
 import { authOptions } from '../../auth/[...nextauth]/route'
+import { getOrgId } from '@/crud/organization'
 
 export const dynamic = 'force-dynamic'
 export async function GET() {
@@ -11,29 +12,16 @@ export async function GET() {
       console.error('Error:', 'Not Authorized')
       return Response.json({ ok: false, data: null, status: 401 })
     }
-    const org = await db.user.findUnique({
-      where: {
-        email: email
-      },
-      select: {
-        email: true,
-        organizations: {
-          select: {
-            id: true,
-            orgName: true
-          }
-        }
-      }
-    })
+    const orgId = await getOrgId(email)
 
-    if (!org?.organizations?.id) {
+    if (!orgId) {
       console.error('Error:', 'Organization Not Found')
       return Response.json({ ok: false, data: null, status: 404 })
     }
 
     const response = await db.invoice.findFirst({
       where: {
-        organizationId: org.organizations.id
+        organizationId: orgId
       },
       select: {
         invoiceNumber: true

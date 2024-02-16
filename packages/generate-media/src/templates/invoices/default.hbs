@@ -14,18 +14,20 @@
       >
         <div>
           <!--  Company logo  -->
-          <h1 style='font-size:xx-large; font-weight:800;'>ENCE</h1>
+          <h1
+            style='font-size:xx-large; font-weight:800;'
+          >{{organization.orgName}}</h1>
         </div>
 
         <div style='text-align: right;'>
           <p>
-            Ence Inc.
+            {{organization.orgName}}
           </p>
           <p style='color: #718096; font-size: 0.875rem;'>
-            info@ence.com
+            {{organization.email}}
           </p>
           <p style='color: #718096; font-size: 0.875rem; margin-top: 0.15rem;'>
-            +91-6207337493
+            +91-{{organization?.whatsappNumber}}
           </p>
         </div>
       </div>
@@ -39,8 +41,8 @@
             Bill to :
           </p>
           <p style='color: #718096; font-size: 0.850rem; font-weight: 500; '>
-            {{#if customerInfo.customerLegalName.value}}
-              {{customerInfo.customerLegalName.value}}
+            {{#if customerInfo.legalName}}
+              {{customerInfo.legalName}}
             {{else}}
               -
             {{/if}}

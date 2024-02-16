@@ -13,7 +13,8 @@ import {
   ItemsInfoAction,
   ItemsInfoState,
   PaymentInfoAction,
-  PaymentInfoState
+  PaymentInfoState,
+  Option
 } from '@/types/invoice'
 import { Dispatch, SetStateAction, createContext, useContext } from 'react'
 
@@ -22,13 +23,13 @@ type InvoiceContextType = {
   invoiceInfoState: InvoiceInfoState
   itemsInfoState: ItemsInfoState
   paymentInfoState: PaymentInfoState
-  customerLegalName: string
+  customerLegalName: Option | null
   subTotal: number
   customerInfoDispatch: Dispatch<CustomerInfoAction>
   invoiceInfoDispatch: Dispatch<InvoiceInfoAction>
   itemsInfoDispatch: Dispatch<ItemsInfoAction>
   paymentInfoDispatch: Dispatch<PaymentInfoAction>
-  setCustomerLegalName: Dispatch<SetStateAction<string>>
+  setCustomerLegalName: Dispatch<SetStateAction<Option | null>>
   setSubTotal: Dispatch<SetStateAction<number>>
 }
 
@@ -37,7 +38,7 @@ const InvoiceContext = createContext<InvoiceContextType>({
   invoiceInfoState: InvoiceInfoInitialState,
   itemsInfoState: ItemsInfoInitialState,
   paymentInfoState: PaymentInfoInitailState,
-  customerLegalName: '',
+  customerLegalName: null,
   subTotal: 0,
   customerInfoDispatch: () => {},
   invoiceInfoDispatch: () => {},

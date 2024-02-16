@@ -104,8 +104,8 @@ const Item = ({
   }
 
   return (
-    <div className='flex mb-4 mt-2 gap-8 w-full items-center'>
-      <div className='w-[48%]'>
+    <div className='flex mb-4 mt-2 gap-4 w-full items-center'>
+      <div className='w-[50%]'>
         <InputPullback
           value={name}
           type='text'
@@ -113,7 +113,7 @@ const Item = ({
           placeholder='Item'
         />
       </div>
-      <div className='w-[12%]'>
+      <div className='w-[13%]'>
         <InputPullback
           value={quantity}
           type='number'
@@ -121,7 +121,7 @@ const Item = ({
           placeholder='Quantity'
         />
       </div>
-      <div className='w-[12%]'>
+      <div className='w-[13%]'>
         <InputPullback
           value={price}
           type='number'
@@ -129,7 +129,7 @@ const Item = ({
           placeholder='Price'
         />
       </div>
-      <div className='w-[12%]'>
+      <div className='w-[13%]'>
         <InputPullback
           value={total}
           type='number'

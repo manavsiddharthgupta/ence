@@ -1,8 +1,8 @@
 import {
-  CustomerInfoState,
   InvoiceBody,
   InvoiceInfoState,
   ItemsInfoState,
+  Option,
   PaymentInfoState,
   PaymentMethods,
   PaymentStatus,
@@ -43,8 +43,7 @@ export const dismissToast = (id: string) => {
 }
 
 export const formatInvoiceData = (
-  customerInfoState: CustomerInfoState,
-  customerLegalName: string,
+  customerId: string,
   invoiceInfoState: InvoiceInfoState,
   paymentInfoState: PaymentInfoState,
   itemsInfoState: ItemsInfoState,
@@ -60,10 +59,7 @@ export const formatInvoiceData = (
     }
   })
   const formattedData: InvoiceBody = {
-    customerInfo: JSON.stringify({
-      ...customerInfoState,
-      customerLegalName
-    }),
+    customerId: customerId,
     dateIssue: invoiceInfoState.dateIssue!,
     dueDate: invoiceInfoState.dueDate!,
     invoiceNumber: +invoiceInfoState.invoiceNumber!,
@@ -170,14 +166,7 @@ export const formatInstantInvoiceData = (
     }
   )
   const formattedData: InvoiceBody = {
-    customerInfo: JSON.stringify({
-      email: instantInvoiceDetails.email,
-      whatsappNumber: instantInvoiceDetails.whatsappNumber,
-      customerLegalName: {
-        id: null,
-        value: instantInvoiceDetails.customerName
-      }
-    }),
+    customerId: instantInvoiceDetails.customerId!,
     dateIssue: instantInvoiceDetails.dateIssue!,
     dueDate: dueDate,
     invoiceNumber: +instantInvoiceDetails.invoiceNumber!,
@@ -232,7 +221,8 @@ export const checkOnDemandValidation = (
   if (
     !instantInvoiceDetails.customerName ||
     !instantInvoiceDetails.invoiceTotal ||
-    !instantInvoiceDetails.dateIssue
+    !instantInvoiceDetails.dateIssue ||
+    !instantInvoiceDetails.customerId
   ) {
     toast.error('Please fill invoice total and customer name', {
       position: 'bottom-center'

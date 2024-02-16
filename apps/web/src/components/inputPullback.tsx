@@ -34,7 +34,7 @@ const InputPullback = ({
   return (
     <div className='w-full h-10 relative'>
       <input
-        className='w-full h-full border-[1px] dark:border-zinc-600 border-zinc-400 bg-transparent outline-none text-xs z-10 absolute left-0 top-0 px-2.5 pt-1.5 rounded-md remove-arrow'
+        className='w-full h-full border-[1px] dark:border-zinc-600/30 border-zinc-400/30 bg-transparent outline-none text-xs z-10 absolute left-0 top-0 px-2.5 pt-1.5 rounded-md remove-arrow'
         type={type}
         onFocus={() => (readonly ? setIfFocused(false) : setIfFocused(true))}
         value={value === null ? '' : value}
