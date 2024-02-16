@@ -4,6 +4,8 @@ import { db } from '@/lib/db'
 import { InvoiceBody } from '@/types/invoice'
 import { InvoiceJobs } from 'events/jobs-publisher'
 import { getOrgId } from '@/crud/organization'
+import { uploadFilesToS3 } from 'helper/s3'
+import { InvoiceGenerateMedia } from 'media-generator'
 
 export async function GET() {
   try {
@@ -149,11 +151,23 @@ export async function POST(request: Request) {
       }
     })
 
-    await InvoiceJobs.createMediaFromInvoiceDataJob(
+    // await InvoiceJobs.createMediaFromInvoiceDataJob(
+    //   invoiceRes.id,
+    //   orgId,
+    //   invoiceRes
+    // )
+
+    const imageBuffer = await InvoiceGenerateMedia.generateImage(invoiceRes)
+    const fileUrl = await uploadFilesToS3(
+      'ence-invoice',
       invoiceRes.id,
-      orgId,
-      invoiceRes
+      imageBuffer
     )
+    if (!fileUrl) {
+      console.error('Error while uploading invoice image to s3')
+    } else {
+      console.log(fileUrl)
+    }
 
     return Response.json({
       ok: true,
