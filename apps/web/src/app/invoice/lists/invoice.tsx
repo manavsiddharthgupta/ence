@@ -18,6 +18,7 @@ import {
   UserCircleIcon
 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
+import Image from 'next/image'
 
 const baseurl = process.env.NEXT_PUBLIC_API_URL
 
@@ -97,9 +98,21 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
         packagingCharges: invoiceInfo.packagingCharge,
         amtToConsumer: invoiceInfo?.totalAmount,
         paidAmount: invoiceInfo.totalAmount - invoiceInfo.dueAmount,
-        amountPayable: invoiceInfo.dueAmount
+        amountPayable: invoiceInfo.dueAmount,
+        invoiceLinks: invoiceInfo.relatedDocuments
       }
     : null
+
+  const filteredInvoiceLink =
+    invoiceDetail?.invoiceLinks && invoiceDetail?.invoiceLinks?.length > 0
+      ? invoiceDetail?.invoiceLinks?.filter((doc) => {
+          return doc.name === 'MAIN_IMAGE'
+        })
+      : []
+
+  const invoiceImage =
+    filteredInvoiceLink.length > 0 ? filteredInvoiceLink[0].documentLink : null
+
   return (
     <SheetContent className='w-full sm:max-w-5xl'>
       <div className='w-full flex justify-between h-full'>
@@ -296,11 +309,25 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
               <TabsTrigger value='overview'>Overview</TabsTrigger>
               <TabsTrigger value='audit'>Audit Trail</TabsTrigger>
             </TabsList>
-            <TabsContent value='overview'>
-              <div className='my-4 py-8'>
-                <p className='text-xs text-center font-medium'>
-                  Invoice overview coming soon...
-                </p>
+            <TabsContent
+              value='overview'
+              className='h-[calc(100%-82px)] overflow-scroll'
+            >
+              <div>
+                {invoiceImage !== null ? (
+                  <Image
+                    src={invoiceImage}
+                    alt='invoice'
+                    width='0'
+                    height='0'
+                    sizes='100vw'
+                    style={{ width: '100%', height: 'auto' }}
+                  />
+                ) : (
+                  <p className='text-xs text-center font-medium my-16'>
+                    It may take sometime...
+                  </p>
+                )}
               </div>
             </TabsContent>
             <TabsContent

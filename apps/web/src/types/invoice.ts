@@ -1,4 +1,4 @@
-import { AuditTrail, CustomerInfo } from 'database'
+import { AuditTrail, CustomerInfo, InvoiceRelatedDocument } from 'database'
 
 export type Option = {
   id: string
@@ -103,6 +103,7 @@ export type InvoiceBody = {
   approvalStatus?: InvoiceApprovalStatus
   receiptSendStatus?: ReceiptSendStatus
   auditTrailEntries?: AuditTrail[]
+  relatedDocuments?: InvoiceRelatedDocument[]
 }
 
 export type InvoiceAuditTrail = AuditTrail[]
