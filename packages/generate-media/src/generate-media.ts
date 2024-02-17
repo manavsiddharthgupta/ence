@@ -27,15 +27,7 @@ export const generateMedia = async (
   data: any,
   type: 'PDF' | 'IMAGE'
 ) => {
-  const browser = await chromium.launch({
-    executablePath: '/usr/bin/chromium-browser',
-    args: [
-      '--disable-gpu',
-      '--disable-setuid-sandbox',
-      '--no-sandbox',
-      '--no-zygote'
-    ]
-  })
+  const browser = await chromium.launch()
   const page = await browser.newPage()
 
   const content = await compile(
