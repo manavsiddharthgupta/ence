@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer'
+import chromium from 'chrome-aws-lambda'
 import fs from 'fs'
 import hbs from 'handlebars'
 import { formatAmount, formatDate, numTowords } from 'helper/format'
@@ -27,14 +27,8 @@ export const generateMedia = async (
   data: any,
   type: 'PDF' | 'IMAGE'
 ) => {
-  const browser = await puppeteer.launch({
-    executablePath: '/usr/bin/chromium-browser',
-    args: [
-      '--disable-gpu',
-      '--disable-setuid-sandbox',
-      '--no-sandbox',
-      '--no-zygote'
-    ]
+  const browser = await chromium.puppeteer.launch({
+    executablePath: await chromium.executablePath
   })
   const page = await browser.newPage()
 
@@ -55,7 +49,7 @@ export const generateMedia = async (
   }
 
   const pdfBuffer = await page.pdf({
-    format: 'A4'
+    format: 'a4'
   })
   await page.close()
   await browser.close()

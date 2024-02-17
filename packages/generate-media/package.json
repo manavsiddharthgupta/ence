@@ -8,6 +8,7 @@
     "@playwright/browser-chromium": "^1.41.2",
     "@playwright/browser-firefox": "^1.41.2",
     "@playwright/browser-webkit": "^1.41.2",
+    "chrome-aws-lambda": "^10.1.0",
     "handlebars": "^4.7.8",
     "helper": "*",
     "playwright": "^1.41.2",
