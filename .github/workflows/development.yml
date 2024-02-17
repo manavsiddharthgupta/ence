@@ -24,9 +24,6 @@ jobs:
       - name: Build Project Artifacts
         run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Playwright - Install w/ OS dependencies
-        run: RUN PLAYWRIGHT_BROWSERS_PATH=0 npx playwright install --with-deps chromium
-
       - name: Apply all pending migrations to the database
         run: npx prisma migrate deploy
         env:

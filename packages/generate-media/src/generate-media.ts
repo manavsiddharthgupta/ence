@@ -1,4 +1,4 @@
-import { chromium } from 'playwright'
+import puppeteer from 'puppeteer'
 import fs from 'fs'
 import hbs from 'handlebars'
 import { formatAmount, formatDate, numTowords } from 'helper/format'
@@ -27,7 +27,9 @@ export const generateMedia = async (
   data: any,
   type: 'PDF' | 'IMAGE'
 ) => {
-  const browser = await chromium.launch()
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox']
+  })
   const page = await browser.newPage()
 
   const content = await compile(
@@ -35,11 +37,11 @@ export const generateMedia = async (
     data
   )
 
-  await page.emulateMedia({ media: 'screen' })
+  await page.emulateMediaType('screen')
   await page.setContent(content)
 
   if (type === 'IMAGE') {
-    await page.setViewportSize({ width: 630, height: 891 })
+    await page.setViewport({ width: 630, height: 891, deviceScaleFactor: 2 })
     const imgBuffer = await page.screenshot()
     await page.close()
     await browser.close()
