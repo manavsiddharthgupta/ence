@@ -28,7 +28,13 @@ export const generateMedia = async (
   type: 'PDF' | 'IMAGE'
 ) => {
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox']
+    executablePath: '/usr/bin/chromium-browser',
+    args: [
+      '--disable-gpu',
+      '--disable-setuid-sandbox',
+      '--no-sandbox',
+      '--no-zygote'
+    ]
   })
   const page = await browser.newPage()
 
