@@ -12,7 +12,7 @@ const nextConfig = {
   },
   transpilePackages: ['helper'],
   experimental: {
-    serverComponentsExternalPackages: ['puppeteer-core', '@sparticuz/chromium']
+    serverComponentsExternalPackages: ['crawlee']
   }
 }
 

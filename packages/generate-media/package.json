@@ -5,10 +5,10 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@sparticuz/chromium": "^121.0.0",
+    "apify": "^3.1.15",
+    "crawlee": "^3.7.3",
     "handlebars": "^4.7.8",
     "helper": "*",
-    "puppeteer": "^22.1.0",
     "typescript": "^5.3.3"
   }
 }

@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer-core'
-import chromium from '@sparticuz/chromium'
+import { Actor } from 'apify'
+import { launchPuppeteer } from 'crawlee'
 import fs from 'fs'
 import hbs from 'handlebars'
 import { formatAmount, formatDate, numTowords } from 'helper/format'
@@ -28,13 +29,7 @@ export const generateMedia = async (
   data: any,
   type: 'PDF' | 'IMAGE'
 ) => {
-  chromium.setGraphicsMode = false
-  const browser = await puppeteer.launch({
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath(),
-    headless: true
-  })
+  const browser = await launchPuppeteer()
 
   const page = await browser.newPage()
 
