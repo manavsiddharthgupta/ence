@@ -10,7 +10,10 @@ const nextConfig = {
     }
     return config
   },
-  transpilePackages: ['helper']
+  transpilePackages: ['helper'],
+  experimental: {
+    serverComponentsExternalPackages: ['puppeteer-core', '@sparticuz/chromium']
+  }
 }
 
 module.exports = nextConfig

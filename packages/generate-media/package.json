@@ -5,14 +5,10 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@playwright/browser-chromium": "^1.41.2",
-    "@playwright/browser-firefox": "^1.41.2",
-    "@playwright/browser-webkit": "^1.41.2",
-    "chrome-aws-lambda": "^10.1.0",
+    "@sparticuz/chromium": "^121.0.0",
     "handlebars": "^4.7.8",
     "helper": "*",
-    "playwright": "^1.41.2",
-    "puppeteer": "^22.0.0",
+    "puppeteer": "^22.1.0",
     "typescript": "^5.3.3"
   }
 }
