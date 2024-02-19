@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['ence-invoice.s3.amazonaws.com']
+    domains: ['ence-invoice.s3.amazonaws.com', 'localhost', 'ence.in']
   },
   webpack: (config, options) => {
     config.resolve.alias = {

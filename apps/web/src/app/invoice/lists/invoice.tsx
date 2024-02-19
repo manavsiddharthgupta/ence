@@ -37,26 +37,6 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
     }
   })
 
-  if (error) {
-    return (
-      <SheetContent className='w-full sm:max-w-5xl flex items-center justify-center'>
-        <p className='text-xs text-red-500 font-semibold'>
-          something went wrong :(
-        </p>
-      </SheetContent>
-    )
-  }
-
-  if (!invoiceInfo && !isPending) {
-    return (
-      <SheetContent className='w-full sm:max-w-5xl flex items-center justify-center'>
-        <p className='text-xs text-red-500 font-semibold'>
-          something went wrong :(
-        </p>
-      </SheetContent>
-    )
-  }
-
   const formatTextToCamelCase = (text: string, type?: string) => {
     if (!text) {
       return null
@@ -103,15 +83,29 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
       }
     : null
 
-  const filteredInvoiceLink =
-    invoiceDetail?.invoiceLinks && invoiceDetail?.invoiceLinks?.length > 0
-      ? invoiceDetail?.invoiceLinks?.filter((doc) => {
-          return doc.name === 'MAIN_IMAGE'
-        })
-      : []
+  const invoiceImage = invoiceInfo
+    ? baseurl + `/api/invoice/${invoiceInfo?.id}/og`
+    : null
 
-  const invoiceImage =
-    filteredInvoiceLink.length > 0 ? filteredInvoiceLink[0].documentLink : null
+  if (error) {
+    return (
+      <SheetContent className='w-full sm:max-w-5xl flex items-center justify-center'>
+        <p className='text-xs text-red-500 font-semibold'>
+          something went wrong :(
+        </p>
+      </SheetContent>
+    )
+  }
+
+  if (!invoiceInfo && !isPending) {
+    return (
+      <SheetContent className='w-full sm:max-w-5xl flex items-center justify-center'>
+        <p className='text-xs text-red-500 font-semibold'>
+          something went wrong :(
+        </p>
+      </SheetContent>
+    )
+  }
 
   return (
     <SheetContent className='w-full sm:max-w-5xl'>
@@ -322,6 +316,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                     height='0'
                     sizes='100vw'
                     style={{ width: '100%', height: 'auto' }}
+                    unoptimized
                   />
                 ) : (
                   <p className='text-xs text-center font-medium my-16'>

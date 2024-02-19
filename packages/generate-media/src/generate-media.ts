@@ -1,4 +1,3 @@
-import puppeteer from 'puppeteer'
 import fs from 'fs'
 import hbs from 'handlebars'
 import { formatAmount, formatDate, numTowords } from 'helper/format'
@@ -27,30 +26,5 @@ export const generateMedia = async (
   data: any,
   type: 'PDF' | 'IMAGE'
 ) => {
-  const browser = await puppeteer.launch()
-  const page = await browser.newPage()
-
-  const content = await compile(
-    `src/templates/${category}/${templateName}.hbs`,
-    data
-  )
-
-  await page.emulateMediaType('screen')
-  await page.setContent(content)
-
-  if (type === 'IMAGE') {
-    await page.setViewport({ width: 630, height: 891, deviceScaleFactor: 2 })
-    // await page.setViewport({ width: 840, height: 1188, deviceScaleFactor: 2 })
-    const imgBuffer = await page.screenshot()
-    await page.close()
-    await browser.close()
-    return imgBuffer
-  }
-
-  const pdfBuffer = await page.pdf({
-    format: 'A4'
-  })
-  await page.close()
-  await browser.close()
-  return pdfBuffer
+  return null
 }
