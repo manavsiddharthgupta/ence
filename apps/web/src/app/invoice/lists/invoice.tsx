@@ -315,10 +315,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                     width='0'
                     height='0'
                     sizes='100vw'
-                    quality={100}
                     style={{ width: '100%', height: 'auto' }}
-                    placeholder='blur'
-                    blurDataURL={invoiceImage}
                   />
                 ) : (
                   <p className='text-xs text-center font-medium my-16'>
