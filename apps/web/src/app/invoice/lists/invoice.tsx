@@ -316,6 +316,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                     height='0'
                     sizes='100vw'
                     style={{ width: '100%', height: 'auto' }}
+                    unoptimized
                   />
                 ) : (
                   <p className='text-xs text-center font-medium my-16'>
