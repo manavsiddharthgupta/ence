@@ -5,8 +5,6 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "apify": "^3.1.15",
-    "crawlee": "^3.7.3",
     "handlebars": "^4.7.8",
     "helper": "*",
     "typescript": "^5.3.3"

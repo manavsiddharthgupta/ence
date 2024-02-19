@@ -78,6 +78,7 @@ export type Customer = {
 }
 
 export type InvoiceBody = {
+  id?: string
   customerId: string
   customerInfo?: CustomerInfo
   dateIssue: Date

@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['ence-invoice.s3.amazonaws.com']
+    domains: [
+      'ence-invoice.s3.amazonaws.com',
+      'localhost',
+      'app.ence.in',
+      'dev.ence.in'
+    ]
   },
   webpack: (config, options) => {
     config.resolve.alias = {
@@ -10,10 +15,7 @@ const nextConfig = {
     }
     return config
   },
-  transpilePackages: ['helper'],
-  experimental: {
-    serverComponentsExternalPackages: ['crawlee']
-  }
+  transpilePackages: ['helper']
 }
 
 module.exports = nextConfig

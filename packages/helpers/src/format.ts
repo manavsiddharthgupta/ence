@@ -7,6 +7,13 @@ export const formatAmount = (amount: number) => {
   return '₹ ' + formattedNumber
 }
 
+export const formatAmountWithRs = (amount: number) => {
+  const formattedNumber = amount.toLocaleString('en-IN', {
+    maximumFractionDigits: 2
+  })
+  return 'Rs ' + formattedNumber
+}
+
 export const formatTextToCaps = (text: string) => {
   const firstChar = text[0]?.toUpperCase()
   const splittedText = text.slice(1)

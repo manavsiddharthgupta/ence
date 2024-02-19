@@ -151,11 +151,11 @@ export async function POST(request: Request) {
       }
     })
 
-    // await InvoiceJobs.createMediaFromInvoiceDataJob(
-    //   invoiceRes.id,
-    //   orgId,
-    //   invoiceRes
-    // )
+    await InvoiceJobs.createMediaFromInvoiceDataJob(
+      invoiceRes.id,
+      orgId,
+      invoiceRes
+    )
 
     const imageBuffer = await InvoiceGenerateMedia.generateImage(invoiceRes)
     const fileUrl = await uploadFilesToS3(
