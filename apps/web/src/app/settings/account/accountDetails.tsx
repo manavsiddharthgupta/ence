@@ -87,7 +87,7 @@ const AccountDetails: React.FC<Props> = ({
           <div className='flex gap-2'>
             <p className='text-sm'>{emailAddress}</p>
             <CopyIcon
-              className='w-[5%] opacity-5 hover:opacity-100 hover:text-blue-700'
+              className='w-[5%] opacity-25 hover:opacity-100 hover:text-blue-700'
               onClick={handleCopyEmail}
             />
           </div>
