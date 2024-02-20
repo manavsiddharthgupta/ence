@@ -22,7 +22,6 @@ import {
 import { useState } from 'react'
 import { InvoicesResponse } from '@/types/invoice'
 import { formatAmount, formatDate } from 'helper/format'
-import { formatCustomerInfo } from '@/lib/helpers'
 import Image from 'next/image'
 import Filter from './filter'
 import createInv from '@/svgs/create-inv.svg'
@@ -30,6 +29,10 @@ import { Sheet } from '@/components/ui/sheet'
 import Invoice from './invoice'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { RecordPayment } from './record-payment'
+import { callLoadingToast } from '@/lib/helpers'
+import { toast } from 'sonner'
+
+const baseurl = process.env.NEXT_PUBLIC_API_URL
 
 const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
   const [selectedInvoice, setInvoiceView] = useState<string | null>(null)
@@ -143,6 +146,28 @@ const InvoiceBody = ({
   onSelectInvoice: (invoiceId: string) => void
   onSelectInvoiceToRecordPayment: (invoiceId: string) => void
 }) => {
+  async function downloadImage(apiUri: string, fileName: string) {
+    const loadingToastId = callLoadingToast(`Downloading Invoice ${fileName}`)
+    try {
+      const response = await fetch(apiUri)
+      if (!response.ok) {
+        throw new Error(`Error fetching image: ${response.statusText}`)
+      }
+      const blobImage = await response.blob()
+      const downloadLink = document.createElement('a')
+      downloadLink.href = URL.createObjectURL(blobImage)
+      downloadLink.download = fileName
+      downloadLink.click()
+      toast.success('Downloaded complete, check your file explorer.', {
+        id: loadingToastId
+      })
+    } catch (error) {
+      console.error('Error downloading image:', error)
+      toast.error(`Error downloading image: ${error}`, {
+        id: loadingToastId
+      })
+    }
+  }
   return (
     <tbody>
       {invoices?.map((invoice, ind) => {
@@ -227,7 +252,16 @@ const InvoiceBody = ({
                     View
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className='bg-zinc-600/20' />
-                  <DropdownMenuItem>Download</DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      downloadImage(
+                        `${baseurl}/api/invoice/${invoice.id}/og`,
+                        `INV-${invoice.invoiceNumber}.webp`
+                      )
+                    }}
+                  >
+                    Download
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </td>
