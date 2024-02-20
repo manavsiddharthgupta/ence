@@ -56,3 +56,88 @@ export const getOrgIdFromDB = async (userEmail: string) => {
     return
   }
 }
+
+export const getAccountDetailsFromDB = async (email: string) => {
+  try {
+    const user = await db.user.findUnique({
+      where: {
+        email
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        image: true
+      }
+    })
+
+    const organization = await db.organization.findUnique({
+      where: {
+        createdById: user?.id
+      },
+      select: {
+        orgName: true
+      }
+    })
+
+    const accountDetails = {
+      name: user?.name,
+      email: user?.email,
+      profilePic: user?.image,
+      orgName: organization?.orgName
+    }
+
+    return accountDetails
+  } catch (error) {
+    console.error('Error fetching account details from DB', error)
+    return null
+  }
+}
+
+export const updateAccountDetailsInDB = async (
+  email: string,
+  userName: string,
+  organizationName: string
+) => {
+  try {
+    const user = await db.user.findUnique({
+      where: {
+        email: email
+      }
+    })
+    const id = user?.id
+    if (!id) {
+      console.error('Error:', 'User Not Found')
+      return null
+    }
+
+    const updatedUser = await db.user.update({
+      where: { id },
+      select: {
+        name: true
+      },
+      data: {
+        name: userName
+      }
+    })
+
+    const updatedOrganization = await db.organization.update({
+      where: {
+        createdById: id
+      },
+      select: {
+        orgName: true
+      },
+      data: {
+        orgName: organizationName
+      }
+    })
+
+    const updatedAccountInfo = { updatedUser, updatedOrganization }
+
+    return updatedAccountInfo
+  } catch (error) {
+    console.error('Error updating user details', error)
+    return null
+  }
+}

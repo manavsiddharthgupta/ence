@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -9,8 +7,6 @@ interface Props {
   isEditing: boolean
   orgName: string
   userName: string
-  profileImage: string | null
-  emailAddress: string
   handleUpdate: () => void
   handleOrgNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   handleUserNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -21,37 +17,17 @@ const OrganizationDetails: React.FC<Props> = ({
   isEditing,
   orgName,
   userName,
-  profileImage,
-  emailAddress,
   handleUpdate,
   handleOrgNameChange,
   handleUserNameChange,
   handleSave
 }) => {
-  const [isCopied, setIsCopied] = useState(false)
-
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(emailAddress)
-    setIsCopied(true)
-    setTimeout(() => {
-      setIsCopied(false)
-    }, 2000)
-  }
-
   return (
     <>
       <h1 className='text-lg font-semibold'>Your Organization </h1>
 
       <div className='flex p-11'>
         <div className='flex space-x-5'>
-          {profileImage && (
-            <img
-              src={profileImage}
-              alt='user_display_pic'
-              className='rounded-full cursor-pointer mr-4'
-              style={{ width: '100px', height: '100px' }}
-            />
-          )}
           <div className='space-y-3 text-gray-500'>
             <Input
               value={orgName}
@@ -85,15 +61,8 @@ const OrganizationDetails: React.FC<Props> = ({
             Email associated with this account
           </p>
           <div className='flex gap-2'>
-            <p className='text-sm'>{emailAddress}</p>
-            <CopyIcon
-              className='w-[5%] opacity-5 hover:opacity-100 hover:text-blue-700'
-              onClick={handleCopyEmail}
-            />
+            {/* <p className='text-sm'>{emailAddress}</p> */}
           </div>
-          {isCopied && (
-            <p className='text-sm text-green-500'>Email copied to clipboard</p>
-          )}
         </div>
       </div>
     </>

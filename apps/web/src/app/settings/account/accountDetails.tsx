@@ -1,9 +1,7 @@
-'use client'
-
-import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { CopyIcon } from 'lucide-react'
+import { toast } from 'sonner'
 
 interface Props {
   isEditing: boolean
@@ -28,14 +26,38 @@ const AccountDetails: React.FC<Props> = ({
   handleUserNameChange,
   handleSave
 }) => {
-  const [isCopied, setIsCopied] = useState(false)
-
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(emailAddress)
-    setIsCopied(true)
-    setTimeout(() => {
-      setIsCopied(false)
-    }, 2000)
+    toast.success('Email copied to clipboard!', { duration: 2000 })
+  }
+
+  const handleSaveClick = async () => {
+    try {
+      handleSave()
+      toast.success('Changes saved successfully!')
+    } catch (error) {
+      toast.error('Failed to save changes. Please try again later.')
+    }
+  }
+
+  const renderActionButton = (isEditing: boolean) => {
+    if (isEditing) {
+      return (
+        <Button
+          onClick={handleSaveClick}
+          className='bg-blue-400 rounded-3xl hover:bg-blue-600 text-white font-bold'>
+          Save
+        </Button>
+      )
+    } else {
+      return (
+        <Button
+          onClick={handleUpdate}
+          className='bg-green-400 rounded-3xl hover:bg-green-600 text-white font-bold'>
+          Update
+        </Button>
+      )
+    }
   }
 
   return (
@@ -64,19 +86,7 @@ const AccountDetails: React.FC<Props> = ({
               onChange={handleUserNameChange}
             />
             <div className='mt-2'>
-              {isEditing ? (
-                <Button
-                  onClick={handleSave}
-                  className='bg-blue-400 rounded-3xl hover:bg-blue-600 text-white font-bold'>
-                  Save
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleUpdate}
-                  className='bg-green-400 rounded-3xl hover:bg-green-600 text-white font-bold'>
-                  Update
-                </Button>
-              )}
+              <div className='mt-2'>{renderActionButton(isEditing)}</div>
             </div>
           </div>
         </div>
@@ -91,9 +101,6 @@ const AccountDetails: React.FC<Props> = ({
               onClick={handleCopyEmail}
             />
           </div>
-          {isCopied && (
-            <p className='text-sm text-green-500'>Email copied to clipboard</p>
-          )}
         </div>
       </div>
     </>

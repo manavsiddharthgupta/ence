@@ -5,7 +5,7 @@ import SidebarItem from './sidebar'
 import { ChevronRight, Loader2, AlertTriangle } from 'lucide-react'
 import AccountDetails from './accountDetails'
 import { Separator } from '@/components/ui/separator'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import OrganizationDetails from './organizationDetails'
 
@@ -30,8 +30,8 @@ const AccountPage = () => {
       throw new Error('Failed to fetch account details')
     }
     const userDetailsResponse = await response.json()
-    setOrgName(userDetailsResponse.data.organizationName)
-    setUserName(userDetailsResponse.data.userName)
+    setOrgName(userDetailsResponse.data.orgName)
+    setUserName(userDetailsResponse.data.name)
     return userDetailsResponse.data
   }
 
@@ -46,9 +46,11 @@ const AccountPage = () => {
 
   if (isLoading || !userDetails) {
     return (
-      <div className='flex gap-2 items-center'>
-        <Loader2 className='animate-spin' />
-        <p className='font-medium'>Fetching Account Details</p>
+      <div className='flex justify-center items-center h-screen'>
+        <div className='flex gap-2 items-center'>
+          <Loader2 className='animate-spin' />
+          <p className='font-medium'>Fetching Account Details</p>
+        </div>
       </div>
     )
   }
@@ -61,7 +63,7 @@ const AccountPage = () => {
           orgName={orgName}
           userName={userName}
           profileImage={userDetails?.profilePic}
-          emailAddress={userDetails?.emailAddress}
+          emailAddress={userDetails?.email}
           handleUpdate={handleUpdate}
           handleOrgNameChange={handleOrgNameChange}
           handleUserNameChange={handleUserNameChange}
@@ -76,8 +78,6 @@ const AccountPage = () => {
           isEditing={isEditing}
           orgName={orgName}
           userName={userName}
-          profileImage={userDetails?.profilePic}
-          emailAddress={userDetails?.emailAddress}
           handleUpdate={handleUpdate}
           handleOrgNameChange={handleOrgNameChange}
           handleUserNameChange={handleUserNameChange}
