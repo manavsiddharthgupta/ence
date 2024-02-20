@@ -18,6 +18,7 @@ import {
   UserCircleIcon
 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
+import Image from 'next/image'
 
 const baseurl = process.env.NEXT_PUBLIC_API_URL
 
@@ -35,26 +36,6 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
       return invoiceData
     }
   })
-
-  if (error) {
-    return (
-      <SheetContent className='w-full sm:max-w-5xl flex items-center justify-center'>
-        <p className='text-xs text-red-500 font-semibold'>
-          something went wrong :(
-        </p>
-      </SheetContent>
-    )
-  }
-
-  if (!invoiceInfo && !isPending) {
-    return (
-      <SheetContent className='w-full sm:max-w-5xl flex items-center justify-center'>
-        <p className='text-xs text-red-500 font-semibold'>
-          something went wrong :(
-        </p>
-      </SheetContent>
-    )
-  }
 
   const formatTextToCamelCase = (text: string, type?: string) => {
     if (!text) {
@@ -97,9 +78,35 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
         packagingCharges: invoiceInfo.packagingCharge,
         amtToConsumer: invoiceInfo?.totalAmount,
         paidAmount: invoiceInfo.totalAmount - invoiceInfo.dueAmount,
-        amountPayable: invoiceInfo.dueAmount
+        amountPayable: invoiceInfo.dueAmount,
+        invoiceLinks: invoiceInfo.relatedDocuments
       }
     : null
+
+  const invoiceImage = invoiceInfo
+    ? baseurl + `/api/invoice/${invoiceInfo?.id}/og`
+    : null
+
+  if (error) {
+    return (
+      <SheetContent className='w-full sm:max-w-5xl flex items-center justify-center'>
+        <p className='text-xs text-red-500 font-semibold'>
+          something went wrong :(
+        </p>
+      </SheetContent>
+    )
+  }
+
+  if (!invoiceInfo && !isPending) {
+    return (
+      <SheetContent className='w-full sm:max-w-5xl flex items-center justify-center'>
+        <p className='text-xs text-red-500 font-semibold'>
+          something went wrong :(
+        </p>
+      </SheetContent>
+    )
+  }
+
   return (
     <SheetContent className='w-full sm:max-w-5xl'>
       <div className='w-full flex justify-between h-full'>
@@ -296,11 +303,26 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
               <TabsTrigger value='overview'>Overview</TabsTrigger>
               <TabsTrigger value='audit'>Audit Trail</TabsTrigger>
             </TabsList>
-            <TabsContent value='overview'>
-              <div className='my-4 py-8'>
-                <p className='text-xs text-center font-medium'>
-                  Invoice overview coming soon...
-                </p>
+            <TabsContent
+              value='overview'
+              className='h-[calc(100%-82px)] overflow-scroll'
+            >
+              <div>
+                {invoiceImage !== null ? (
+                  <Image
+                    src={invoiceImage}
+                    alt='invoice'
+                    width='0'
+                    height='0'
+                    sizes='100vw'
+                    style={{ width: '100%', height: 'auto' }}
+                    unoptimized
+                  />
+                ) : (
+                  <p className='text-xs text-center font-medium my-16'>
+                    It may take sometime...
+                  </p>
+                )}
               </div>
             </TabsContent>
             <TabsContent

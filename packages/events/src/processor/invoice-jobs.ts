@@ -9,10 +9,6 @@ export class InvoiceJobsProcessor {
       return
     }
     await sendInvoiceThroughMail(email, invoiceData)
-    console.log('no other logic to process', body)
+    // sending through whatsapp
   }
-
-  static async processSendInvoiceToWhatsapp(body: any) {}
-
-  static async processSendInvoiceLinkOnWhatsapp(body: any) {}
 }

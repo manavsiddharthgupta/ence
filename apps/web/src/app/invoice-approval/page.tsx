@@ -4,10 +4,12 @@ import { useQuery } from '@tanstack/react-query'
 import { AlertTriangle, InfoIcon, Loader2, ReceiptText } from 'lucide-react'
 import { notFound, useSearchParams } from 'next/navigation'
 import { formatAmount, formatDate } from 'helper/format'
+import { useEffect, useState } from 'react'
 
 const baseURI = process.env.NEXT_PUBLIC_API_URL
 
 const InvoiceApproval = () => {
+  const [invoiceImageUrl, setImageUrl] = useState<string | null>()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
   const status = searchParams.get('status')
@@ -25,6 +27,22 @@ const InvoiceApproval = () => {
         res.json()
       )
   })
+
+  useEffect(() => {
+    const invoiceImage = res?.data?.id
+      ? baseURI + `/api/invoice/${res?.data?.id}/og`
+      : null
+    if (!invoiceImage) {
+      return
+    }
+    const onFetchImage = async () => {
+      const response = await fetch(invoiceImage)
+      const blobImage = await response.blob()
+      const href = URL.createObjectURL(blobImage)
+      setImageUrl(href)
+    }
+    onFetchImage()
+  }, [res])
 
   if (isPending) {
     return status === 'approve' ? (
@@ -148,6 +166,17 @@ const InvoiceApproval = () => {
           Invoice.
         </AlertDescription>
       </Alert>
+      {invoiceImageUrl && (
+        <p className='text-xs text-center mt-2'>
+          <a
+            className='underline'
+            href={invoiceImageUrl}
+            download={`INV-${data?.invoiceNumber}.webp`}
+          >
+            Download invoice here
+          </a>
+        </p>
+      )}
     </div>
   )
 }

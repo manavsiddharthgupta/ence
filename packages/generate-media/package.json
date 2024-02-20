@@ -6,8 +6,7 @@
   },
   "dependencies": {
     "handlebars": "^4.7.8",
-    "puppeteer": "^21.11.0",
-    "typescript": "^5.3.3",
-    "helper": "*"
+    "helper": "*",
+    "typescript": "^5.3.3"
   }
 }
