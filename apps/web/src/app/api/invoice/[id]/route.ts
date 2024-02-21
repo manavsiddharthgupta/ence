@@ -62,3 +62,52 @@ export async function GET(
     return Response.json({ ok: false, data: null, status: 500 })
   }
 }
+
+export async function PATCH(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions)
+    const email = session?.user?.email
+    if (!email) {
+      console.error('Error:', 'Not Authorized')
+      return Response.json({ ok: false, data: null, status: 401 })
+    }
+    const orgId = await getOrgId(email)
+
+    if (!orgId) {
+      console.error('Error:', 'Organization Not Found')
+      return Response.json({ ok: false, data: null, status: 404 })
+    }
+
+    const invoiceId = params.id
+
+    const { dueDate, paymentMethod, paymentTerms, notes, relatedDocuments } =
+      await request.json()
+
+    const response = await db.invoice.update({
+      where: {
+        id: invoiceId
+      },
+      select: {
+        dueDate: true,
+        paymentMethod: true,
+        paymentTerms: true,
+        notes: true,
+        relatedDocuments: true
+      },
+      data: {
+        dueDate,
+        paymentMethod,
+        paymentTerms,
+        notes,
+        relatedDocuments
+      }
+    })
+    return Response.json({ ok: true, data: response, status: 200 })
+  } catch (error) {
+    console.error('Error:', error)
+    return Response.json({ ok: false, data: null, status: 500 })
+  }
+}
