@@ -83,8 +83,14 @@ export async function PATCH(
 
     const invoiceId = params.id
 
-    const { dueDate, paymentMethod, paymentTerms, notes, relatedDocuments } =
-      await request.json()
+    const {
+      dueDate,
+      paymentMethod,
+      paymentTerms,
+      notes,
+      relatedDocuments,
+      approvalStatus
+    } = await request.json()
 
     const response = await db.invoice.update({
       where: {
@@ -95,14 +101,16 @@ export async function PATCH(
         paymentMethod: true,
         paymentTerms: true,
         notes: true,
-        relatedDocuments: true
+        relatedDocuments: true,
+        approvalStatus: true
       },
       data: {
         dueDate,
         paymentMethod,
         paymentTerms,
         notes,
-        relatedDocuments
+        relatedDocuments,
+        approvalStatus
       }
     })
     return Response.json({ ok: true, data: response, status: 200 })
