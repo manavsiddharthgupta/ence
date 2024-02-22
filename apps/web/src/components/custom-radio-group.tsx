@@ -8,20 +8,23 @@ export function CustomRadioGroup({
   value,
   setValue,
   options,
-  className
+  className,
+  disabled = false
 }: {
   value: string
   setValue: Dispatch<SetStateAction<string>>
   options: { label: string; value: string }[]
   className?: string
+  disabled?: boolean
 }) {
   return (
     <RadioGroup
+      disabled={disabled}
       value={value}
       onValueChange={(value) => {
         setValue(value)
       }}
-      className='flex gap-1.5 items-center'
+      className={`flex gap-1.5 items-center ${disabled ? 'opacity-60' : ''}`}
     >
       {options.map((option) => {
         return (

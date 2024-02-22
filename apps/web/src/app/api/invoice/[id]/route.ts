@@ -83,28 +83,62 @@ export async function PATCH(
 
     const invoiceId = params.id
 
-    const { dueDate, paymentMethod, paymentTerms, notes, relatedDocuments } =
+    const { dueDate, paymentMethod, paymentTerms, notes, approvalStatus } =
       await request.json()
+
+    if (!dueDate || !paymentMethod || !paymentTerms || !notes) {
+      console.error(
+        'Invalid data ->',
+        dueDate,
+        paymentMethod,
+        notes,
+        paymentMethod
+      )
+      return Response.json({
+        ok: true,
+        data: 'Invalid data, please check data',
+        status: 409
+      })
+    }
 
     const response = await db.invoice.update({
       where: {
         id: invoiceId
-      },
-      select: {
-        dueDate: true,
-        paymentMethod: true,
-        paymentTerms: true,
-        notes: true,
-        relatedDocuments: true
       },
       data: {
         dueDate,
         paymentMethod,
         paymentTerms,
         notes,
-        relatedDocuments
+        approvalStatus: approvalStatus !== null ? approvalStatus : 'APPROVED'
+      },
+      select: {
+        dueDate: true,
+        paymentMethod: true,
+        paymentTerms: true,
+        notes: true,
+        approvalStatus: true
       }
     })
+
+    if (approvalStatus) {
+      const auditResponse = await db.auditTrail.create({
+        data: {
+          invoiceId: invoiceId,
+          actionType: 'APPROVAL_ACTION',
+          title: 'Customer Approval of Invoice',
+          description: 'Customer has officially approved the invoice.',
+          oldStatus: 'UNAPPROVED',
+          newStatus: approvalStatus === 'APPROVED' ? 'APPROVED' : 'REJECTED'
+        }
+      })
+      return Response.json({
+        ok: true,
+        data: { ...response, ...auditResponse },
+        status: 200
+      })
+    }
+
     return Response.json({ ok: true, data: response, status: 200 })
   } catch (error) {
     console.error('Error:', error)

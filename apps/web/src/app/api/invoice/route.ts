@@ -92,16 +92,12 @@ export async function POST(request: Request) {
         invoiceTotal: invoiceTotal,
         subTotal: subTotal,
         auditTrailEntries: {
-          createMany: {
-            data: [
-              {
-                actionType: 'MANUAL_CREATION',
-                title: 'Invoice Manually Created',
-                description: 'You manually created a new invoice.',
-                oldStatus: 'N/A',
-                newStatus: 'Unapproved'
-              }
-            ]
+          create: {
+            actionType: 'MANUAL_CREATION',
+            title: 'Invoice Manually Created',
+            description: 'You manually created a new invoice.',
+            oldStatus: 'N/A',
+            newStatus: 'Unapproved'
           }
         },
         paymentMethod: paymentMethod,

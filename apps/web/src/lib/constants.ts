@@ -22,6 +22,11 @@ export const SENDING_OPTIONS = [
   { value: 'whatsapp', label: 'Whatsapp' }
 ]
 
+export const APPROVAL_OPTIONS = [
+  { value: 'approved', label: 'Approve' },
+  { value: 'rejected', label: 'Reject' }
+]
+
 export const PAYMENT_OPTION = [
   { value: 'cash', label: 'Cash' },
   { value: 'digital wallets', label: 'Digital Wallets' }
