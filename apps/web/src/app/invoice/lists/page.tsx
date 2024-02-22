@@ -1,12 +1,13 @@
 import Image from 'next/image'
 import InvoiceTable from './invoices-table'
+import Filter from './filter'
 import Overview from './overview'
 import err from '@/svgs/err.svg'
 import { Suspense } from 'react'
 import { ChevronDown, Loader2Icon, ReceiptText, Zap } from 'lucide-react'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
-import { getInvoices, getInvoicesOverview } from '@/crud/invoices'
+import { getInvoices } from '@/crud/invoices'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -17,8 +18,15 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import Link from 'next/link'
+import { Skeleton } from '@/components/ui/skeleton'
 
-const Invoices = () => {
+const Invoices = ({
+  searchParams
+}: {
+  searchParams: { [key: string]: string | string[] | undefined }
+}) => {
+  const search =
+    typeof searchParams.search === 'string' ? searchParams.search : null
   return (
     <div className='w-full max-w-4xl mx-auto'>
       <div className='flex justify-between items-center'>
@@ -58,44 +66,46 @@ const Invoices = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <Suspense
-        fallback={
-          <div className='py-6 w-full flex justify-center'>
-            <div className='w-fit h-fit flex items-center gap-2 '>
-              <Loader2Icon className='animate-spin' />
-              <p className='text-sm font-semibold'>Getting invoices...</p>
-            </div>
-          </div>
-        }
-      >
-        <Lists />
+      <Suspense fallback={<OverviewSkeleton />}>
+        <Overview />
       </Suspense>
+      <div className='my-8'>
+        <Filter />
+        <Suspense
+          fallback={
+            <div className='py-6 w-full flex justify-center'>
+              <div className='w-fit h-fit flex items-center gap-2 '>
+                <Loader2Icon className='animate-spin' />
+                <p className='text-sm font-semibold'>Getting invoices...</p>
+              </div>
+            </div>
+          }
+        >
+          <Lists query={search} />
+        </Suspense>
+      </div>
     </div>
   )
 }
 
 export default Invoices
 
-const Lists = async () => {
+const OverviewSkeleton = () => {
+  return (
+    <Skeleton className='rounded-2xl h-[113.33px] mt-6 mb-12 w-full bg-gray-500/10' />
+  )
+}
+
+const Lists = async ({ query }: { query: string | null }) => {
   const getInvoiceLists = async () => {
     const session = await getServerSession(authOptions)
     const email = session?.user?.email
-    const response = await getInvoices(email)
+    const response = await getInvoices(email, query)
     return JSON.parse(response)
   }
-
-  const getInvoiceListsOverview = async () => {
-    const session = await getServerSession(authOptions)
-    const email = session?.user?.email
-    const response = await getInvoicesOverview(email)
-    return JSON.parse(response)
-  }
-
-  const invoiceOverview = await getInvoiceListsOverview()
   const invoiceLists = await getInvoiceLists()
   return (
     <>
-      <Overview overview={invoiceOverview.data} />
       {invoiceLists.ok ? (
         <InvoiceTable lists={invoiceLists.data} />
       ) : (

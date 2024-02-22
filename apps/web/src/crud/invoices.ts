@@ -1,7 +1,10 @@
 import { db } from '@/lib/db'
 import { Invoice } from 'database'
 import { getOrgId } from '@/crud/organization'
-export const getInvoices = async (email: string | null | undefined) => {
+export const getInvoices = async (
+  email: string | null | undefined,
+  query: string | null
+) => {
   try {
     if (!email) {
       console.error('Error:', 'Not Authorized')
@@ -16,7 +19,28 @@ export const getInvoices = async (email: string | null | undefined) => {
 
     const response = await db.invoice.findMany({
       where: {
-        organizationId: orgId
+        organizationId: orgId,
+        OR: [
+          { invoiceNumber: { equals: parseInt(query || '') || 0 } },
+          {
+            customerInfo: {
+              legalName: { contains: query || '', mode: 'insensitive' }
+            }
+          },
+          {
+            customerInfo: {
+              email: { contains: query || '', mode: 'insensitive' }
+            }
+          },
+          {
+            customerInfo: {
+              whatsAppNumber: { contains: query || '', mode: 'insensitive' }
+            }
+          }
+        ]
+      },
+      orderBy: {
+        dateIssue: 'desc'
       },
       select: {
         id: true,
