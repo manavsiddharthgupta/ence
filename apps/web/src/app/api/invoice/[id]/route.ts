@@ -83,19 +83,32 @@ export async function PATCH(
 
     const invoiceId = params.id
 
-    const { dueDate, paymentMethod, paymentTerms, notes, approvalStatus } =
-      await request.json()
+    const {
+      dueDate,
+      paymentMethod,
+      sendingMethod,
+      notes,
+      approvalStatus,
+      oldStatus
+    } = await request.json()
 
-    if (!dueDate || !paymentMethod || !paymentTerms || !notes) {
+    if (
+      !dueDate ||
+      !paymentMethod ||
+      !sendingMethod ||
+      !notes ||
+      !approvalStatus
+    ) {
       console.error(
         'Invalid data ->',
         dueDate,
         paymentMethod,
         notes,
-        paymentMethod
+        approvalStatus,
+        sendingMethod
       )
       return Response.json({
-        ok: true,
+        ok: false,
         data: 'Invalid data, please check data',
         status: 409
       })
@@ -107,21 +120,22 @@ export async function PATCH(
       },
       data: {
         dueDate,
+        paymentTerms: 'CUSTOM',
         paymentMethod,
-        paymentTerms,
+        sendingMethod,
         notes,
-        approvalStatus: approvalStatus !== null ? approvalStatus : 'APPROVED'
+        approvalStatus: oldStatus === 'APPROVED' ? 'APPROVED' : approvalStatus
       },
       select: {
         dueDate: true,
         paymentMethod: true,
-        paymentTerms: true,
+        sendingMethod: true,
         notes: true,
         approvalStatus: true
       }
     })
 
-    if (approvalStatus) {
+    if (oldStatus === 'UNAPPROVED') {
       const auditResponse = await db.auditTrail.create({
         data: {
           invoiceId: invoiceId,
@@ -132,7 +146,23 @@ export async function PATCH(
               ? 'You approved the invoice.'
               : 'You reject the invoice.',
           oldStatus: 'UNAPPROVED',
-          newStatus: approvalStatus === 'APPROVED' ? 'APPROVED' : 'REJECTED'
+          newStatus: approvalStatus
+        }
+      })
+      return Response.json({
+        ok: true,
+        data: { ...response, ...auditResponse },
+        status: 200
+      })
+    } else if (approvalStatus !== oldStatus && oldStatus === 'REJECTED') {
+      const auditResponse = await db.auditTrail.create({
+        data: {
+          invoiceId: invoiceId,
+          actionType: 'APPROVAL_ACTION',
+          title: 'Invoice Approval Status Change',
+          description: 'You approved the invoice.',
+          oldStatus: 'REJECTED',
+          newStatus: 'APPROVED'
         }
       })
       return Response.json({

@@ -17,6 +17,7 @@ import {
 } from '@/lib/constants'
 import { Textarea } from '@/components/ui/textarea'
 import { callErrorToast, callSuccessToast } from '@/lib/helpers'
+import { useRouter } from 'next/navigation'
 
 const UpdateInvoiceDialog = ({
   invoice,
@@ -31,7 +32,7 @@ const UpdateInvoiceDialog = ({
   const [sendingType, setSendingType] = useState(sendingOption[0].value)
   const [approvalStatus, setApprovalStatus] = useState(approvalOption[0].value)
   const [notes, setNotes] = useState('')
-
+  const router = useRouter()
   useEffect(() => {
     if (
       !invoice?.dueDate ||
@@ -73,8 +74,6 @@ const UpdateInvoiceDialog = ({
       approvalStatusSchema.parse(approvalStatus)
       notesSchema.parse(notes)
 
-      const approval =
-        invoice?.approvalStatus === 'APPROVED' ? null : approvalStatus
       const response = await fetch(`/api/invoice/${invoice?.id}`, {
         method: 'PATCH',
         body: JSON.stringify({
@@ -92,21 +91,23 @@ const UpdateInvoiceDialog = ({
               ? 'DIGITAL_WALLET'
               : null,
           approvalStatus:
-            approval === 'approved'
+            approvalStatus === 'approved'
               ? 'APPROVED'
-              : approval === 'rejected'
+              : approvalStatus === 'rejected'
               ? 'REJECTED'
               : null,
+          oldStatus: invoice?.approvalStatus,
           notes
         })
       })
       const updtRes = await response.json()
       if (!updtRes.ok) {
-        throw new Error(`HTTP error! Status: ${updtRes.status}`)
+        throw new Error(updtRes.data)
       } else {
         callSuccessToast('Successfully updated the invoice')
       }
       setPending(false)
+      router.refresh()
       onCloseUpdateInvoiceDialog()
     } catch (err) {
       if (err instanceof ZodError) {
@@ -116,7 +117,7 @@ const UpdateInvoiceDialog = ({
         callErrorToast(errorMessage)
         console.error('Validation Error', errorMessage)
       } else {
-        callErrorToast(`Error while updating: ${err}`)
+        callErrorToast(`${err}`)
         console.error('Something Went Wrong', err)
       }
       setPending(false)
@@ -201,16 +202,11 @@ const UpdateInvoiceDialog = ({
             />
           </div>
           <div className='grid w-1/2 items-center gap-2'>
-            <Label
-              htmlFor='Approval'
-              className={`pl-1 ${
-                invoice?.approvalStatus !== 'UNAPPROVED' ? 'opacity-65' : ''
-              }`}
-            >
+            <Label htmlFor='Approval' className='pl-1 '>
               Approval Status
             </Label>
             <CustomRadioGroup
-              disabled={invoice?.approvalStatus !== 'UNAPPROVED'}
+              disabled={invoice?.approvalStatus === 'APPROVED'}
               value={approvalStatus}
               setValue={setApprovalStatus}
               options={approvalOption}
