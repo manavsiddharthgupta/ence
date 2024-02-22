@@ -30,6 +30,7 @@ import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { RecordPayment } from './record-payment'
 import { callLoadingToast } from '@/lib/helpers'
 import { toast } from 'sonner'
+import UpdateInvoiceDialog from './update-invoice'
 
 const baseurl = process.env.NEXT_PUBLIC_API_URL
 
@@ -40,6 +41,10 @@ const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
     string | null
   >(null)
   const [recordPaymentDialogStatus, setPaymentDialogStatus] = useState(false)
+  const [selectedInvoiceToUpdate, setInvoiceToUpdate] = useState<string | null>(
+    null
+  )
+  const [updateInvoiceDialog, setUpdateInvoiceDialog] = useState(false)
   const [currentPage, setPageNumber] = useState(1)
   const invoicesPerPage = 10
   const itemOffset = (currentPage - 1) * invoicesPerPage
@@ -83,6 +88,15 @@ const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
     setPaymentDialogStatus(false)
   }
 
+  const onSelectInvoiceToUpdate = (invoiceId: string) => {
+    setInvoiceToUpdate(invoiceId)
+    setUpdateInvoiceDialog(true)
+  }
+
+  const onCloseUpdateInvoiceDialog = () => {
+    setUpdateInvoiceDialog(false)
+  }
+
   return (
     <Sheet open={slideOverviewStatus} onOpenChange={onCloseInvoiceView}>
       <InvoiceCard>
@@ -103,6 +117,7 @@ const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
             onSelectInvoice={onSelectInvoice}
             invoices={currentInvoices}
             onSelectInvoiceToRecordPayment={onSelectInvoiceToRecordPayment}
+            onSelectInvoiceToUpdate={onSelectInvoiceToUpdate}
           />
         </table>
         {invoices?.length === 0 && <InvoiceEmptyState />}
@@ -127,6 +142,17 @@ const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
           onClosePaymentDialog={onClosePaymentDialog}
         />
       </Dialog>
+      <Dialog
+        open={updateInvoiceDialog}
+        onOpenChange={onCloseUpdateInvoiceDialog}
+      >
+        <UpdateInvoiceDialog
+          invoice={invoices.find((value) => {
+            return value.id === selectedInvoiceToUpdate
+          })}
+          onCloseUpdateInvoiceDialog={onCloseUpdateInvoiceDialog}
+        />
+      </Dialog>
     </Sheet>
   )
 }
@@ -136,11 +162,13 @@ export default InvoiceTable
 const InvoiceBody = ({
   invoices,
   onSelectInvoice,
-  onSelectInvoiceToRecordPayment
+  onSelectInvoiceToRecordPayment,
+  onSelectInvoiceToUpdate
 }: {
   invoices: InvoicesResponse[]
   onSelectInvoice: (invoiceId: string) => void
   onSelectInvoiceToRecordPayment: (invoiceId: string) => void
+  onSelectInvoiceToUpdate: (invoiceId: string) => void
 }) => {
   async function downloadImage(apiUri: string, fileName: string) {
     const loadingToastId = callLoadingToast(`Downloading Invoice ${fileName}`)
@@ -226,7 +254,13 @@ const InvoiceBody = ({
                 >
                   <DropdownMenuLabel>Invoice Action</DropdownMenuLabel>
                   <DropdownMenuSeparator className='bg-zinc-600/20' />
-                  <DropdownMenuItem>Update</DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      onSelectInvoiceToUpdate(invoice.id)
+                    }}
+                  >
+                    Update
+                  </DropdownMenuItem>
                   {invoice.paymentStatus !== 'PAID' &&
                     invoice.approvalStatus === 'APPROVED' && (
                       <DialogTrigger asChild>

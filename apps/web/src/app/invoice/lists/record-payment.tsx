@@ -49,7 +49,7 @@ export const RecordPayment = ({
         paymentType: paymentType
       })
     } catch (err: any) {
-      console.log(err)
+      console.error(err)
       callErrorToast(err[0]?.message || 'Invalid Payment Record Data')
       return
     }

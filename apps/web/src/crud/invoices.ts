@@ -57,7 +57,11 @@ export const getInvoices = async (
         paymentStatus: true,
         dueAmount: true,
         totalAmount: true,
-        approvalStatus: true
+        approvalStatus: true,
+        sendingMethod: true,
+        paymentMethod: true,
+        paymentTerms: true,
+        notes: true
       }
     })
 
