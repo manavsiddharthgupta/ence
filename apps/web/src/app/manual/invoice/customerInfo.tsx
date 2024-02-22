@@ -2,16 +2,11 @@
 import InputCombobox from '@/components/customer-combobox'
 import { CustomerForm } from '@/components/customer-form'
 import { useInvoiceContext } from '@/context/invoice'
-import { Option } from '@/types/invoice'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const CustomerInfo = () => {
-  const {
-    customerInfoState,
-    customerInfoDispatch,
-    customerLegalName,
-    setCustomerLegalName
-  } = useInvoiceContext()
+  const [query, setQuery] = useState('')
+  const { customerLegalName, setCustomerLegalName } = useInvoiceContext()
 
   // useEffect(() => {
   //   // set Customer Info using Id
@@ -53,9 +48,11 @@ const CustomerInfo = () => {
         <InputCombobox
           selectedValue={customerLegalName}
           setSelectedValue={setCustomerLegalName}
+          query={query}
+          onSetQuery={setQuery}
         />
       </div>
-      <CustomerForm />
+      <CustomerForm query={query} />
     </>
   )
 }

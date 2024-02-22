@@ -10,12 +10,15 @@ const baseurl = process.env.NEXT_PUBLIC_API_URL
 
 function InputCombobox({
   selectedValue,
-  setSelectedValue
+  setSelectedValue,
+  query,
+  onSetQuery: setQuery
 }: {
   selectedValue: Option | null
   setSelectedValue: Dispatch<SetStateAction<Option | null>>
+  query: string
+  onSetQuery: Dispatch<SetStateAction<string>>
 }) {
-  const [query, setQuery] = useState('')
   const [focused, setIfFocused] = useState(false)
   // const [isPending, setPending] = useState(false)
   // const [error, setError] = useState(false)
@@ -84,7 +87,7 @@ function InputCombobox({
           leave='transition ease-in duration-0'
           leaveFrom='opacity-100'
           leaveTo='opacity-0'
-          afterLeave={() => setQuery('')}
+          // afterLeave={() => setQuery('')}
         >
           <Combobox.Options className='absolute mt-1 max-h-60 w-full overflow-auto rounded-md dark:bg-zinc-700 bg-zinc-300 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-50'>
             {query.length > 0 && (

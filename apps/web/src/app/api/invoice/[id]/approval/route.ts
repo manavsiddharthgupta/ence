@@ -43,8 +43,11 @@ export async function PATCH(
     await db.auditTrail.create({
       data: {
         actionType: 'APPROVAL_ACTION',
-        title: 'Customer Approval of Invoice',
-        description: 'Customer has officially approved the invoice.',
+        title: 'Invoice Approval Status Change',
+        description:
+          status === 'APPROVED'
+            ? 'Customer has officially approved the invoice.'
+            : 'Customer has rejected the invoice.',
         invoiceId: invoiceId,
         oldStatus: oldStatus,
         newStatus: status === 'APPROVED' ? 'APPROVED' : 'REJECTED'

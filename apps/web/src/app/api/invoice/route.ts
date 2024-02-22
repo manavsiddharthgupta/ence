@@ -97,7 +97,7 @@ export async function POST(request: Request) {
             title: 'Invoice Manually Created',
             description: 'You manually created a new invoice.',
             oldStatus: 'N/A',
-            newStatus: 'Unapproved'
+            newStatus: 'CREATED'
           }
         },
         paymentMethod: paymentMethod,

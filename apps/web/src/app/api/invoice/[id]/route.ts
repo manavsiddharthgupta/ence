@@ -126,8 +126,11 @@ export async function PATCH(
         data: {
           invoiceId: invoiceId,
           actionType: 'APPROVAL_ACTION',
-          title: 'Customer Approval of Invoice',
-          description: 'Customer has officially approved the invoice.',
+          title: 'Invoice Approval Status Change',
+          description:
+            approvalStatus === 'APPROVED'
+              ? 'You approved the invoice.'
+              : 'You reject the invoice.',
           oldStatus: 'UNAPPROVED',
           newStatus: approvalStatus === 'APPROVED' ? 'APPROVED' : 'REJECTED'
         }
