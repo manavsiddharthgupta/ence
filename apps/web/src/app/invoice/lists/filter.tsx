@@ -9,19 +9,29 @@ import {
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { PlusCircledIcon } from '@radix-ui/react-icons'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { addDays } from 'date-fns'
 import { Badge } from '@/components/ui/badge'
+import { useRouter } from 'next/navigation'
+import { useDebounce } from 'use-debounce'
 
 const Filter = () => {
+  const [search, setSearch] = useState<string | null>(null)
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(2022, 0, 20),
     to: addDays(new Date(2022, 0, 20), 20)
   })
-
   const [selectedStatus, onSelectStatus] = useState<string[]>([])
-
+  const [query] = useDebounce(search, 800)
+  const router = useRouter()
+  useEffect(() => {
+    if (query) {
+      router.push(`/invoice/lists?search=${query}`)
+    } else {
+      router.push('/invoice/lists')
+    }
+  }, [query])
   const checkIfStatusSelected = (status: string) => {
     return selectedStatus.includes(status)
   }
@@ -46,7 +56,11 @@ const Filter = () => {
     <div className='flex justify-between items-center mb-4'>
       <div className='flex gap-2'>
         <Input
-          placeholder='Filter Invoices ...'
+          value={search || ''}
+          onChange={(e) => {
+            setSearch(e.target.value)
+          }}
+          placeholder='Search Invoices...'
           type='text'
           className='h-9 max-w-xs bg-transparent dark:border-zinc-700 border-zinc-200 hover:bg-zinc-100/80 hover:dark:bg-zinc-800/50 min-w-[300px]'
         />

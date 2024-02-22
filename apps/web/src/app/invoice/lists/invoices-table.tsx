@@ -23,7 +23,6 @@ import { useState } from 'react'
 import { InvoicesResponse } from '@/types/invoice'
 import { formatAmount, formatDate } from 'helper/format'
 import Image from 'next/image'
-import Filter from './filter'
 import createInv from '@/svgs/create-inv.svg'
 import { Sheet } from '@/components/ui/sheet'
 import Invoice from './invoice'
@@ -86,39 +85,36 @@ const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
 
   return (
     <Sheet open={slideOverviewStatus} onOpenChange={onCloseInvoiceView}>
-      <div className='my-8'>
-        <Filter />
-        <InvoiceCard>
-          <table className='w-full text-black dark:text-white'>
-            <thead>
-              <tr className='text-sm font-medium text-zinc-600/60 dark:text-zinc-400/70 border-b-[1px] border-zinc-200 dark:border-zinc-700/40'>
-                <td className='p-3 w-[10%]'># Invoice</td>
-                <td className='p-2 w-[24%]'>To</td>
-                <td className='p-2 w-[10%] text-center'>Approval</td>
-                <td className='p-2 w-[13%] text-center'>Due Date</td>
-                <td className='p-2 w-[11%] text-center'>Status</td>
-                <td className='p-2 w-[13%] text-center'>Total</td>
-                <td className='p-2 w-[13%] text-center'>Due</td>
-                <td className='p-2 w-[5%]'></td>
-              </tr>
-            </thead>
-            <InvoiceBody
-              onSelectInvoice={onSelectInvoice}
-              invoices={currentInvoices}
-              onSelectInvoiceToRecordPayment={onSelectInvoiceToRecordPayment}
-            />
-          </table>
-          {invoices?.length === 0 && <InvoiceEmptyState />}
-        </InvoiceCard>
-        {invoices?.length > 0 && (
-          <PaginationUI
-            currentPage={currentPage}
-            pageCount={pageCount}
-            onHandleNextButton={onHandleNextButton}
-            onHandlePreviousButton={onHandlePreviousButton}
+      <InvoiceCard>
+        <table className='w-full text-black dark:text-white'>
+          <thead>
+            <tr className='text-sm font-medium text-zinc-600/60 dark:text-zinc-400/70 border-b-[1px] border-zinc-200 dark:border-zinc-700/40'>
+              <td className='p-3 w-[10%]'># Invoice</td>
+              <td className='p-2 w-[24%]'>To</td>
+              <td className='p-2 w-[10%] text-center'>Approval</td>
+              <td className='p-2 w-[13%] text-center'>Due Date</td>
+              <td className='p-2 w-[11%] text-center'>Status</td>
+              <td className='p-2 w-[13%] text-center'>Total</td>
+              <td className='p-2 w-[13%] text-center'>Due</td>
+              <td className='p-2 w-[5%]'></td>
+            </tr>
+          </thead>
+          <InvoiceBody
+            onSelectInvoice={onSelectInvoice}
+            invoices={currentInvoices}
+            onSelectInvoiceToRecordPayment={onSelectInvoiceToRecordPayment}
           />
-        )}
-      </div>
+        </table>
+        {invoices?.length === 0 && <InvoiceEmptyState />}
+      </InvoiceCard>
+      {invoices?.length > 0 && (
+        <PaginationUI
+          currentPage={currentPage}
+          pageCount={pageCount}
+          onHandleNextButton={onHandleNextButton}
+          onHandlePreviousButton={onHandlePreviousButton}
+        />
+      )}
       <Invoice invoiceId={selectedInvoice} />
       <Dialog
         open={recordPaymentDialogStatus}
@@ -287,8 +283,8 @@ const InvoiceEmptyState = () => {
         src={createInv}
         className='mx-auto'
         alt='empty-inv'
-        width={256}
-        height={232}
+        width={192}
+        height={174}
       />
       <p className='text-xs font-light text-black dark:text-white max-w-[200px] mx-auto '>
         There are no invoices to display at the moment. You're all caught up!
