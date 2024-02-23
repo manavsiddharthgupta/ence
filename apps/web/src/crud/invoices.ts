@@ -1,9 +1,11 @@
 import { db } from '@/lib/db'
 import { Invoice } from 'database'
 import { getOrgId } from '@/crud/organization'
+import { PaymentStatus } from '@/types/invoice'
 export const getInvoices = async (
   email: string | null | undefined,
-  query: string | null
+  query: string | null,
+  status: PaymentStatus[] | null
 ) => {
   try {
     if (!email) {
@@ -20,6 +22,9 @@ export const getInvoices = async (
     const response = await db.invoice.findMany({
       where: {
         organizationId: orgId,
+        paymentStatus: {
+          in: status ?? ['DUE', 'OVERDUE', 'PAID', 'PARTIALLY_PAID']
+        },
         OR: [
           { invoiceNumber: { equals: parseInt(query || '') || 0 } },
           {

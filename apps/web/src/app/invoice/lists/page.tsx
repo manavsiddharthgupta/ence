@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import Link from 'next/link'
 import { Skeleton } from '@/components/ui/skeleton'
+import { PaymentStatus } from '@/types/invoice'
 
 const Invoices = ({
   searchParams
@@ -27,6 +28,8 @@ const Invoices = ({
 }) => {
   const search =
     typeof searchParams.search === 'string' ? searchParams.search : null
+  const status =
+    typeof searchParams.status === 'string' ? searchParams.status : null
   return (
     <div className='w-full max-w-4xl mx-auto'>
       <div className='flex justify-between items-center'>
@@ -81,7 +84,10 @@ const Invoices = ({
             </div>
           }
         >
-          <Lists query={search} />
+          <Lists
+            query={search}
+            status={(status?.split(',') || null) as PaymentStatus[]}
+          />
         </Suspense>
       </div>
     </div>
@@ -96,11 +102,17 @@ const OverviewSkeleton = () => {
   )
 }
 
-const Lists = async ({ query }: { query: string | null }) => {
+const Lists = async ({
+  query,
+  status
+}: {
+  query: string | null
+  status: PaymentStatus[] | null
+}) => {
   const getInvoiceLists = async () => {
     const session = await getServerSession(authOptions)
     const email = session?.user?.email
-    const response = await getInvoices(email, query)
+    const response = await getInvoices(email, query, status)
     return JSON.parse(response)
   }
   const invoiceLists = await getInvoiceLists()
