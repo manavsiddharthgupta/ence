@@ -93,9 +93,23 @@ export const getInvoicesOverview = async (email: string | null | undefined) => {
 
     const currentWeekInvoices: Invoice[] = await db.invoice.findMany({
       where: {
-        organizationId: orgId,
+        organization: {
+          id: orgId
+        },
         dateIssue: {
           gte: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000) // Last 7 days
+        }
+      }
+    })
+
+    const previousWeekInvoices: Invoice[] = await db.invoice.findMany({
+      where: {
+        organization: {
+          id: orgId
+        },
+        dateIssue: {
+          gte: new Date(new Date().getTime() - 14 * 24 * 60 * 60 * 1000),
+          lt: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
         }
       }
     })
@@ -110,6 +124,13 @@ export const getInvoicesOverview = async (email: string | null | undefined) => {
       partiallyPaid: getTotalCount(currentWeekInvoices, 'PARTIALLY_PAID')
     }
 
+    const totalCountPreviousWeek = {
+      paid: getTotalCount(previousWeekInvoices, 'PAID'),
+      due: getTotalCount(previousWeekInvoices, 'DUE'),
+      overdue: getTotalCount(previousWeekInvoices, 'OVERDUE'),
+      partiallyPaid: getTotalCount(previousWeekInvoices, 'PARTIALLY_PAID')
+    }
+
     const totalCountAllTime = {
       paid: getTotalCount(allInvoices, 'PAID'),
       due: getTotalCount(allInvoices, 'DUE'),
@@ -119,19 +140,19 @@ export const getInvoicesOverview = async (email: string | null | undefined) => {
 
     const percentageChange = {
       paid: calculatePercentageChange(
-        totalCountAllTime.paid - totalCountCurrentWeek.paid,
+        totalCountPreviousWeek.paid,
         totalCountCurrentWeek.paid
       ),
       due: calculatePercentageChange(
-        totalCountAllTime.due - totalCountCurrentWeek.due,
+        totalCountPreviousWeek.due,
         totalCountCurrentWeek.due
       ),
       overdue: calculatePercentageChange(
-        totalCountAllTime.overdue - totalCountCurrentWeek.overdue,
+        totalCountPreviousWeek.overdue,
         totalCountCurrentWeek.overdue
       ),
       partiallyPaid: calculatePercentageChange(
-        totalCountAllTime.partiallyPaid - totalCountCurrentWeek.partiallyPaid,
+        totalCountPreviousWeek.partiallyPaid,
         totalCountCurrentWeek.partiallyPaid
       )
     }
