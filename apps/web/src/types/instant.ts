@@ -1,12 +1,9 @@
 export interface InstantInvoice {
-  customerId: string | null
   customerName: string | null
   dateIssue: Date | undefined
   invoiceNumber: string | null
   subTotal: number | null
   invoiceTotal: number | null
-  email: string | null
-  whatsappNumber: string | number | null
 }
 
 export type InstantInvoiceAction = {

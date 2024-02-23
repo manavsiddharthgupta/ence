@@ -69,10 +69,16 @@ const ActivityCard = async () => {
               break
 
             case 'APPROVAL_ACTION':
+              const formattedDesc = activity.description
+                ? activity.description.slice(
+                    0,
+                    activity.description.length - 1
+                  ) + ' on'
+                : 'Approved on'
               desc = (
                 <Desc
                   date={activity.createdAt}
-                  desc='Customer approved on'
+                  desc={formattedDesc}
                   invoiceNumber={`#INV-${activity.invoice.invoiceNumber}`}
                 />
               )

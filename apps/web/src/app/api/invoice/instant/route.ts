@@ -3,6 +3,7 @@ import { authOptions } from '../../auth/[...nextauth]/route'
 import { db } from '@/lib/db'
 import { InvoiceBody } from '@/types/invoice'
 import { getOrgId } from '@/crud/organization'
+import { InvoiceJobs } from 'events/jobs-publisher'
 
 export async function POST(request: Request) {
   try {
@@ -59,21 +60,14 @@ export async function POST(request: Request) {
                 description:
                   'An invoice has been swiftly generated through an automated, instant creation process.',
                 oldStatus: 'N/A',
-                newStatus: 'Unapproved'
-              },
-              {
-                actionType: 'APPROVAL_ACTION',
-                title: 'Customer Approval of Invoice',
-                description: 'Customer has officially approved the invoice.',
-                oldStatus: 'Unapproved',
-                newStatus: 'Approved'
-              } // Todo: rmv, this will be done by customer
+                newStatus: 'CREATED'
+              }
             ]
           }
         },
+        notes: 'Thank you for your business! We appreciate your trust.', // Todo: remove this
         paymentMethod: paymentMethod,
         instantInvoiceLink: instantInvoiceLink,
-        approvalStatus: 'APPROVED', // Todo: rmv, this will be done by customer
         paymentStatus: paymentStatus,
         paymentTerms: paymentTerms,
         sendingMethod: sendingMethod,
@@ -82,17 +76,48 @@ export async function POST(request: Request) {
             data: items
           }
         }
+      },
+      select: {
+        id: true,
+        invoiceNumber: true,
+        dateIssue: true,
+        dueDate: true,
+        customerInfo: true,
+        organization: {
+          select: { orgName: true, id: true, email: true }
+        },
+        items: {
+          select: {
+            id: true,
+            name: true,
+            unit: true,
+            price: true,
+            quantity: true,
+            total: true
+          }
+        },
+        subTotal: true,
+        discount: true,
+        adjustmentFee: true,
+        lateCharge: true,
+        invoiceTotal: true,
+        packagingCharge: true,
+        shippingCharge: true,
+        totalAmount: true,
+        notes: true
       }
     })
 
-    // Todo: create link for customer and send them based on sending method
+    await InvoiceJobs.createMediaFromInvoiceDataJob(
+      invoiceRes.id,
+      orgId,
+      invoiceRes
+    )
+
     return Response.json({
       ok: true,
       data: {
         invoiceNumber: invoiceRes.invoiceNumber,
-        sendingMethod: invoiceRes.sendingMethod,
-        paymentStatus: invoiceRes.paymentStatus,
-        dueAmount: invoiceRes.dueAmount,
         dueDate: invoiceRes.dueDate
       },
       status: 200
