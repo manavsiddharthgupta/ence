@@ -109,7 +109,7 @@ export async function PATCH(
       )
       return Response.json({
         ok: false,
-        data: 'Invalid data, please check data',
+        data: 'Invalid data, please check the data you are sending.',
         status: 409
       })
     }
@@ -143,8 +143,8 @@ export async function PATCH(
           title: 'Invoice Approval Status Change',
           description:
             approvalStatus === 'APPROVED'
-              ? 'You approved the invoice.'
-              : 'You reject the invoice.',
+              ? 'You have approved the invoice.'
+              : 'You have rejected the invoice.',
           oldStatus: 'UNAPPROVED',
           newStatus: approvalStatus
         }
@@ -160,7 +160,7 @@ export async function PATCH(
           invoiceId: invoiceId,
           actionType: 'APPROVAL_ACTION',
           title: 'Invoice Approval Status Change',
-          description: 'You approved the invoice.',
+          description: 'You have approved the invoice.',
           oldStatus: 'REJECTED',
           newStatus: 'APPROVED'
         }

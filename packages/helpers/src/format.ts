@@ -50,7 +50,7 @@ export const formatDate = (inputDate: Date | undefined) => {
   return formattedDate
 }
 
-export const numTowords = new ToWords({
+export const numToWords = new ToWords({
   localeCode: 'en-IN',
   converterOptions: {
     currency: true,

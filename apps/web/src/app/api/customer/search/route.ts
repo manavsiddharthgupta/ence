@@ -23,10 +23,12 @@ export async function GET(request: Request) {
     const query = searchParams.get('query')
     const response = await db.customerInfo.findMany({
       where: {
-        organisationId: orgId,
+        organization: {
+          id: orgId
+        },
         OR: [
-          { legalName: { contains: query || '', mode: 'insensitive' } },
-          { email: { contains: query || '', mode: 'insensitive' } }
+          { legalName: { contains: query ?? '', mode: 'insensitive' } },
+          { email: { contains: query ?? '', mode: 'insensitive' } }
         ]
       },
       select: {
@@ -37,7 +39,7 @@ export async function GET(request: Request) {
       }
     })
 
-    return Response.json({ ok: true, data: response, staus: 200 })
+    return Response.json({ ok: true, data: response, status: 200 })
   } catch (error) {
     console.error('Error:', error)
     return Response.json({ ok: false, data: null, status: 500 })

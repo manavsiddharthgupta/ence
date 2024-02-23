@@ -8,12 +8,12 @@ const isAllowedUser = (email: string | undefined | null) => {
   if (!email) {
     return null
   }
-  const userEmailname = email.split('@')[0]
-  if (!userEmailname) {
+  const userEmailName = email.split('@')[0]
+  if (!userEmailName) {
     return null
   }
-  console.log('your username ->', userEmailname)
-  return ALLOWED_USER.includes(userEmailname)
+  console.log('your username ->', userEmailName)
+  return ALLOWED_USER.includes(userEmailName)
 } // Todo: Currently in dev mode will be removed
 
 export const authOptions = {

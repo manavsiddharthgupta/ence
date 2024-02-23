@@ -8,7 +8,7 @@ async function handler(req: NextRequest) {
   await Processor.handleMessage(body)
   return NextResponse.json({
     ok: true,
-    data: 'job received successfully',
+    data: 'Job received successfully',
     status: 200
   })
 }

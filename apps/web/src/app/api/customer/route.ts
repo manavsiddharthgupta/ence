@@ -21,7 +21,9 @@ export async function GET() {
 
     const response = await db.customerInfo.findMany({
       where: {
-        organisationId: orgId
+        organization: {
+          id: orgId
+        }
       },
       select: {
         id: true,
@@ -31,7 +33,7 @@ export async function GET() {
       }
     })
 
-    return Response.json({ ok: true, data: response, staus: 200 })
+    return Response.json({ ok: true, data: response, status: 200 })
   } catch (error) {
     console.error('Error:', error)
     return Response.json({ ok: false, data: null, status: 500 })
@@ -56,7 +58,11 @@ export async function POST(request: Request) {
     const data: Customer = await request.json()
     const customerRes = await db.customerInfo.create({
       data: {
-        organisationId: orgId,
+        organization: {
+          connect: {
+            id: orgId
+          }
+        },
         legalName: data.legalName,
         email: data.email,
         whatsAppNumber: data.whatsAppNumber

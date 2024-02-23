@@ -94,8 +94,8 @@ export async function POST(request: Request) {
         auditTrailEntries: {
           create: {
             actionType: 'MANUAL_CREATION',
-            title: 'Invoice Manually Created',
-            description: 'You manually created a new invoice.',
+            title: 'Invoice Created Manually',
+            description: 'You have manually created a new invoice.',
             oldStatus: 'N/A',
             newStatus: 'CREATED'
           }

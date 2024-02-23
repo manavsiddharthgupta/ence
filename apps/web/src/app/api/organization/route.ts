@@ -100,7 +100,7 @@ export async function POST(request: Request) {
     return Response.json({
       ok: true,
       data: { orgName: orgResponse.orgName, state: orgResponse.state },
-      staus: 200
+      status: 200
     })
   } catch (error) {
     console.error('Error:', error)

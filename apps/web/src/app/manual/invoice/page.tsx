@@ -124,8 +124,8 @@ const createInvoice = () => {
               <div className='w-full text-center'>
                 <h1 className='text-2xl font-semibold'>New Invoice</h1>
                 <p className='text-xs font-medium mt-2'>
-                  Fill in the fields, preview invoice and send it emailed or
-                  whatsapp directly to client.
+                  Complete the fields, preview the invoice, and then send it
+                  directly to the client via email or WhatsApp.
                 </p>
               </div>
             </div>

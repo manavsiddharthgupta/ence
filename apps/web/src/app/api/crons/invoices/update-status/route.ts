@@ -49,7 +49,7 @@ export async function GET(request: Request) {
     )
     return Response.json({
       ok: true,
-      data: 'Your cron job for updating overdue payment is successful done',
+      data: 'Your cron job for updating overdue payments has been successfully completed.',
       status: 200
     })
   } catch (error) {

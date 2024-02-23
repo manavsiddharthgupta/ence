@@ -57,7 +57,7 @@ export async function PATCH(
     return Response.json({
       ok: true,
       data:
-        'Congratulation you have approved the invoice. Your Invoice no. is INV-' +
+        'Congratulations you have approved the invoice. Your Invoice no. is INV-' +
         response.invoiceNumber +
         '. Pay the invoice before due date.',
       status: 200

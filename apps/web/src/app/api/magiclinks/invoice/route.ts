@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 export const dynamic = 'force-dynamic'
 export async function GET(request: Request) {
   try {
-    const secret = process.env.INVOICE_APPROVAL_SECRET_KEY || ''
+    const secret = process.env.INVOICE_APPROVAL_SECRET_KEY ?? ''
 
     const { searchParams } = new URL(request.url)
     const token = searchParams.get('token')

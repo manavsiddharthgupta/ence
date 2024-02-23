@@ -1,6 +1,6 @@
 import { db } from '@/lib/db'
 import { ImageResponse } from '@vercel/og'
-import { formatAmountWithRs, formatDate, numTowords } from 'helper/format'
+import { formatAmountWithRs, formatDate, numToWords } from 'helper/format'
 // export const runtime = 'edge'
 
 export async function GET(
@@ -184,7 +184,7 @@ export async function GET(
             <div tw='mt-4 w-full flex justify-center mt-2'>
               <p tw='text-[#718096] text-xs px-4 w-full'>
                 Total Amount (in words) :
-                {numTowords.convert(invoice?.totalAmount || 0, {
+                {numToWords.convert(invoice?.totalAmount || 0, {
                   currency: true
                 })}
               </p>
