@@ -365,7 +365,7 @@ const InvoiceInfo = () => {
     <div className='flex flex-col gap-4 py-2'>
       <div className='flex w-full items-center gap-4'>
         <Label
-          className='text-sm font-normal text-sky-950 dark:text-white w-[130px] text-right'
+          className='text-sm font-normal text-sky-950 dark:text-white min-w-32 w-[130px] text-right'
           htmlFor='customer'
         >
           Customer
