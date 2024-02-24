@@ -106,7 +106,9 @@ const CollapsiblePurchasedItems = () => {
               <span className='text-zinc-800/60 dark:text-zinc-200/60'>
                 Discount
               </span>
-              <span>{formatAmount(0)}</span>
+              <span>
+                {formatAmount(subTotal * (+paymentInfoState.discount / 100))}
+              </span>
             </div>
           </div>
         </div>

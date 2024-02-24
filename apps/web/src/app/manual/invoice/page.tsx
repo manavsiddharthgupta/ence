@@ -163,7 +163,8 @@ const createInvoice = () => {
                 {formatAmount(
                   subTotal +
                     +paymentInfoState.adjustmentFee +
-                    +paymentInfoState.additionalCharges
+                    +paymentInfoState.additionalCharges -
+                    subTotal * (+paymentInfoState.discount / 100)
                 )}
               </h1>
             </div>

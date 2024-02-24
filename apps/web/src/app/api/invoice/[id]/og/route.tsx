@@ -34,6 +34,10 @@ export async function GET(
       }
     })
 
+    const subTotal = invoice?.subTotal ?? 0
+    const discount = invoice?.discount ? +invoice?.discount : 0
+    const discountInRs = subTotal * (discount / 100)
+
     return new ImageResponse(
       (
         <div
@@ -168,6 +172,14 @@ export async function GET(
                     </th>
                     <td tw='text-right text-sm text-gray-500 sm:pr-0'>
                       {formatAmountWithRs(invoice?.shippingCharge || 0)}
+                    </td>
+                  </tr>
+                  <tr tw='flex justify-between'>
+                    <th tw='text-right text-sm font-normal text-gray-500'>
+                      Discount
+                    </th>
+                    <td tw='text-right text-sm text-gray-500 sm:pr-0'>
+                      {formatAmountWithRs(discountInRs)}
                     </td>
                   </tr>
                   <tr tw='flex justify-between'>

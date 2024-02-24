@@ -125,7 +125,8 @@ const PreviewModal = ({
                     {formatAmount(
                       subTotal +
                         +paymentInfoState.adjustmentFee +
-                        +paymentInfoState.additionalCharges
+                        +paymentInfoState.additionalCharges -
+                        subTotal * (+paymentInfoState.discount / 100)
                     )}
                   </span>
                 </div>
@@ -330,7 +331,9 @@ export const InvoiceFormat = ({
                 -
               </span>
               <h1>Discount</h1>
-              <h1>{formatAmount(0)}</h1>
+              <h1>
+                {formatAmount(subTotal * (+paymentInfoState.discount / 100))}
+              </h1>
             </div>
           </div>
         </div>
@@ -341,7 +344,8 @@ export const InvoiceFormat = ({
               {formatAmount(
                 subTotal +
                   +paymentInfoState.adjustmentFee +
-                  +paymentInfoState.additionalCharges
+                  +paymentInfoState.additionalCharges -
+                  subTotal * (+paymentInfoState.discount / 100)
               )}
             </h1>
           </div>
@@ -351,7 +355,8 @@ export const InvoiceFormat = ({
           {numTowords.convert(
             subTotal +
               +paymentInfoState.adjustmentFee +
-              +paymentInfoState.additionalCharges,
+              +paymentInfoState.additionalCharges -
+              subTotal * (+paymentInfoState.discount / 100),
             {
               currency: true
             }
@@ -364,7 +369,8 @@ export const InvoiceFormat = ({
             {formatAmount(
               subTotal +
                 +paymentInfoState.adjustmentFee +
-                +paymentInfoState.additionalCharges
+                +paymentInfoState.additionalCharges -
+                subTotal * (+paymentInfoState.discount / 100)
             )}
           </span>
         </p>
