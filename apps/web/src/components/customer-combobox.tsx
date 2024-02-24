@@ -115,7 +115,8 @@ function InputCombobox({
                 {option.legalName}
                 <span className='text-xs font-semibold'>
                   {'  -  '}
-                  {option.email}
+                  <p>{option.email}</p>
+                  <p>{option.whatsAppNumber}</p>
                 </span>
               </Combobox.Option>
             ))}
