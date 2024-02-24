@@ -1,6 +1,7 @@
 export const whatsappService = async (
   customerName: string,
   invoiceLink: string | null,
+  invoiceId: string | null,
   customerNumber?: string
 ) => {
   const url = 'https://graph.facebook.com/v18.0/195250480342179/messages'
@@ -42,7 +43,8 @@ export const whatsappService = async (
           ]
         }
       ]
-    }
+    },
+    invoiceId: invoiceId
   }
 
   try {
