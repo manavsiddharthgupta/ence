@@ -101,9 +101,9 @@ const Sidebar = ({
             </PopoverContent>
           </Popover>
         </div>
-        <Separator className='dark:bg-zinc-700 bg-zinc-300 h-[0.5px]' />
       </div>
-      <div className='h-16 pb-4 flex items-end truncate'>
+      <Separator className='dark:bg-zinc-700/40 bg-zinc-300/40 h-[0.5px] mt-2' />
+      <div className='h-16 mb-2 flex items-center truncate'>
         <div className='flex gap-4 items-center px-3'>
           <Popover>
             <PopoverTrigger asChild>
