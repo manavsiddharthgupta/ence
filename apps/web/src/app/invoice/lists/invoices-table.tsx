@@ -31,6 +31,7 @@ import { RecordPayment } from './record-payment'
 import { callLoadingToast } from '@/lib/helpers'
 import { toast } from 'sonner'
 import UpdateInvoiceDialog from './update-invoice'
+import { useRouter } from 'next/navigation'
 
 const baseurl = process.env.NEXT_PUBLIC_API_URL
 
@@ -170,6 +171,8 @@ const InvoiceBody = ({
   onSelectInvoiceToRecordPayment: (invoiceId: string) => void
   onSelectInvoiceToUpdate: (invoiceId: string) => void
 }) => {
+  const [isDeleting, setDeleting] = useState(false)
+  const router = useRouter()
   async function downloadImage(apiUri: string, fileName: string) {
     const loadingToastId = callLoadingToast(`Downloading Invoice ${fileName}`)
     try {
@@ -192,6 +195,36 @@ const InvoiceBody = ({
       })
     }
   }
+
+  async function OnDeleteInvoice(invoiceId: string, invoiceNumber: number) {
+    const loadingToastId = callLoadingToast(
+      `Deleting invoice INV-${invoiceNumber}`
+    )
+    try {
+      const response = await fetch(`${baseurl}/api/invoice/${invoiceId}`, {
+        method: 'DELETE'
+      })
+      const delRes = await response.json()
+      if (delRes.ok) {
+        toast.success('You successfully deleted invoice INV-' + invoiceNumber, {
+          position: 'top-right',
+          id: loadingToastId
+        })
+        setDeleting(false)
+        router.refresh()
+      } else {
+        throw new Error(`Error fetching image: ${delRes.data}`)
+      }
+    } catch (error) {
+      console.error('Error deleting invoice:', error)
+      toast.error(`Error deleting invoice: ${error}`, {
+        position: 'top-right',
+        id: loadingToastId
+      })
+      setDeleting(false)
+    }
+  }
+
   return (
     <tbody>
       {invoices?.map((invoice, ind) => {
@@ -291,6 +324,16 @@ const InvoiceBody = ({
                     }}
                   >
                     Download
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className='text-red-500 hover:text-red-500'
+                    disabled={isDeleting}
+                    onClick={() => {
+                      setDeleting(true)
+                      OnDeleteInvoice(invoice?.id, invoice?.invoiceNumber)
+                    }}
+                  >
+                    Delete
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
