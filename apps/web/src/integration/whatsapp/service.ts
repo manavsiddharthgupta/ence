@@ -17,7 +17,7 @@ export const whatsappService = async (
     to: '916207337493',
     type: 'template',
     template: {
-      name: 'ence1',
+      name: 'ence2',
       language: {
         code: 'en'
       },
@@ -39,6 +39,30 @@ export const whatsappService = async (
             {
               type: 'text',
               text: customerName
+            }
+          ]
+        },
+        {
+          type: 'button',
+          sub_type: 'url',
+          index: 0,
+          parameters: [
+            {
+              type: 'text',
+              text: 'https://example.com/approve'
+              //TODO: Replace with approval link
+            }
+          ]
+        },
+        {
+          type: 'button',
+          sub_type: 'url',
+          index: 1,
+          parameters: [
+            {
+              type: 'text',
+              text: 'https://example.com/reject'
+              //TODO: Replace with rejection link
             }
           ]
         }
