@@ -12,7 +12,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
-  callLoadingToast,
   checkOnDemandValidation,
   formatInstantInvoiceData
 } from '@/lib/helpers'
@@ -45,6 +44,8 @@ import { InstantInvoiceItemsAction } from '@/types/instant'
 import { ChevronLeft, ChevronRight, Loader2Icon } from 'lucide-react'
 import { ImageMagnifier } from '@/components/img-magnifier'
 import { motion } from 'framer-motion'
+import { Option } from '@/types/invoice'
+import InstantInputCombobox from './customer-input'
 
 const InstantDrawer = ({
   blobUrl,
@@ -57,6 +58,9 @@ const InstantDrawer = ({
   const [paymentTerm, setPaymentTerm] = useState(termsOptions[0].value)
   const [sendingMethod, setSendingMethod] = useState(sendingOptions[1].value)
   const [paymentMethod, setPaymentMethod] = useState(paymentOptions[0].value)
+  const [customerLegalName, setCustomerLegalName] = useState<Option | null>(
+    null
+  )
   const [dueDate, setDueDate] = useState<Date | undefined>(new Date())
   const [instantInvoiceDetails, instantInvoiceDispatch] = useReducer(
     instantInvoiceReducers,
@@ -86,12 +90,14 @@ const InstantDrawer = ({
         value: ''
       }
     })
+    setCustomerLegalName(null)
   }, [blobUrl])
 
   return (
     <InstantInvoiceProvider
       value={{
         instantInvoiceItems,
+        customerLegalName,
         instantInvoiceItemsDispatch,
         paymentTerm,
         sendingMethod,
@@ -99,6 +105,7 @@ const InstantDrawer = ({
         dueDate,
         instantInvoiceDetails,
         setPaymentMethod,
+        setCustomerLegalName,
         setPaymentTerm,
         setSendingMethod,
         setDueDate,
@@ -248,9 +255,7 @@ const InvoiceCarouselContent = ({
             customerName: null,
             dateIssue: new Date(),
             invoiceTotal: null,
-            subTotal: null,
-            email: null,
-            whatsappNumber: null
+            subTotal: null
           }
         })
         setPaymentTerm('immediate')
@@ -262,9 +267,7 @@ const InvoiceCarouselContent = ({
             customerName: parsedData?.data?.customer?.customerName || '',
             dateIssue: new Date(),
             invoiceTotal: +parsedData?.data?.total || 0, // will change
-            subTotal: +parsedData?.data?.total || 0, // will change
-            email: parsedData?.data?.customer?.customerEmail || '',
-            whatsappNumber: +parsedData?.data?.customer?.customerNumber || ''
+            subTotal: +parsedData?.data?.total || 0 // will change
           }
         })
         instantInvoiceItemsDispatch({
@@ -334,6 +337,8 @@ const InvoiceInfo = () => {
   const {
     instantInvoiceDetails,
     instantInvoiceDispatch,
+    customerLegalName,
+    setCustomerLegalName,
     sendingMethod,
     setSendingMethod,
     paymentMethod,
@@ -360,70 +365,42 @@ const InvoiceInfo = () => {
     <div className='flex flex-col gap-4 py-2'>
       <div className='flex w-full items-center gap-4'>
         <Label
-          className='text-sm font-normal text-sky-950 dark:text-white w-[130px] text-right'
+          className='text-sm font-normal text-sky-950 dark:text-white min-w-32 w-[130px] text-right'
           htmlFor='customer'
         >
           Customer
         </Label>
-        <Input
-          value={instantInvoiceDetails.customerName || ''}
-          className={`max-w-xs border-[1px] outline-none bg-transparent ${
-            instantInvoiceDetails.customerName
-              ? 'dark:border-zinc-700 border-zinc-200'
-              : 'dark:border-red-600 border-red-400 focus-visible:ring-red-500'
-          }`}
-          type='text'
-          id='customer'
-          onChange={(e) => {
-            instantInvoiceDispatch({
-              type: 'CUSTOMER_NAME',
-              payload: { customerName: e.target.value }
-            })
-          }}
+        <InstantInputCombobox
+          selectedValue={customerLegalName}
+          setSelectedValue={setCustomerLegalName}
+          query={instantInvoiceDetails.customerName || ''}
+          onSetQuery={instantInvoiceDispatch}
         />
       </div>
       <div className='flex w-full items-center gap-4'>
+        <Label
+          className={`text-sm font-normal text-sky-950 dark:text-white w-[130px] text-right`}
+          htmlFor='total'
+        >
+          Invoice Number
+        </Label>
+        <Input
+          value={instantInvoiceDetails.invoiceNumber || ''}
+          className={`max-w-48 border-[1px] outline-none bg-transparent  ${
+            instantInvoiceDetails.invoiceNumber
+              ? 'dark:border-zinc-700 border-zinc-200'
+              : 'dark:border-red-600 border-red-400 focus-visible:ring-red-500'
+          }`}
+          disabled
+          type='number'
+          id='inv-number'
+        />
         <ShadcnCombobox
           options={sendingOptions}
           value={sendingMethod}
           setValue={setSendingMethod}
           placeholder='Select'
         />
-        {sendingMethod === 'mail' ? (
-          <Input
-            value={instantInvoiceDetails.email || ''}
-            className={`max-w-xs border-[1px] outline-none bg-transparent ${
-              instantInvoiceDetails.email
-                ? 'dark:border-zinc-700 border-zinc-200'
-                : 'dark:border-red-600 border-red-400 focus-visible:ring-red-500'
-            }`}
-            onChange={(e) => {
-              instantInvoiceDispatch({
-                type: 'EMAIL',
-                payload: { email: e.target.value }
-              })
-            }}
-            type='text'
-            id='mail'
-          />
-        ) : (
-          <Input
-            value={instantInvoiceDetails.whatsappNumber || ''}
-            className={`max-w-xs border-[1px] outline-none bg-transparent ${
-              instantInvoiceDetails.whatsappNumber
-                ? 'dark:border-zinc-700 border-zinc-200'
-                : 'dark:border-red-600 border-red-400 focus-visible:ring-red-500'
-            }`}
-            onChange={(e) => {
-              instantInvoiceDispatch({
-                type: 'WHATSAPP',
-                payload: { whatsappNumber: e.target.value }
-              })
-            }}
-            type='number'
-            id='whatsapp'
-          />
-        )}
       </div>
       <div className='flex w-full items-center gap-4'>
         <Label
@@ -639,6 +616,7 @@ const Footer = ({
     instantInvoiceDetails,
     dueDate,
     instantInvoiceItems,
+    customerLegalName,
     paymentMethod,
     paymentTerm,
     sendingMethod
@@ -646,6 +624,7 @@ const Footer = ({
 
   const onCreateInstantInvoice = async () => {
     const isValid = checkOnDemandValidation(
+      customerLegalName?.id,
       instantInvoiceDetails,
       dueDate,
       instantInvoiceItems,
@@ -659,6 +638,7 @@ const Footer = ({
     }
 
     const formattedData = formatInstantInvoiceData(
+      customerLegalName?.id!,
       instantInvoiceDetails,
       dueDate,
       instantInvoiceItems,
@@ -669,7 +649,9 @@ const Footer = ({
     )
 
     setLoading(true)
-    const loadingToastId = callLoadingToast('Creating invoice...')
+    const loadingToastId = toast.loading('Creating invoice...', {
+      position: 'bottom-center'
+    })
     const response = await fetch('/api/invoice/instant', {
       method: 'POST',
       body: JSON.stringify(formattedData)
@@ -677,13 +659,15 @@ const Footer = ({
     const invRes = await response.json()
     if (invRes.ok) {
       toast.success('🎉 Invoice created successfully!', {
-        id: loadingToastId
+        id: loadingToastId,
+        position: 'bottom-center'
       })
       onReset()
     } else {
       setLoading(false)
       toast.error('Something went wrong while creating invoice', {
-        id: loadingToastId
+        id: loadingToastId,
+        position: 'bottom-center'
       })
     }
   }

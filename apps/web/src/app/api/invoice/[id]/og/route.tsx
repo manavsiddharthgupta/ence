@@ -34,6 +34,10 @@ export async function GET(
       }
     })
 
+    const subTotal = invoice?.subTotal ?? 0
+    const discount = invoice?.discount ? +invoice?.discount : 0
+    const discountInRs = subTotal * (discount / 100)
+
     return new ImageResponse(
       (
         <div
@@ -98,7 +102,7 @@ export async function GET(
               </div>
             </div>
 
-            <div tw='mt-12 flex flex-col w-full min-h-[460px]'>
+            <div tw='mt-12 flex flex-col w-full overflow-hidden h-[68%]'>
               <table tw='w-full flex flex-col items-end'>
                 <thead tw='border-b border-gray-300 text-gray-900'>
                   <tr>
@@ -171,6 +175,14 @@ export async function GET(
                     </td>
                   </tr>
                   <tr tw='flex justify-between'>
+                    <th tw='text-right text-sm font-normal text-gray-500'>
+                      Discount
+                    </th>
+                    <td tw='text-right text-sm text-gray-500 sm:pr-0'>
+                      {formatAmountWithRs(discountInRs)}
+                    </td>
+                  </tr>
+                  <tr tw='flex justify-between'>
                     <th tw='text-right text-sm font-semibold text-gray-900'>
                       Total
                     </th>
@@ -180,14 +192,18 @@ export async function GET(
                   </tr>
                 </tfoot>
               </table>
-            </div>
-            <div tw='mt-4 w-full flex justify-center mt-2'>
-              <p tw='text-[#718096] text-xs px-4 w-full'>
-                Total Amount (in words) :
-                {numTowords.convert(invoice?.totalAmount || 0, {
-                  currency: true
-                })}
-              </p>
+              <div tw='mt-4 w-full flex justify-center'>
+                <div tw='text-xs flex flex-wrap w-full'>
+                  <p tw='text-black pr-1 my-0 py-0'>
+                    Total Amount (in words) :
+                  </p>
+                  <p tw='text-[#718096] my-0 py-0'>
+                    {numTowords.convert(invoice?.totalAmount || 0, {
+                      currency: true
+                    })}
+                  </p>
+                </div>
+              </div>
             </div>
             <div tw='my-2 w-full flex justify-center'>
               <p tw='text-xs text-gray-500'>
@@ -199,7 +215,7 @@ export async function GET(
       ),
       {
         width: 680,
-        height: 860
+        height: 960
       }
     )
   } catch (e) {

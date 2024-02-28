@@ -7,14 +7,11 @@ import {
 } from '@/types/instant'
 
 export const InitialInstantInvoiceDetails: InstantInvoice = {
-  customerId: null,
   customerName: null,
   dateIssue: undefined,
   invoiceNumber: null,
   invoiceTotal: null,
-  subTotal: null,
-  email: null,
-  whatsappNumber: null
+  subTotal: null
 }
 
 export const InitialInstantInvoiceItemsState: InstantInvoiceItems = []
@@ -40,16 +37,6 @@ export const instantInvoiceReducers = (
         ...action.payload
       }
     case 'INVOICE_TOTAL':
-      return {
-        ...state,
-        ...action.payload
-      }
-    case 'EMAIL':
-      return {
-        ...state,
-        ...action.payload
-      }
-    case 'WHATSAPP':
       return {
         ...state,
         ...action.payload

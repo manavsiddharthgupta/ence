@@ -1,21 +1,29 @@
+'use client'
 import { Badge } from '@/components/ui/badge'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useQuery } from '@tanstack/react-query'
 import { formatAmount } from 'helper/format'
 import { Banknote, Coins, TrendingUp, Wallet2 } from 'lucide-react'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
-import { getOverview } from '@/crud/invoices'
 import { notFound } from 'next/navigation'
 
-const CountOverview = async () => {
-  const getCountOverview = async () => {
-    const session = await getServerSession(authOptions)
-    const email = session?.user?.email
-    const response = await getOverview(email)
-    return JSON.parse(response)
+const baseurl = process.env.NEXT_PUBLIC_API_URL
+
+const CountOverview = () => {
+  const {
+    isPending,
+    error,
+    data: countOverview
+  } = useQuery({
+    queryKey: ['analytics'],
+    queryFn: () =>
+      fetch(`${baseurl}/api/invoice/analytics/counts`).then((res) => res.json())
+  })
+
+  if (isPending) {
+    return <CountOverviewSuspense />
   }
 
-  const countOverview = await getCountOverview()
-  if (!countOverview.ok) {
+  if (error || !countOverview.ok) {
     notFound()
   }
   return (
@@ -111,5 +119,24 @@ const CountBadge = ({
     >
       {text}
     </Badge>
+  )
+}
+
+const CountOverviewSuspense = () => {
+  return (
+    <div className='py-6 flex gap-4'>
+      <div className='rounded-3xl w-1/4 max-w-60'>
+        <Skeleton className='rounded-3xl h-[150px] bg-gray-500/10' />
+      </div>
+      <div className='rounded-3xl w-1/4 max-w-60'>
+        <Skeleton className='rounded-3xl h-[150px] bg-gray-500/10' />
+      </div>
+      <div className='rounded-3xl w-1/4 max-w-60'>
+        <Skeleton className='rounded-3xl h-[150px] bg-gray-500/10' />
+      </div>
+      <div className='rounded-3xl w-1/4 max-w-60'>
+        <Skeleton className='rounded-3xl h-[150px] bg-gray-500/10' />
+      </div>
+    </div>
   )
 }

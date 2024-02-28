@@ -22,14 +22,18 @@ import {
 import { useState } from 'react'
 import { InvoicesResponse } from '@/types/invoice'
 import { formatAmount, formatDate } from 'helper/format'
-import { formatCustomerInfo } from '@/lib/helpers'
 import Image from 'next/image'
-import Filter from './filter'
 import createInv from '@/svgs/create-inv.svg'
 import { Sheet } from '@/components/ui/sheet'
 import Invoice from './invoice'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { RecordPayment } from './record-payment'
+import { callLoadingToast } from '@/lib/helpers'
+import { toast } from 'sonner'
+import UpdateInvoiceDialog from './update-invoice'
+import DeleteAlert from './delete-alert'
+
+const baseurl = process.env.NEXT_PUBLIC_API_URL
 
 const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
   const [selectedInvoice, setInvoiceView] = useState<string | null>(null)
@@ -38,6 +42,14 @@ const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
     string | null
   >(null)
   const [recordPaymentDialogStatus, setPaymentDialogStatus] = useState(false)
+  const [selectedInvoiceToUpdate, setInvoiceToUpdate] = useState<string | null>(
+    null
+  )
+  const [updateInvoiceDialog, setUpdateInvoiceDialog] = useState(false)
+  const [deleteAlert, setAlertForDelete] = useState(false)
+  const [selectedInvoiceToDelete, setInvoiceToDelete] = useState<string | null>(
+    null
+  )
   const [currentPage, setPageNumber] = useState(1)
   const invoicesPerPage = 10
   const itemOffset = (currentPage - 1) * invoicesPerPage
@@ -81,41 +93,58 @@ const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
     setPaymentDialogStatus(false)
   }
 
+  const onSelectInvoiceToUpdate = (invoiceId: string) => {
+    setInvoiceToUpdate(invoiceId)
+    setUpdateInvoiceDialog(true)
+  }
+
+  const onCloseUpdateInvoiceDialog = () => {
+    setUpdateInvoiceDialog(false)
+  }
+
+  const onSelectInvoiceToDelete = (invoiceId: string) => {
+    setInvoiceToDelete(invoiceId)
+    setAlertForDelete(true)
+  }
+
+  const onCloseDeleteAlertDialog = () => {
+    setAlertForDelete(false)
+  }
+
   return (
     <Sheet open={slideOverviewStatus} onOpenChange={onCloseInvoiceView}>
-      <div className='my-8'>
-        <Filter />
-        <InvoiceCard>
-          <table className='w-full text-black dark:text-white'>
-            <thead>
-              <tr className='text-sm font-medium text-zinc-600/60 dark:text-zinc-400/70 border-b-[1px] border-zinc-200 dark:border-zinc-700/40'>
-                <td className='p-3 w-[10%]'># Invoice</td>
-                <td className='p-2 w-[24%]'>To</td>
-                <td className='p-2 w-[10%] text-center'>Approval</td>
-                <td className='p-2 w-[13%] text-center'>Due Date</td>
-                <td className='p-2 w-[11%] text-center'>Status</td>
-                <td className='p-2 w-[13%] text-center'>Total</td>
-                <td className='p-2 w-[13%] text-center'>Due</td>
-                <td className='p-2 w-[5%]'></td>
-              </tr>
-            </thead>
-            <InvoiceBody
-              onSelectInvoice={onSelectInvoice}
-              invoices={currentInvoices}
-              onSelectInvoiceToRecordPayment={onSelectInvoiceToRecordPayment}
-            />
-          </table>
-          {invoices?.length === 0 && <InvoiceEmptyState />}
-        </InvoiceCard>
-        {invoices?.length > 0 && (
-          <PaginationUI
-            currentPage={currentPage}
-            pageCount={pageCount}
-            onHandleNextButton={onHandleNextButton}
-            onHandlePreviousButton={onHandlePreviousButton}
+      <InvoiceCard>
+        <table className='w-full text-black dark:text-white'>
+          <thead>
+            <tr className='text-sm font-medium text-zinc-600/60 dark:text-zinc-400/70 border-b-[1px] border-zinc-200 dark:border-zinc-700/40'>
+              <td className='p-3 w-[10%]'># Invoice</td>
+              <td className='p-2 w-[24%]'>To</td>
+              <td className='p-2 w-[10%] text-center'>Approval</td>
+              <td className='p-2 w-[13%] text-center'>Due Date</td>
+              <td className='p-2 w-[11%] text-center'>Status</td>
+              <td className='p-2 w-[13%] text-center'>Total</td>
+              <td className='p-2 w-[13%] text-center'>Due</td>
+              <td className='p-2 w-[5%]'></td>
+            </tr>
+          </thead>
+          <InvoiceBody
+            onSelectInvoice={onSelectInvoice}
+            invoices={currentInvoices}
+            onSelectInvoiceToRecordPayment={onSelectInvoiceToRecordPayment}
+            onSelectInvoiceToUpdate={onSelectInvoiceToUpdate}
+            onSelectInvoiceToDelete={onSelectInvoiceToDelete}
           />
-        )}
-      </div>
+        </table>
+        {invoices?.length === 0 && <InvoiceEmptyState />}
+      </InvoiceCard>
+      {invoices?.length > 0 && (
+        <PaginationUI
+          currentPage={currentPage}
+          pageCount={pageCount}
+          onHandleNextButton={onHandleNextButton}
+          onHandlePreviousButton={onHandlePreviousButton}
+        />
+      )}
       <Invoice invoiceId={selectedInvoice} />
       <Dialog
         open={recordPaymentDialogStatus}
@@ -128,6 +157,25 @@ const InvoiceTable = ({ lists: invoices }: { lists: InvoicesResponse[] }) => {
           onClosePaymentDialog={onClosePaymentDialog}
         />
       </Dialog>
+      <Dialog
+        open={updateInvoiceDialog}
+        onOpenChange={onCloseUpdateInvoiceDialog}
+      >
+        <UpdateInvoiceDialog
+          invoice={invoices.find((value) => {
+            return value.id === selectedInvoiceToUpdate
+          })}
+          onCloseUpdateInvoiceDialog={onCloseUpdateInvoiceDialog}
+        />
+      </Dialog>
+      <Dialog open={deleteAlert} onOpenChange={onCloseDeleteAlertDialog}>
+        <DeleteAlert
+          invoice={invoices.find((value) => {
+            return value.id === selectedInvoiceToDelete
+          })}
+          onCloseAlertDialog={onCloseDeleteAlertDialog}
+        />
+      </Dialog>
     </Sheet>
   )
 }
@@ -137,12 +185,39 @@ export default InvoiceTable
 const InvoiceBody = ({
   invoices,
   onSelectInvoice,
-  onSelectInvoiceToRecordPayment
+  onSelectInvoiceToRecordPayment,
+  onSelectInvoiceToUpdate,
+  onSelectInvoiceToDelete
 }: {
   invoices: InvoicesResponse[]
   onSelectInvoice: (invoiceId: string) => void
   onSelectInvoiceToRecordPayment: (invoiceId: string) => void
+  onSelectInvoiceToUpdate: (invoiceId: string) => void
+  onSelectInvoiceToDelete: (invoiceId: string) => void
 }) => {
+  async function downloadImage(apiUri: string, fileName: string) {
+    const loadingToastId = callLoadingToast(`Downloading Invoice ${fileName}`)
+    try {
+      const response = await fetch(apiUri)
+      if (!response.ok) {
+        throw new Error(`Error fetching image: ${response.statusText}`)
+      }
+      const blobImage = await response.blob()
+      const downloadLink = document.createElement('a')
+      downloadLink.href = URL.createObjectURL(blobImage)
+      downloadLink.download = fileName
+      downloadLink.click()
+      toast.success('Downloaded complete, check your file explorer.', {
+        id: loadingToastId
+      })
+    } catch (error) {
+      console.error('Error downloading image:', error)
+      toast.error(`Error downloading image: ${error}`, {
+        id: loadingToastId
+      })
+    }
+  }
+
   return (
     <tbody>
       {invoices?.map((invoice, ind) => {
@@ -205,7 +280,13 @@ const InvoiceBody = ({
                 >
                   <DropdownMenuLabel>Invoice Action</DropdownMenuLabel>
                   <DropdownMenuSeparator className='bg-zinc-600/20' />
-                  <DropdownMenuItem>Update</DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      onSelectInvoiceToUpdate(invoice.id)
+                    }}
+                  >
+                    Update
+                  </DropdownMenuItem>
                   {invoice.paymentStatus !== 'PAID' &&
                     invoice.approvalStatus === 'APPROVED' && (
                       <DialogTrigger asChild>
@@ -227,7 +308,24 @@ const InvoiceBody = ({
                     View
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className='bg-zinc-600/20' />
-                  <DropdownMenuItem>Download</DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      downloadImage(
+                        `${baseurl}/api/invoice/${invoice.id}/og`,
+                        `INV-${invoice.invoiceNumber}.webp`
+                      )
+                    }}
+                  >
+                    Download
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className='text-red-500 hover:text-red-500'
+                    onClick={() => {
+                      onSelectInvoiceToDelete(invoice?.id)
+                    }}
+                  >
+                    Delete
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </td>
@@ -253,8 +351,8 @@ const InvoiceEmptyState = () => {
         src={createInv}
         className='mx-auto'
         alt='empty-inv'
-        width={256}
-        height={232}
+        width={192}
+        height={174}
       />
       <p className='text-xs font-light text-black dark:text-white max-w-[200px] mx-auto '>
         There are no invoices to display at the moment. You're all caught up!

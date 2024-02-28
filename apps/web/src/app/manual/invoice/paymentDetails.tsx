@@ -36,6 +36,9 @@ const PaymentDetails = () => {
   }
 
   const onChangeDiscountPercent = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (+e.target.value > 100 || +e.target.value < 0) {
+      return
+    }
     paymentInfoDispatch({
       type: 'DISCOUNT_PERCENT',
       payload: {
@@ -178,15 +181,15 @@ const PaymentDetails = () => {
             Notes/Memo
           </Label>
           <Textarea
-            className='bg-transparent dark:border-zinc-600 border-zinc-400 placeholder:dark:text-zinc-300/80 placeholder:text-zinc-700/80 text-xs'
+            className='bg-transparent dark:border-zinc-600/40 border-zinc-400/40 placeholder:dark:text-zinc-300/80 placeholder:text-zinc-700/80 text-xs'
             placeholder='Type your message here.'
             id='message'
             onChange={onChangeNotes}
             value={paymentInfoState.notes}
           />
-          <div className='mt-4'>
+          {/* <div className='mt-4'>
             <UploadFile />
-          </div>
+          </div> */}
         </div>
         <div className='max-w-xs w-full p-1 mt-2'>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
@@ -200,7 +203,6 @@ const PaymentDetails = () => {
               type='number'
               className='outline-none border-none w-1/3 bg-transparent text-right remove-arrow'
               onChange={onChangeDiscountPercent}
-              readOnly // For Beta, will change later
             />
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
@@ -266,7 +268,8 @@ const PaymentDetails = () => {
               {formatAmount(
                 subTotal +
                   +paymentInfoState.adjustmentFee +
-                  +paymentInfoState.additionalCharges
+                  +paymentInfoState.additionalCharges -
+                  subTotal * (+paymentInfoState.discount / 100)
               )}
             </p>
           </div>

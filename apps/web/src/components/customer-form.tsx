@@ -11,15 +11,17 @@ import {
 } from '@/components/ui/sheet'
 import { Customer } from '@/types/invoice'
 import { Loader } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
-export const CustomerForm = () => {
-  const [legalName, setLegalName] = useState<string | undefined>()
+export const CustomerForm = ({ query }: { query: string }) => {
+  const [legalName, setLegalName] = useState<string | undefined>(query)
   const [whatsAppNumber, setWhatsApp] = useState<string | undefined>()
   const [email, setEmail] = useState<string | undefined>()
   const [loading, setLoading] = useState(false)
-
+  useEffect(() => {
+    setLegalName(query)
+  }, [query])
   const onCreateCustomer = async () => {
     if (!legalName || !email || !whatsAppNumber) {
       toast.error('Invalid customer data')

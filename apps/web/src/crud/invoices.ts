@@ -1,7 +1,12 @@
 import { db } from '@/lib/db'
 import { Invoice } from 'database'
 import { getOrgId } from '@/crud/organization'
-export const getInvoices = async (email: string | null | undefined) => {
+import { PaymentStatus } from '@/types/invoice'
+export const getInvoices = async (
+  email: string | null | undefined,
+  query: string | null,
+  status: PaymentStatus[] | null
+) => {
   try {
     if (!email) {
       console.error('Error:', 'Not Authorized')
@@ -16,7 +21,31 @@ export const getInvoices = async (email: string | null | undefined) => {
 
     const response = await db.invoice.findMany({
       where: {
-        organizationId: orgId
+        organizationId: orgId,
+        paymentStatus: {
+          in: status ?? ['DUE', 'OVERDUE', 'PAID', 'PARTIALLY_PAID']
+        },
+        OR: [
+          { invoiceNumber: { equals: parseInt(query || '') || 0 } },
+          {
+            customerInfo: {
+              legalName: { contains: query || '', mode: 'insensitive' }
+            }
+          },
+          {
+            customerInfo: {
+              email: { contains: query || '', mode: 'insensitive' }
+            }
+          },
+          {
+            customerInfo: {
+              whatsAppNumber: { contains: query || '', mode: 'insensitive' }
+            }
+          }
+        ]
+      },
+      orderBy: {
+        dateIssue: 'desc'
       },
       select: {
         id: true,
@@ -33,7 +62,11 @@ export const getInvoices = async (email: string | null | undefined) => {
         paymentStatus: true,
         dueAmount: true,
         totalAmount: true,
-        approvalStatus: true
+        approvalStatus: true,
+        sendingMethod: true,
+        paymentMethod: true,
+        paymentTerms: true,
+        notes: true
       }
     })
 

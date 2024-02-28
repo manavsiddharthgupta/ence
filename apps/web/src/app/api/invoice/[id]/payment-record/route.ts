@@ -86,7 +86,7 @@ export async function PATCH(
       },
       data: {
         paymentStatus: 'PAID', // will change based on the body.amount
-        dueAmount: invoice?.dueAmount - body?.amount,
+        dueAmount: { decrement: body?.amount },
         paymentMethod: body?.paymentType === 'cash' ? 'CASH' : 'DIGITAL_WALLET'
       }
     })
@@ -99,7 +99,7 @@ export async function PATCH(
         newStatus: 'PAID', // Todo: will change based on the body.amount
         title: 'Payment Status Change',
         description:
-          'You updated the payment status of the invoice to Paid, signifies  the successful completion of the payment.' // Todo: will change based on the body.amount
+          'You updated the payment status of the invoice to Paid, signifies the successful completion of the payment.' // Todo: will change based on the body.amount
       }
     })
 

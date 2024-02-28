@@ -11,9 +11,7 @@ const dashboard = () => {
         Overview
       </p>
       <h1 className='text-4xl leading-9 font-semibold'>Home</h1>
-      <Suspense fallback={<CountOverviewSuspense />}>
-        <CountOverview />
-      </Suspense>
+      <CountOverview />
       <div className='py-6 flex justify-between'>
         <TimeLine />
         <Suspense fallback={<ActivityCardSuspense />}>
@@ -25,25 +23,6 @@ const dashboard = () => {
 }
 
 export default dashboard
-
-const CountOverviewSuspense = () => {
-  return (
-    <div className='py-6 flex gap-4'>
-      <div className='rounded-3xl w-1/4 max-w-60'>
-        <Skeleton className='rounded-3xl h-[150px] bg-gray-500/10' />
-      </div>
-      <div className='rounded-3xl w-1/4 max-w-60'>
-        <Skeleton className='rounded-3xl h-[150px] bg-gray-500/10' />
-      </div>
-      <div className='rounded-3xl w-1/4 max-w-60'>
-        <Skeleton className='rounded-3xl h-[150px] bg-gray-500/10' />
-      </div>
-      <div className='rounded-3xl w-1/4 max-w-60'>
-        <Skeleton className='rounded-3xl h-[150px] bg-gray-500/10' />
-      </div>
-    </div>
-  )
-}
 
 const ActivityCardSuspense = () => {
   return (

@@ -67,6 +67,7 @@ export const formatInvoiceData = (
     shippingCharge: +paymentInfoState.shippingCharge,
     packagingCharge: +paymentInfoState.packagingCharge,
     adjustmentFee: +paymentInfoState.adjustmentFee,
+    discount: +paymentInfoState.discount,
     sendingMethod:
       invoiceInfoState.sendingMethod === 'mail'
         ? SendMethods.MAIL
@@ -95,18 +96,23 @@ export const formatInvoiceData = (
         : paymentInfoState.terms === 'net 90'
         ? PaymentTerms.NET_90
         : PaymentTerms.CUSTOM,
-    invoiceTotal: subTotal + +paymentInfoState.adjustmentFee, // Todo: add discount
+    invoiceTotal:
+      subTotal +
+      +paymentInfoState.adjustmentFee -
+      subTotal * (+paymentInfoState.discount / 100),
     subTotal: subTotal,
     totalAmount:
       subTotal +
       +paymentInfoState.adjustmentFee +
-      +paymentInfoState.additionalCharges, // Todo: add tax and discount
+      +paymentInfoState.additionalCharges -
+      subTotal * (+paymentInfoState.discount / 100),
     dueAmount:
       paymentInfoState.status === 'paid'
         ? 0
         : subTotal +
           +paymentInfoState.adjustmentFee +
-          +paymentInfoState.additionalCharges, // Todo: do it in server side instead in client side
+          +paymentInfoState.additionalCharges -
+          subTotal * (+paymentInfoState.discount / 100),
     items: formattedInvoiceItems
   }
   return formattedData
@@ -138,6 +144,7 @@ export const formatOrgData = (orgInfo: OrganizationState) => {
 }
 
 export const formatInstantInvoiceData = (
+  customerId: string,
   instantInvoiceDetails: InstantInvoice,
   dueDate: Date,
   instantInvoiceItems: InstantInvoiceItems,
@@ -166,7 +173,7 @@ export const formatInstantInvoiceData = (
     }
   )
   const formattedData: InvoiceBody = {
-    customerId: instantInvoiceDetails.customerId!,
+    customerId: customerId,
     dateIssue: instantInvoiceDetails.dateIssue!,
     dueDate: dueDate,
     invoiceNumber: +instantInvoiceDetails.invoiceNumber!,
@@ -195,6 +202,7 @@ export const formatInstantInvoiceData = (
 }
 
 export const checkOnDemandValidation = (
+  customerId: string | undefined,
   instantInvoiceDetails: InstantInvoice,
   dueDate: Date | undefined,
   instantInvoiceItems: InstantInvoiceItems,
@@ -212,39 +220,26 @@ export const checkOnDemandValidation = (
     )
     return false
   }
+  if (!customerId) {
+    toast.error('Please enter valid customer', {
+      position: 'bottom-center'
+    })
+    return false
+  }
   if (!instantInvoiceDetails.invoiceNumber) {
     toast.error('Please re-upload, we did not catch invoice number', {
       position: 'bottom-center'
     })
     return false
   }
-  if (
-    !instantInvoiceDetails.customerName ||
-    !instantInvoiceDetails.invoiceTotal ||
-    !instantInvoiceDetails.dateIssue ||
-    !instantInvoiceDetails.customerId
-  ) {
-    toast.error('Please fill invoice total and customer name', {
+  if (!instantInvoiceDetails.invoiceTotal || !instantInvoiceDetails.dateIssue) {
+    toast.error('Please fill invoice total and dateIssue', {
       position: 'bottom-center'
     })
     return false
   }
   if (!dueDate || !paymentMethod || !paymentTerm || !sendingMethod) {
     toast.error('Please validate invoice details', {
-      position: 'bottom-center'
-    })
-    return false
-  }
-
-  if (sendingMethod === 'mail' && !instantInvoiceDetails.email) {
-    toast.error('Please fill customer email', {
-      position: 'bottom-center'
-    })
-    return false
-  }
-
-  if (sendingMethod === 'whatsapp' && !instantInvoiceDetails.whatsappNumber) {
-    toast.error('Please fill customer whatsapp number', {
       position: 'bottom-center'
     })
     return false

@@ -5,14 +5,20 @@ import {
 } from 'lucide-react'
 import Tip from '@/components/component-tip'
 import { InvoicesOverview } from '@/types/invoice'
-const Overview = ({
-  overview: invoiceOverview
-}: {
-  overview: InvoicesOverview | null
-}) => {
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { getInvoicesOverview } from '@/crud/invoices'
+const Overview = async () => {
+  const getInvoiceListsOverview = async () => {
+    const session = await getServerSession(authOptions)
+    const email = session?.user?.email
+    const response = await getInvoicesOverview(email)
+    return JSON.parse(response)
+  }
+  const invoiceOverview = await getInvoiceListsOverview()
   return (
     <div className='mt-6 mb-12 w-full border-[1px] dark:border-zinc-700/60 border-zinc-300/60 rounded-2xl bg-zinc-100/20 dark:bg-zinc-800/10 py-6 flex justify-between'>
-      <InvoiceOverviewCard invoiceOverview={invoiceOverview} />
+      <InvoiceOverviewCard invoiceOverview={invoiceOverview.data} />
     </div>
   )
 }

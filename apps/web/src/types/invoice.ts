@@ -165,6 +165,10 @@ export type InvoicesResponse = {
   invoiceNumber: number
   paymentStatus: 'PAID' | 'DUE' | 'PARTIALLY_PAID' | 'OVERDUE'
   totalAmount: number
+  sendingMethod: SendMethods
+  paymentMethod: PaymentMethods
+  paymentTerms: PaymentTerms
+  notes: string
 }
 
 export type InvoicesOverview = {

@@ -9,15 +9,18 @@ import {
   InstantInvoiceItems,
   InstantInvoiceItemsAction
 } from '@/types/instant'
+import { Option } from '@/types/invoice'
 import { Dispatch, SetStateAction, createContext, useContext } from 'react'
 
 type InstantInvoiceContextType = {
   instantInvoiceDetails: InstantInvoice
+  customerLegalName: Option | null
   paymentTerm: string
   sendingMethod: string
   paymentMethod: string
   dueDate: Date | undefined
   instantInvoiceItems: InstantInvoiceItems
+  setCustomerLegalName: Dispatch<SetStateAction<Option | null>>
   setPaymentTerm: Dispatch<SetStateAction<string>>
   setSendingMethod: Dispatch<SetStateAction<string>>
   setPaymentMethod: Dispatch<SetStateAction<string>>
@@ -27,12 +30,14 @@ type InstantInvoiceContextType = {
 }
 
 const InstantInvoiceContext = createContext<InstantInvoiceContextType>({
+  customerLegalName: null,
   instantInvoiceDetails: InitialInstantInvoiceDetails,
   instantInvoiceItems: InitialInstantInvoiceItemsState,
   paymentTerm: '',
   paymentMethod: '',
   sendingMethod: '',
   dueDate: undefined,
+  setCustomerLegalName: () => {},
   instantInvoiceItemsDispatch: () => {},
   instantInvoiceDispatch: () => {},
   setPaymentMethod: () => {},

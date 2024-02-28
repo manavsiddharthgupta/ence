@@ -49,7 +49,7 @@ export const RecordPayment = ({
         paymentType: paymentType
       })
     } catch (err: any) {
-      console.log(err)
+      console.error(err)
       callErrorToast(err[0]?.message || 'Invalid Payment Record Data')
       return
     }
@@ -87,7 +87,7 @@ export const RecordPayment = ({
   }, [invoice])
 
   return (
-    <DialogContent className='bg-white dark:bg-zinc-950 dark:border-zinc-800 border-zinc-200 max-w-2xl shadow-sm sm:max-w-[575px] '>
+    <DialogContent className='bg-white dark:bg-zinc-950 dark:border-zinc-800 border-zinc-200 max-w-2xl shadow-sm sm:max-w-[575px]'>
       <div className='flex justify-between items-end'>
         <div>
           <h1 className='text-xl font-bold mb-0.5'>
