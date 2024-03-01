@@ -228,6 +228,22 @@ enum ActionType {
   RECEIPT_SEND_STATUS_CHANGE
 }
 
+enum APILimit {
+  RESEND_MAIL
+  INSTANT_INVOICE
+}
+
+model UserAPILimit {
+  id             String   @id @default(uuid())
+  organizationId String
+  count          Int      @default(0)
+  type           APILimit
+  createdAt      DateTime @default(now())
+  updateAt       DateTime @updatedAt
+
+  @@unique([organizationId, type])
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String

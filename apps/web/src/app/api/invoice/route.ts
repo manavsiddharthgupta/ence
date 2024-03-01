@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { InvoiceBody } from '@/types/invoice'
 import { InvoiceJobs } from 'events/jobs-publisher'
 import { getOrgId } from '@/crud/organization'
+import { checkApiLimit, increaseApiLimit } from '@/lib/api-limits'
 
 export async function GET() {
   try {
@@ -147,11 +148,15 @@ export async function POST(request: Request) {
       }
     })
 
-    await InvoiceJobs.createMediaFromInvoiceDataJob(
-      invoiceRes.id,
-      orgId,
-      invoiceRes
-    )
+    const freeTrial = await checkApiLimit('RESEND_MAIL', orgId)
+    if (freeTrial.ok) {
+      await InvoiceJobs.createMediaFromInvoiceDataJob(
+        invoiceRes.id,
+        orgId,
+        invoiceRes
+      )
+      await increaseApiLimit('RESEND_MAIL', orgId)
+    }
 
     return Response.json({
       ok: true,

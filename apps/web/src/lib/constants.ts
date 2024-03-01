@@ -40,3 +40,8 @@ export const PAYMENT_STATUS_OPTIONS = [
 ]
 
 export const WEEK_VALUES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat']
+
+export const MAX_FREE_COUNT = {
+  INSTANT_INVOICE: 10,
+  RESEND_MAIL: 15
+}

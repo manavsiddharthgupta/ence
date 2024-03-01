@@ -3,6 +3,7 @@ import { authOptions } from '../../auth/[...nextauth]/route'
 import { uploadFilesToS3 } from 'helper/s3'
 import { streamToBuffer } from '@/utils/buffer'
 import { getOrgId } from '@/crud/organization'
+import { checkApiLimit, increaseApiLimit } from '@/lib/api-limits'
 
 export async function POST(request: Request) {
   try {
@@ -21,6 +22,15 @@ export async function POST(request: Request) {
       return Response.json({ ok: false, data: null, status: 404 })
     }
 
+    const freeTrial = await checkApiLimit('INSTANT_INVOICE', orgId)
+    if (!freeTrial.ok) {
+      return Response.json({
+        ok: false,
+        data: 'Free trial has expired',
+        status: 500
+      })
+    }
+
     const { searchParams } = new URL(request.url)
     const filename = searchParams.get('filename')
     if (!filename || !request.body) {
@@ -33,6 +43,7 @@ export async function POST(request: Request) {
       filename,
       bufferImageData
     )
+    await increaseApiLimit('INSTANT_INVOICE', orgId)
     console.log(fileUrl)
     return Response.json({
       ok: true,
