@@ -31,7 +31,7 @@ export async function GET() {
       }
     })
 
-    return Response.json({ ok: true, data: response, staus: 200 })
+    return Response.json({ ok: true, data: response, status: 200 })
   } catch (error) {
     console.error('Error:', error)
     return Response.json({ ok: false, data: null, status: 500 })
