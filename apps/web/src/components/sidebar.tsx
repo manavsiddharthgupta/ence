@@ -100,7 +100,6 @@ const Sidebar = ({
       setUpgradeLoading(false)
     }
   }
-  console.log(session) //Todo : remove
   return (
     <nav className='border-r-2 dark:border-zinc-800/90 border-zinc-200/90 border-white bg-zinc-50 dark:bg-zinc-900 w-56 h-screen px-4 dark:text-white fixed left-0 top-0'>
       <div className='h-[calc(100%-220px)] pt-8'>
@@ -130,7 +129,12 @@ const Sidebar = ({
                 </div>
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className='w-52 dark:border-zinc-700/60 border-zinc-300/60 bg-white dark:bg-zinc-950 p-2'>
+            <DropdownMenuContent
+              side='bottom'
+              align='center'
+              sideOffset={16}
+              className='w-52 dark:border-zinc-700/60 border-zinc-300/60 bg-white dark:bg-zinc-950 p-2'
+            >
               <DropdownMenuItem className='flex gap-2 items-center p-2 cursor-pointer'>
                 <Settings size='16px' />
                 <span className='text-xs font-medium'>Manage</span>
