@@ -19,7 +19,7 @@ export const Beta = () => {
           </Badge>
         </TooltipTrigger>
         <TooltipContent className='bg-white dark:bg-zinc-900 dark:border-zinc-800 border-zinc-200 text-xs'>
-          <p>This is in beta version</p>
+          <p>This is a beta feature. Your feedback is valuable!</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

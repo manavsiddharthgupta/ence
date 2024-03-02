@@ -54,7 +54,7 @@ export async function GET() {
             },
             unit_amount: 199900,
             recurring: {
-              interval: 'month'
+              interval: 'year'
             }
           },
           quantity: 1

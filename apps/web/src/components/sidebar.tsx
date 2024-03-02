@@ -21,6 +21,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Button } from './ui/button'
@@ -106,25 +108,18 @@ const Sidebar = ({
         <div className='h-10 mb-2 flex items-center truncate'>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div className='flex gap-4 items-center px-3 cursor-pointer'>
+              <div className='flex gap-2 items-center w-full cursor-pointer truncate'>
                 <Avatar className='w-9 h-9'>
-                  <AvatarImage
-                    src={
-                      session?.user?.image || 'https://github.com/shadcn.png'
-                    }
-                  />
-                  <AvatarFallback>T</AvatarFallback>
+                  <AvatarImage src={''} />
+                  <AvatarFallback>
+                    {orgName?.slice(0, 1) ?? 'NA'}
+                  </AvatarFallback>
                 </Avatar>
-                <div>
-                  <p className='text-sm font-medium'>
-                    {session?.user?.name || '-'}
-                  </p>
+                <div className='w-[calc(100%-44px)]'>
                   {loading ? (
-                    <Skeleton className='rounded-md h-3 bg-gray-500/10' />
+                    <Skeleton className='rounded-md h-4 bg-gray-500/10' />
                   ) : (
-                    <p className='text-xs leading-3 font-medium text-zinc-600 dark:text-zinc-400'>
-                      {orgName}
-                    </p>
+                    <p className='text-sm font-medium'>{orgName}</p>
                   )}
                 </div>
               </div>
@@ -132,39 +127,68 @@ const Sidebar = ({
             <DropdownMenuContent
               side='bottom'
               align='center'
-              sideOffset={16}
+              sideOffset={8}
               className='w-52 dark:border-zinc-700/60 border-zinc-300/60 bg-white dark:bg-zinc-950 p-2'
             >
-              <DropdownMenuItem className='flex gap-2 items-center p-2 cursor-pointer'>
-                <Settings size='16px' />
+              <DropdownMenuLabel>
+                <div className='flex gap-2 items-center w-full cursor-pointer'>
+                  <Avatar className='w-7 h-7'>
+                    <AvatarImage
+                      src={
+                        session?.user?.image || 'https://github.com/shadcn.png'
+                      }
+                    />
+                    <AvatarFallback>
+                      {session?.user?.name
+                        ? session?.user?.name.slice(0, 1)
+                        : 'NA'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className='text-sm font-medium'>
+                      {session?.user?.name || '-'}
+                    </p>
+                    <p className='text-xs leading-3 text-zinc-600 dark:text-zinc-400'>
+                      {session?.user?.email
+                        ? session.user.email.length > 18
+                          ? session.user.email.slice(0, 18) + '...'
+                          : session.user.email
+                        : '-'}
+                    </p>
+                  </div>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className='flex justify-between items-center p-2 cursor-pointer'>
                 <span className='text-xs font-medium'>Manage</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className='flex gap-2 items-center p-2 cursor-pointer'
-                onClick={() => signOut()}
-              >
-                <LogOut size='16px' />
-                <span className='text-xs font-medium'>SignOut</span>
+                <Settings size='16px' />
               </DropdownMenuItem>
               {isPro ? (
                 <DropdownMenuItem
                   onClick={onSubscribe}
                   disabled={upgradeLoading}
-                  className='flex gap-2 items-center p-2 cursor-pointer'
+                  className='flex gap-2 justify-between items-center p-2 cursor-pointer'
                 >
-                  <CreditCard size='16px' />
                   <span className='text-xs font-medium'>Billing</span>
+                  <CreditCard size='16px' />
                 </DropdownMenuItem>
               ) : (
                 <DropdownMenuItem
                   onClick={onSubscribe}
                   disabled={upgradeLoading}
-                  className='flex gap-2 items-center p-2 cursor-pointer'
+                  className='flex gap-2 justify-between items-center p-2 cursor-pointer'
                 >
-                  <Rocket size='16px' />
                   <span className='text-xs font-medium'>Upgrade</span>
+                  <Rocket size='16px' />
                 </DropdownMenuItem>
               )}
+              <DropdownMenuItem
+                className='flex gap-2 justify-between items-center p-2 cursor-pointer'
+                onClick={() => signOut()}
+              >
+                <span className='text-xs font-medium'>SignOut</span>
+                <LogOut size='16px' />
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -332,7 +356,6 @@ const SideItems = () => {
             >
               {item.icon}
               <span>{item.label}</span>
-              {item.to === '/home' && <Beta />}
             </div>
           </li>
         )

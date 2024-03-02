@@ -79,7 +79,8 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
         amtToConsumer: invoiceInfo?.totalAmount,
         paidAmount: invoiceInfo.totalAmount - invoiceInfo.dueAmount,
         amountPayable: invoiceInfo.dueAmount,
-        invoiceLinks: invoiceInfo.relatedDocuments
+        invoiceLinks: invoiceInfo.relatedDocuments,
+        sendingMethod: invoiceInfo?.sendingMethod
       }
     : null
 
@@ -200,10 +201,17 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                   className='text-xs items-center gap-2 px-6 h-9 dark:bg-transparent dark:hover:bg-zinc-800/50 dark:border-zinc-600/30 border-zinc-400/30'
                 >
                   <Bell size={12} />
-                  <p>Send Payment Reminder</p>
-                  <Badge className='text-[10px] leading-[14px] px-2'>
-                    {invoiceDetail?.paymentMethod || '-'}
-                  </Badge>
+                  <p>
+                    Send{' '}
+                    {invoiceDetail?.sendingMethod
+                      ? invoiceDetail?.sendingMethod.toLowerCase()
+                      : ''}
+                  </p>
+                  {invoiceDetail?.sendingMethod === 'MAIL' && (
+                    <Badge className='text-[10px] lowercase leading-[14px] px-2'>
+                      {'last sent : 2h ago'}
+                    </Badge>
+                  )}
                 </Button>
               </div>
             )}
