@@ -112,12 +112,13 @@ function InputCombobox({
                   }`
                 }
               >
-                {option.legalName}
-                <span className='text-xs font-semibold'>
-                  {'  -  '}
-                  <p>{option.email}</p>
-                  <p>{option.whatsAppNumber}</p>
-                </span>
+                <div className='flex items-center gap-1'>
+                  <p className='text-sm w-1/2 truncate'>{option.legalName}</p>
+                  <div className='w-1/2 truncate flex flex-col text-xs font-medium'>
+                    <p>{option.email}</p>
+                    <p>{option.whatsAppNumber}</p>
+                  </div>
+                </div>
               </Combobox.Option>
             ))}
             {isPending && (
