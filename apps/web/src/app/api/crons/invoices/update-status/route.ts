@@ -1,18 +1,10 @@
 import { db } from '@/lib/db'
+import { NextRequest, NextResponse } from 'next/server'
+import { verifySignatureAppRouter } from '@upstash/qstash/dist/nextjs'
 
-export const dynamic = 'force-dynamic'
-export async function GET(request: Request) {
+async function handler(req: NextRequest) {
+  const body = await req.json()
   try {
-    const { searchParams } = new URL(request.url)
-    const key = searchParams.get('key')
-    if (key !== process.env.NEXT_CRON_SECRET) {
-      return Response.json({
-        ok: false,
-        data: 'You are not authorized',
-        status: 401
-      })
-    }
-
     const currentDate = new Date()
     currentDate.setHours(0, 0, 0, 0)
 
@@ -47,13 +39,19 @@ export async function GET(request: Request) {
         })
       })
     )
-    return Response.json({
+    return NextResponse.json({
       ok: true,
       data: 'Your cron job for updating overdue payment is successful done',
       status: 200
     })
   } catch (error) {
     console.error('Error:', error)
-    return Response.json({ ok: false, data: null, status: 500 })
+    return NextResponse.json({
+      ok: false,
+      data: null,
+      status: 500
+    })
   }
 }
+
+export const POST = verifySignatureAppRouter(handler)

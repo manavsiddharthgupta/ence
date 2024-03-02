@@ -8,5 +8,6 @@ export const config = {
     '/instant/:path*',
     '/home',
     '/api:path*'
-  ]
+  ],
+  exclude: ['/api/webhooks/stripe']
 }
