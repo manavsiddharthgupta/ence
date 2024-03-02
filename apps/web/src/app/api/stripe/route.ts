@@ -4,8 +4,9 @@ import { getOrgId } from '@/crud/organization'
 import { db } from '@/lib/db'
 import { stripe } from '@/lib/stripe'
 
-const returnURL = `${process.env.NEXT_PUBLIC_API_URL}/home`
+export const dynamic = 'force-dynamic'
 
+const returnURL = `${process.env.NEXT_PUBLIC_API_URL}/home`
 export async function GET() {
   try {
     const session = await getServerSession(authOptions)

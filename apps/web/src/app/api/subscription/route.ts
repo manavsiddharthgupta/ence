@@ -3,6 +3,7 @@ import { authOptions } from '../auth/[...nextauth]/route'
 import { getOrgId } from '@/crud/organization'
 import { checkSubscription } from '@/lib/subscription'
 
+export const dynamic = 'force-dynamic'
 export async function GET() {
   try {
     const session = await getServerSession(authOptions)
