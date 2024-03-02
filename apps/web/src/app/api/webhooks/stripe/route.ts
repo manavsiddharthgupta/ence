@@ -2,8 +2,8 @@ import { db } from '@/lib/db'
 import { stripe } from '@/lib/stripe'
 import Stripe from 'stripe'
 
-const webhookSecret: string = process.env.STRIPE_WEBHOOK_SECRET!
 export async function POST(req: Request) {
+  const webhookSecret: string = process.env.STRIPE_WEBHOOK_SECRET!
   try {
     const buf = await req.text()
     const sig = req.headers.get('stripe-signature')!
