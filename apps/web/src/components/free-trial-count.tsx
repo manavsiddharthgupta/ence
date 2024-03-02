@@ -1,22 +1,20 @@
 'use client'
 import { Card, CardContent } from '@/components/ui/card'
 import { MAX_FREE_COUNT } from '@/lib/constants'
-
 import { useQuery } from '@tanstack/react-query'
 import { Progress } from './ui/progress'
-import { Skeleton } from './ui/skeleton'
 
-const FreeTrialCount = () => {
+const FreeTrialCount = ({ isPro }: { isPro: boolean }) => {
+  if (isPro) {
+    return <div className=' h-[128px]'></div>
+  }
+
   const { isPending, error, data } = useQuery({
     queryKey: ['api-limit'],
     queryFn: () => fetch(`/api/limit-count`).then((res) => res.json())
   })
   if (isPending) {
-    return (
-      <div className='rounded-xl w-full'>
-        <Skeleton className='rounded-xl h-[128px] bg-gray-500/10' />
-      </div>
-    )
+    return <div className=' h-[128px]'></div>
   }
 
   if (error) {
@@ -30,7 +28,6 @@ const FreeTrialCount = () => {
   const INSTANT_INVOICE = data?.data?.INSTANT_INVOICE || 0
   const RESEND_MAIL = data?.data?.RESEND_MAIL || 0
 
-  console.log(data, INSTANT_INVOICE)
   return (
     <Card className='bg-zinc-900/5 dark:bg-white/5 border-none shadow-none'>
       <CardContent className='text-center p-4'>

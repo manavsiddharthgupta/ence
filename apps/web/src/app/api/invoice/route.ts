@@ -5,6 +5,7 @@ import { InvoiceBody } from '@/types/invoice'
 import { InvoiceJobs } from 'events/jobs-publisher'
 import { getOrgId } from '@/crud/organization'
 import { checkApiLimit, increaseApiLimit } from '@/lib/api-limits'
+import { checkSubscription } from '@/lib/subscription'
 
 export async function GET() {
   try {
@@ -149,12 +150,25 @@ export async function POST(request: Request) {
     })
 
     const freeTrial = await checkApiLimit('RESEND_MAIL', orgId)
-    if (freeTrial.ok) {
-      await InvoiceJobs.createMediaFromInvoiceDataJob(
-        invoiceRes.id,
-        orgId,
-        invoiceRes
-      )
+    const isPro = await checkSubscription(orgId)
+    if (!freeTrial.ok && !isPro) {
+      return Response.json({
+        ok: true,
+        data: {
+          invoiceNumber: invoiceRes.invoiceNumber,
+          dueDate: invoiceRes.dueDate
+        },
+        status: 200
+      })
+    }
+
+    await InvoiceJobs.createMediaFromInvoiceDataJob(
+      invoiceRes.id,
+      orgId,
+      invoiceRes
+    )
+
+    if (!isPro) {
       await increaseApiLimit('RESEND_MAIL', orgId)
     }
 

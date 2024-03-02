@@ -4,6 +4,7 @@ import { uploadFilesToS3 } from 'helper/s3'
 import { streamToBuffer } from '@/utils/buffer'
 import { getOrgId } from '@/crud/organization'
 import { checkApiLimit, increaseApiLimit } from '@/lib/api-limits'
+import { checkSubscription } from '@/lib/subscription'
 
 export async function POST(request: Request) {
   try {
@@ -23,10 +24,12 @@ export async function POST(request: Request) {
     }
 
     const freeTrial = await checkApiLimit('INSTANT_INVOICE', orgId)
-    if (!freeTrial.ok) {
+    const isPro = await checkSubscription(orgId)
+
+    if (!freeTrial.ok && !isPro) {
       return Response.json({
         ok: false,
-        data: 'Free trial has expired',
+        data: 'Free trial for instant invoice has expired.',
         status: 500
       })
     }
@@ -43,7 +46,10 @@ export async function POST(request: Request) {
       filename,
       bufferImageData
     )
-    await increaseApiLimit('INSTANT_INVOICE', orgId)
+
+    if (!isPro) {
+      await increaseApiLimit('INSTANT_INVOICE', orgId)
+    }
     console.log(fileUrl)
     return Response.json({
       ok: true,

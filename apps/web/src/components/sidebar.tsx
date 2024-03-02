@@ -24,11 +24,20 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Button } from './ui/button'
-import { FileMinus2, FilePlus2, LogOut, Settings, Zap } from 'lucide-react'
+import {
+  CreditCard,
+  FileMinus2,
+  FilePlus2,
+  LogOut,
+  Rocket,
+  Settings,
+  Zap
+} from 'lucide-react'
 import { Beta } from './beta-badge'
 import { Skeleton } from './ui/skeleton'
 import Link from 'next/link'
 import FreeTrialCount from './free-trial-count'
+import { callErrorToast } from '@/lib/helpers'
 
 const Sidebar = ({
   onChangeThemeHandler
@@ -36,7 +45,12 @@ const Sidebar = ({
   onChangeThemeHandler: () => void
 }) => {
   const [orgName, setOrgName] = useState('-')
+  const [isPro, setPro] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [upgradeLoading, setUpgradeLoading] = useState(false)
+  const { theme } = useTheme()
+  const { data: session } = useSession()
+  const route = useRouter()
 
   useEffect(() => {
     const getOrgDetails = async () => {
@@ -53,8 +67,39 @@ const Sidebar = ({
     }
     getOrgDetails()
   }, [])
-  const { theme } = useTheme()
-  const { data: session } = useSession()
+
+  useEffect(() => {
+    const checkIfPro = async () => {
+      const response = await fetch('/api/subscription')
+      const res = await response.json()
+      if (res.ok) {
+        const isPro = !!res?.data?.isPro
+        setPro(isPro)
+      } else {
+        setPro(false)
+      }
+    }
+    checkIfPro()
+  }, [])
+
+  const onSubscribe = async () => {
+    try {
+      setUpgradeLoading(true)
+      const response = await fetch('/api/stripe')
+      const urlRes = await response.json()
+      if (urlRes.ok) {
+        const url = urlRes?.data || '/'
+        route.push(url)
+      } else {
+        callErrorToast('Something went wrong, please try again.')
+      }
+    } catch (err) {
+      console.error(err)
+      callErrorToast('Something went wrong, please try again.')
+    } finally {
+      setUpgradeLoading(false)
+    }
+  }
   console.log(session) //Todo : remove
   return (
     <nav className='border-r-2 dark:border-zinc-800/90 border-zinc-200/90 border-white bg-zinc-50 dark:bg-zinc-900 w-56 h-screen px-4 dark:text-white fixed left-0 top-0'>
@@ -97,6 +142,25 @@ const Sidebar = ({
                 <LogOut size='16px' />
                 <span className='text-xs font-medium'>SignOut</span>
               </DropdownMenuItem>
+              {isPro ? (
+                <DropdownMenuItem
+                  onClick={onSubscribe}
+                  disabled={upgradeLoading}
+                  className='flex gap-2 items-center p-2 cursor-pointer'
+                >
+                  <CreditCard size='16px' />
+                  <span className='text-xs font-medium'>Billing</span>
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem
+                  onClick={onSubscribe}
+                  disabled={upgradeLoading}
+                  className='flex gap-2 items-center p-2 cursor-pointer'
+                >
+                  <Rocket size='16px' />
+                  <span className='text-xs font-medium'>Upgrade</span>
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -104,7 +168,7 @@ const Sidebar = ({
           <SideItems />
         </div>
       </div>
-      <FreeTrialCount />
+      <FreeTrialCount isPro={isPro} />
       <div className='h-8 flex flex-col justify-between mt-4'>
         <div className=' flex items-center justify-center gap-1'>
           <Switch
