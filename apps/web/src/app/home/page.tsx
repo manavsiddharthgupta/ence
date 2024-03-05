@@ -2,11 +2,15 @@ import { Suspense } from 'react'
 import CountOverview from './count-overview'
 import ActivityCard from './activity'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { TimeLine } from './timeline'
+import { RocketIcon } from 'lucide-react'
+import Link from 'next/link'
 
 const dashboard = () => {
   return (
     <div className='w-full max-w-4xl mx-auto'>
+      <Announcements />
       <p className='text-xs leading-3 text-zinc-600/80 dark:text-zinc-300/80 font-medium'>
         Overview
       </p>
@@ -53,5 +57,21 @@ const EachActivitySkeleton = ({ last }: { last?: boolean }) => {
         <Skeleton className='rounded-3xl h-3 bg-gray-500/10' />
       </div>
     </div>
+  )
+}
+
+export function Announcements() {
+  return (
+    <Alert className='dark:bg-zinc-950 mb-6 border border-zinc-400/20 dark:border-zinc-600/20'>
+      <RocketIcon className='h-4 w-4' />
+      <AlertTitle>Heads up!</AlertTitle>
+      <AlertDescription>
+        Hey, We are getting better with features everyday. Please reach out to{' '}
+        <Link className='font-medium' href='mailto:@info.ence.in'>
+          @info.ence.in
+        </Link>{' '}
+        if you want a feature or have a suggestion.
+      </AlertDescription>
+    </Alert>
   )
 }
