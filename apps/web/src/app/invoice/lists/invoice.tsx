@@ -207,11 +207,11 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                       ? invoiceDetail?.sendingMethod.toLowerCase()
                       : ''}
                   </p>
-                  {invoiceDetail?.sendingMethod === 'MAIL' && (
+                  {/* {invoiceDetail?.sendingMethod === 'MAIL' && (
                     <Badge className='text-[10px] lowercase leading-[14px] px-2'>
                       {'last sent : 2h ago'}
                     </Badge>
-                  )}
+                  )} */}
                 </Button>
               </div>
             )}

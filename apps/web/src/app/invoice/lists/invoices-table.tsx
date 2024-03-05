@@ -13,6 +13,7 @@ import { StatusBadge } from '@/components/status-badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   AlertCircle,
+  CheckCheck,
   CheckCircle2,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -246,7 +247,7 @@ const InvoiceBody = ({
             </td>
             <td className='p-2'>
               {invoice.approvalStatus === 'APPROVED' ? (
-                <CheckCircle2 size={18} className='text-green-500 mx-auto' />
+                <CheckCheck size={18} className='text-green-500 mx-auto' />
               ) : invoice.approvalStatus === 'UNAPPROVED' ? (
                 <Loader size={18} className='text-yellow-500 mx-auto' />
               ) : (
