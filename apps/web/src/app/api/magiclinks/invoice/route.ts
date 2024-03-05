@@ -7,7 +7,20 @@ export async function GET(request: Request) {
     const secret = process.env.INVOICE_APPROVAL_SECRET_KEY || ''
 
     const { searchParams } = new URL(request.url)
-    const token = searchParams.get('token')
+    let token = searchParams.get('token')
+    const alias = searchParams.get('aliasId')
+
+    if (!token && alias) {
+      const res = await db.tokens.findUnique({
+        where: {
+          id: alias
+        }
+      })
+      if (res?.target) {
+        token = res.target
+      }
+    }
+
     if (!token) {
       return Response.json({
         ok: false,

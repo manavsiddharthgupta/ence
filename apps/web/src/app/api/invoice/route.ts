@@ -6,6 +6,7 @@ import { InvoiceJobs } from 'events/jobs-publisher'
 import { getOrgId } from '@/crud/organization'
 import { checkApiLimit, increaseApiLimit } from '@/lib/api-limits'
 import { checkSubscription } from '@/lib/subscription'
+import jwt from 'jsonwebtoken'
 
 export async function GET() {
   try {
@@ -147,6 +148,41 @@ export async function POST(request: Request) {
         totalAmount: true,
         notes: true
       }
+    })
+
+    const tokenForApprove = jwt.sign(
+      {
+        invoiceId: invoiceRes?.id,
+        status: 'APPROVED',
+        orgId: invoiceRes?.organization?.id
+      },
+      process.env.INVOICE_APPROVAL_SECRET_KEY || '',
+      { expiresIn: '24h' }
+    )
+
+    const tokenForReject = jwt.sign(
+      {
+        invoiceId: invoiceRes?.id,
+        status: 'REJECTED',
+        orgId: invoiceRes?.organization?.id
+      },
+      process.env.INVOICE_APPROVAL_SECRET_KEY || '',
+      { expiresIn: '24h' }
+    )
+
+    await db.tokens.createMany({
+      data: [
+        {
+          invoiceId: invoiceRes?.id,
+          target: tokenForApprove,
+          type: 'INV_APPROVE'
+        },
+        {
+          invoiceId: invoiceRes?.id,
+          target: tokenForReject,
+          type: 'INV_REJECT'
+        }
+      ]
     })
 
     const freeTrial = await checkApiLimit('RESEND_MAIL', orgId)
