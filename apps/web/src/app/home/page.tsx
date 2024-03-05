@@ -60,7 +60,7 @@ const EachActivitySkeleton = ({ last }: { last?: boolean }) => {
   )
 }
 
-function Announcements() {
+const Announcements = () => {
   return (
     <Alert className='dark:bg-zinc-950 mb-6 border border-zinc-400/20 dark:border-zinc-600/20'>
       <RocketIcon className='h-4 w-4' />
