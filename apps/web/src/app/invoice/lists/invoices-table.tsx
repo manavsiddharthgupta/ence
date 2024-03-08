@@ -28,7 +28,7 @@ import { Sheet } from '@/components/ui/sheet'
 import Invoice from './invoice'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { RecordPayment } from './record-payment'
-import { callLoadingToast } from '@/lib/helpers'
+import { callErrorToast, callInfoToast, callLoadingToast } from '@/lib/helpers'
 import { toast } from 'sonner'
 import UpdateInvoiceDialog from './update-invoice'
 import DeleteAlert from './delete-alert'
@@ -205,6 +205,7 @@ const InvoiceBody = ({
   onSelectInvoiceToUpdate: (invoiceId: string) => void
   onSelectInvoiceToDelete: (invoiceId: string) => void
 }) => {
+  const [sendingMail, setMailStatus] = useState(false)
   async function downloadImage(apiUri: string, fileName: string) {
     const loadingToastId = callLoadingToast(`Downloading Invoice ${fileName}`)
     try {
@@ -225,6 +226,26 @@ const InvoiceBody = ({
       toast.error(`Error downloading image: ${error}`, {
         id: loadingToastId
       })
+    }
+  }
+
+  const sendMailHandler = async (invoiceId: string) => {
+    setMailStatus(true)
+    try {
+      const res = await fetch(`/api/email/${invoiceId}`)
+      const sendMail = await res.json()
+      if (!sendMail.ok) {
+        callErrorToast(
+          sendMail.data || 'Something went wrong, please try again'
+        )
+      } else {
+        callInfoToast('Sucessfully sent email to the customer')
+      }
+    } catch (err) {
+      console.error(err)
+      callErrorToast('Something went wrong, please try again')
+    } finally {
+      setMailStatus(false)
     }
   }
 
@@ -279,7 +300,10 @@ const InvoiceBody = ({
                       </div>
                       <div className='flex justify-end items-center gap-2 w-full'>
                         <Button
-                          disabled
+                          onClick={() => {
+                            sendMailHandler(invoice.id)
+                          }}
+                          disabled={sendingMail}
                           className='text-xs w-fit h-5 py-3 px-4'
                         >
                           Send on Mail
