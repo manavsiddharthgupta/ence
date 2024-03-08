@@ -12,20 +12,26 @@ const InvoiceApproval = () => {
   const [invoiceImageUrl, setImageUrl] = useState<string | null>()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
+  const alias = searchParams.get('aliasId')
   const status = searchParams.get('status')
-  if (!token) {
+  let API_URI = '/api/magiclinks/invoice'
+  if (!token && !alias) {
     return notFound()
   }
+
+  if (!token && alias) {
+    API_URI += `?aliasId=${alias}`
+  } else {
+    API_URI += `?token=${token}`
+  }
+
   const {
     isPending,
     error,
     data: res
   } = useQuery({
     queryKey: ['customer-approval'],
-    queryFn: () =>
-      fetch(`${baseURI}/api/magiclinks/invoice?token=${token}`).then((res) =>
-        res.json()
-      )
+    queryFn: () => fetch(`${baseURI}${API_URI}`).then((res) => res.json())
   })
 
   useEffect(() => {

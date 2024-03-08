@@ -6,6 +6,7 @@ import { InvoiceJobs } from 'events/jobs-publisher'
 import { getOrgId } from '@/crud/organization'
 import { checkApiLimit, increaseApiLimit } from '@/lib/api-limits'
 import { checkSubscription } from '@/lib/subscription'
+import jwt from 'jsonwebtoken'
 
 export async function GET() {
   try {
@@ -149,28 +150,63 @@ export async function POST(request: Request) {
       }
     })
 
-    const freeTrial = await checkApiLimit('RESEND_MAIL', orgId)
-    const isPro = await checkSubscription(orgId)
-    if (!freeTrial.ok && !isPro) {
-      return Response.json({
-        ok: true,
-        data: {
-          invoiceNumber: invoiceRes.invoiceNumber,
-          dueDate: invoiceRes.dueDate
-        },
-        status: 200
-      })
-    }
-
-    await InvoiceJobs.createMediaFromInvoiceDataJob(
-      invoiceRes.id,
-      orgId,
-      invoiceRes
+    const tokenForApprove = jwt.sign(
+      {
+        invoiceId: invoiceRes?.id,
+        status: 'APPROVED',
+        orgId: invoiceRes?.organization?.id
+      },
+      process.env.INVOICE_APPROVAL_SECRET_KEY || '',
+      { expiresIn: '24h' }
     )
 
-    if (!isPro) {
-      await increaseApiLimit('RESEND_MAIL', orgId)
-    }
+    const tokenForReject = jwt.sign(
+      {
+        invoiceId: invoiceRes?.id,
+        status: 'REJECTED',
+        orgId: invoiceRes?.organization?.id
+      },
+      process.env.INVOICE_APPROVAL_SECRET_KEY || '',
+      { expiresIn: '24h' }
+    )
+
+    await db.tokens.createMany({
+      data: [
+        {
+          invoiceId: invoiceRes?.id,
+          target: tokenForApprove,
+          type: 'INV_APPROVE'
+        },
+        {
+          invoiceId: invoiceRes?.id,
+          target: tokenForReject,
+          type: 'INV_REJECT'
+        }
+      ]
+    })
+
+    // const freeTrial = await checkApiLimit('RESEND_MAIL', orgId)
+    // const isPro = await checkSubscription(orgId)
+    // if (!freeTrial.ok && !isPro) {
+    //   return Response.json({
+    //     ok: true,
+    //     data: {
+    //       invoiceNumber: invoiceRes.invoiceNumber,
+    //       dueDate: invoiceRes.dueDate
+    //     },
+    //     status: 200
+    //   })
+    // }
+
+    // await InvoiceJobs.createMediaFromInvoiceDataJob(
+    //   invoiceRes.id,
+    //   orgId,
+    //   invoiceRes
+    // )
+
+    // if (!isPro) {
+    //   await increaseApiLimit('RESEND_MAIL', orgId)
+    // }
 
     return Response.json({
       ok: true,

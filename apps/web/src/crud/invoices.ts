@@ -57,6 +57,8 @@ export const getInvoices = async (
             whatsAppNumber: true
           }
         },
+        organization: { select: { orgName: true, id: true } },
+        tokens: true,
         dateIssue: true,
         dueDate: true,
         paymentStatus: true,

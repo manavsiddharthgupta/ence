@@ -13,14 +13,13 @@ import { StatusBadge } from '@/components/status-badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   AlertCircle,
+  BellRing,
   CheckCheck,
-  CheckCircle2,
   ChevronLeftIcon,
   ChevronRightIcon,
-  Loader,
   User2Icon
 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { InvoicesResponse } from '@/types/invoice'
 import { formatAmount, formatDate } from 'helper/format'
 import Image from 'next/image'
@@ -29,10 +28,20 @@ import { Sheet } from '@/components/ui/sheet'
 import Invoice from './invoice'
 import { Dialog, DialogTrigger } from '@/components/ui/dialog'
 import { RecordPayment } from './record-payment'
-import { callLoadingToast } from '@/lib/helpers'
+import { callErrorToast, callInfoToast, callLoadingToast } from '@/lib/helpers'
 import { toast } from 'sonner'
 import UpdateInvoiceDialog from './update-invoice'
 import DeleteAlert from './delete-alert'
+import Tip from '@/components/component-tip'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
+import Link from 'next/link'
+import { useQuery } from '@tanstack/react-query'
+import { invoicetextToWhatsappUrl } from '@/lib/url-encoder'
 
 const baseurl = process.env.NEXT_PUBLIC_API_URL
 
@@ -196,6 +205,7 @@ const InvoiceBody = ({
   onSelectInvoiceToUpdate: (invoiceId: string) => void
   onSelectInvoiceToDelete: (invoiceId: string) => void
 }) => {
+  const [sendingMail, setMailStatus] = useState(false)
   async function downloadImage(apiUri: string, fileName: string) {
     const loadingToastId = callLoadingToast(`Downloading Invoice ${fileName}`)
     try {
@@ -216,6 +226,26 @@ const InvoiceBody = ({
       toast.error(`Error downloading image: ${error}`, {
         id: loadingToastId
       })
+    }
+  }
+
+  const sendMailHandler = async (invoiceId: string) => {
+    setMailStatus(true)
+    try {
+      const res = await fetch(`/api/email/${invoiceId}`)
+      const sendMail = await res.json()
+      if (!sendMail.ok) {
+        callErrorToast(
+          sendMail.data || 'Something went wrong, please try again'
+        )
+      } else {
+        callInfoToast('Sucessfully sent email to the customer')
+      }
+    } catch (err) {
+      console.error(err)
+      callErrorToast('Something went wrong, please try again')
+    } finally {
+      setMailStatus(false)
     }
   }
 
@@ -247,11 +277,55 @@ const InvoiceBody = ({
             </td>
             <td className='p-2'>
               {invoice.approvalStatus === 'APPROVED' ? (
-                <CheckCheck size={18} className='text-green-500 mx-auto' />
+                <Tip info='Invoice is approved by customer'>
+                  <CheckCheck size={18} className='text-green-500 mx-auto' />
+                </Tip>
               ) : invoice.approvalStatus === 'UNAPPROVED' ? (
-                <Loader size={18} className='text-yellow-500 mx-auto' />
+                <TooltipProvider delayDuration={100}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <BellRing
+                        size={17}
+                        className='text-yellow-500 mx-auto cursor-pointer'
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent className='bg-white dark:bg-zinc-900 dark:border-zinc-800 border-zinc-200 text-xs py-2'>
+                      <div className='mb-2'>
+                        <p className='mb-1.5 font-medium'>
+                          Send a reminder to the customer to approve the
+                          invoice.
+                        </p>
+                        <p>Confirm your Invoice INV-{invoice?.invoiceNumber}</p>
+                        <p>...</p>
+                      </div>
+                      <div className='flex justify-end items-center gap-2 w-full'>
+                        <Button
+                          onClick={() => {
+                            sendMailHandler(invoice.id)
+                          }}
+                          disabled={sendingMail}
+                          className='text-xs w-fit h-5 py-3 px-4'
+                        >
+                          Send on Mail
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            const url = invoicetextToWhatsappUrl(invoice)
+                            console.log('URL', url)
+                            window.open(url)
+                          }}
+                          className='text-xs w-fit h-5 py-3 px-4'
+                        >
+                          Send on Whatsapp
+                        </Button>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               ) : (
-                <AlertCircle size={16} className='text-red-500 mx-auto' />
+                <Tip info='Invoice rejected by customer. Please fix and resend it.'>
+                  <AlertCircle size={17} className='text-red-500 mx-auto' />
+                </Tip>
               )}
             </td>
             <td className='p-2 text-center'>{formatDate(invoice.dueDate)}</td>

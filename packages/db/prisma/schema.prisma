@@ -172,6 +172,7 @@ model Invoice {
   approvalStatus     InvoiceApprovalStatus    @default(UNAPPROVED)
   receiptSendStatus  ReceiptSendStatus        @default(NOT_SENT)
   auditTrailEntries  AuditTrail[]
+  tokens             Tokens[]
   relatedDocuments   InvoiceRelatedDocument[]
   organizationId     String
   organization       Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -206,6 +207,20 @@ model InvoiceItem {
   price     Float?
   quantity  Float?
   total     Float?
+}
+
+model Tokens {
+  id        String     @unique @default(uuid())
+  target    String     @unique
+  type      TokenTypes
+  usedCount Int        @default(0)
+  invoiceId String
+  invoice   Invoice    @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+enum TokenTypes {
+  INV_APPROVE
+  INV_REJECT
 }
 
 model AuditTrail {

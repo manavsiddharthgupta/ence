@@ -1,4 +1,9 @@
-import { AuditTrail, CustomerInfo, InvoiceRelatedDocument } from 'database'
+import {
+  AuditTrail,
+  CustomerInfo,
+  InvoiceRelatedDocument,
+  Tokens
+} from 'database'
 
 export type Option = {
   id: string
@@ -169,6 +174,8 @@ export type InvoicesResponse = {
   paymentMethod: PaymentMethods
   paymentTerms: PaymentTerms
   notes: string
+  organization: { orgName: string; id: string }
+  tokens: Tokens[]
 }
 
 export type InvoicesOverview = {
