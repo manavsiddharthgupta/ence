@@ -190,7 +190,7 @@ const UpdateInvoiceDialog = ({
           </div>
         </div>
         <div className='flex items-start'>
-          <div className='grid w-1/2 items-center gap-2'>
+          {/* <div className='grid w-1/2 items-center gap-2'>
             <Label htmlFor='Sending' className='pl-1'>
               Sending Type
             </Label>
@@ -200,7 +200,7 @@ const UpdateInvoiceDialog = ({
               options={sendingOption}
               className='text-xs'
             />
-          </div>
+          </div> */}
           <div className='grid w-1/2 items-center gap-2'>
             <Label htmlFor='Approval' className='pl-1 '>
               Approval Status

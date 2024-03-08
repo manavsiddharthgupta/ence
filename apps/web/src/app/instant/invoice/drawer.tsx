@@ -395,12 +395,12 @@ const InvoiceInfo = () => {
           type='number'
           id='inv-number'
         />
-        <ShadcnCombobox
+        {/* <ShadcnCombobox
           options={sendingOptions}
           value={sendingMethod}
           setValue={setSendingMethod}
           placeholder='Select'
-        />
+        /> */}
       </div>
       <div className='flex w-full items-center gap-4'>
         <Label
