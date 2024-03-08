@@ -80,7 +80,7 @@ const InvoiceInfo = () => {
     <>
       <h3 className='text-lg'>Invoice info</h3>
       <div className='flex justify-between mt-2 items-center'>
-        <div className='w-[calc(60%-8rem)]'>
+        <div className='w-[calc(60%-1rem)]'>
           <InputPullback
             value={invoiceInfoState.invoiceNumber}
             type='number'
@@ -88,14 +88,14 @@ const InvoiceInfo = () => {
             placeholder='Invoice Number #'
           />
         </div>
-        <div className='w-32'>
+        {/* <div className='w-32'>
           <SelectMenu
             value={invoiceInfoState.sendingMethod}
             setValue={onSetMethod}
             options={sendingInvoiceOptions}
             label='Send via'
           />
-        </div>
+        </div> */}
         <div className='w-1/6'>
           <InputDate
             value={invoiceInfoState.dateIssue}

@@ -44,7 +44,7 @@ const FreeTrialCount = ({ isPro }: { isPro: boolean }) => {
         </div>
         <div className='text-xs text-left flex flex-col gap-1.5'>
           <p>
-            {RESEND_MAIL} / {MAX_FREE_COUNT.RESEND_MAIL} Automated Mail
+            {RESEND_MAIL} / {MAX_FREE_COUNT.RESEND_MAIL} Send Mail
           </p>
           <Progress value={(RESEND_MAIL / MAX_FREE_COUNT.RESEND_MAIL) * 100} />
         </div>
