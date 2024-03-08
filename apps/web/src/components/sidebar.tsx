@@ -159,7 +159,10 @@ const Sidebar = ({
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator className='dark:bg-zinc-700 bg-zinc-300' />
-              <DropdownMenuItem className='flex justify-between items-center p-2 cursor-pointer'>
+              <DropdownMenuItem
+                disabled
+                className='flex justify-between items-center p-2 cursor-pointer'
+              >
                 <span className='text-xs font-medium'>Manage</span>
                 <Settings size='16px' />
               </DropdownMenuItem>
