@@ -4,6 +4,11 @@ import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Sidebar from './sidebar'
 import { Toaster } from '@/components/ui/sonner'
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup
+} from '@/components/ui/resizable'
 
 const Card = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(Theme.Dark)
@@ -87,10 +92,20 @@ const Card = ({ children }: { children: React.ReactNode }) => {
   return (
     <ThemeProvider value={{ theme: theme, setTheme: onSetTheme }}>
       <body className={className}>
-        <Sidebar onChangeThemeHandler={onSetTheme} />
-        <main className='ml-56 px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
-          {children}
-        </main>
+        <ResizablePanelGroup direction='horizontal' className='w-full'>
+          <ResizablePanel defaultSize={17.5} minSize={17.5}>
+            <Sidebar onChangeThemeHandler={onSetTheme} />
+          </ResizablePanel>
+          <ResizableHandle
+            withHandle
+            className='dark:bg-zinc-800/90 bg-zinc-200/90'
+          />
+          <ResizablePanel defaultSize={82.5} minSize={80}>
+            <main className='px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
+              {children}
+            </main>
+          </ResizablePanel>
+        </ResizablePanelGroup>
         <Toaster />
       </body>
     </ThemeProvider>

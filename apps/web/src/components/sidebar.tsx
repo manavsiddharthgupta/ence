@@ -103,13 +103,13 @@ const Sidebar = ({
     }
   }
   return (
-    <nav className='border-r-2 dark:border-zinc-800/90 border-zinc-200/90 border-white bg-zinc-50 dark:bg-zinc-900 w-56 h-screen px-4 dark:text-white fixed left-0 top-0'>
+    <nav className='border-white bg-zinc-50 dark:bg-zinc-900 w-56 h-screen px-4 dark:text-white fixed left-0 top-0'>
       <div className='h-[calc(100%-220px)] pt-8'>
         <div className='h-10 mb-2 flex items-center truncate'>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div className='flex gap-2 items-center w-full cursor-pointer truncate'>
-                <Avatar className='w-9 h-9'>
+              <div className='flex gap-2 items-center w-full cursor-pointer truncate border dark:border-zinc-700/40 border-zinc-200/60 hover:bg-zinc-100/80 hover:dark:bg-zinc-800/50 px-2 py-1.5 rounded-md'>
+                <Avatar className='w-6 h-6'>
                   <AvatarImage src={''} />
                   <AvatarFallback>
                     {orgName?.slice(0, 1) ?? 'NA'}
@@ -119,7 +119,7 @@ const Sidebar = ({
                   {loading ? (
                     <Skeleton className='rounded-md h-4 bg-gray-500/10' />
                   ) : (
-                    <p className='text-sm font-medium'>{orgName}</p>
+                    <p className='text-xs'>{orgName}</p>
                   )}
                 </div>
               </div>
@@ -128,9 +128,9 @@ const Sidebar = ({
               side='bottom'
               align='center'
               sideOffset={8}
-              className='w-52 dark:border-zinc-700/60 border-zinc-300/60 bg-white dark:bg-zinc-950 p-2'
+              className='w-48 dark:border-zinc-700/60 border-zinc-300/60 bg-white dark:bg-zinc-950 p-2'
             >
-              <DropdownMenuLabel>
+              <DropdownMenuLabel className='px-1 pt-1 pb-1.5'>
                 <div className='flex gap-2 items-center w-full cursor-pointer'>
                   <Avatar className='w-7 h-7'>
                     <AvatarImage
@@ -145,7 +145,7 @@ const Sidebar = ({
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className='text-sm font-medium'>
+                    <p className='text-sm leading-4 font-medium'>
                       {session?.user?.name || '-'}
                     </p>
                     <p className='text-xs leading-3 text-zinc-600 dark:text-zinc-400'>
@@ -158,7 +158,7 @@ const Sidebar = ({
                   </div>
                 </div>
               </DropdownMenuLabel>
-              <DropdownMenuSeparator className='dark:bg-zinc-700 bg-zinc-300' />
+              <DropdownMenuSeparator className='dark:bg-zinc-700/40 bg-zinc-300/40' />
               <DropdownMenuItem
                 disabled
                 className='flex justify-between items-center p-2 cursor-pointer'
