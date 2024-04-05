@@ -185,28 +185,28 @@ export async function POST(request: Request) {
       ]
     })
 
-    // const freeTrial = await checkApiLimit('RESEND_MAIL', orgId)
-    // const isPro = await checkSubscription(orgId)
-    // if (!freeTrial.ok && !isPro) {
-    //   return Response.json({
-    //     ok: true,
-    //     data: {
-    //       invoiceNumber: invoiceRes.invoiceNumber,
-    //       dueDate: invoiceRes.dueDate
-    //     },
-    //     status: 200
-    //   })
-    // }
+    const freeTrial = await checkApiLimit('RESEND_MAIL', orgId)
+    const isPro = await checkSubscription(orgId)
+    if (!freeTrial.ok && !isPro) {
+      return Response.json({
+        ok: true,
+        data: {
+          invoiceNumber: invoiceRes.invoiceNumber,
+          dueDate: invoiceRes.dueDate
+        },
+        status: 200
+      })
+    }
 
-    // await InvoiceJobs.createMediaFromInvoiceDataJob(
-    //   invoiceRes.id,
-    //   orgId,
-    //   invoiceRes
-    // )
+    await InvoiceJobs.createMediaFromInvoiceDataJob(
+      invoiceRes.id,
+      orgId,
+      invoiceRes
+    )
 
-    // if (!isPro) {
-    //   await increaseApiLimit('RESEND_MAIL', orgId)
-    // }
+    if (!isPro) {
+      await increaseApiLimit('RESEND_MAIL', orgId)
+    }
 
     return Response.json({
       ok: true,
