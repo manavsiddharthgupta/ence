@@ -103,7 +103,7 @@ const Sidebar = ({
     }
   }
   return (
-    <nav className='border-white bg-zinc-50 dark:bg-zinc-900 w-56 h-screen px-4 dark:text-white fixed left-0 top-0'>
+    <nav className='border-r-[1px] dark:border-zinc-800/90 border-zinc-200/90 border-white bg-zinc-50 dark:bg-zinc-900 w-56 h-screen px-4 dark:text-white fixed left-0 top-0'>
       <div className='h-[calc(100%-220px)] pt-8'>
         <div className='h-10 mb-2 flex items-center truncate'>
           <DropdownMenu>
