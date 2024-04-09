@@ -9,9 +9,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 const Card = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(Theme.Dark)
-  const [smallScreenAlert, setShowAlert] = useState(
-    +window.innerWidth <= 1024 ? true : false
-  )
+  const [smallScreenAlert, setShowAlert] = useState(false)
 
   useEffect(() => {
     const existedTheme =
