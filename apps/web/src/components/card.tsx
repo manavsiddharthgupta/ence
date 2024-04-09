@@ -28,6 +28,7 @@ const Card = ({ children }: { children: React.ReactNode }) => {
         setShowAlert(false)
       }
     }
+    handleResize()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
