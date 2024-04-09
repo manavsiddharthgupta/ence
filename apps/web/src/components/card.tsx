@@ -4,14 +4,12 @@ import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Sidebar from './sidebar'
 import { Toaster } from '@/components/ui/sonner'
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup
-} from '@/components/ui/resizable'
+import { Terminal } from 'lucide-react'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 const Card = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(Theme.Dark)
+  const [smallScreenAlert, setShowAlert] = useState(false)
 
   useEffect(() => {
     const existedTheme =
@@ -19,6 +17,20 @@ const Card = ({ children }: { children: React.ReactNode }) => {
     if (existedTheme) {
       setTheme(existedTheme)
     }
+  }, [])
+
+  useEffect(() => {
+    function handleResize() {
+      const width = +window.innerWidth
+      if (width <= 1024) {
+        setShowAlert(true)
+      } else {
+        setShowAlert(false)
+      }
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   const pathname = usePathname()
@@ -89,23 +101,25 @@ const Card = ({ children }: { children: React.ReactNode }) => {
     )
   }
 
+  if (smallScreenAlert) {
+    return (
+      <ThemeProvider value={{ theme: theme, setTheme: onSetTheme }}>
+        <body className={className}>
+          <main className='min-h-screen flex justify-center items-center px-6'>
+            <SmallerScreenAlert />
+          </main>
+        </body>
+      </ThemeProvider>
+    )
+  }
+
   return (
     <ThemeProvider value={{ theme: theme, setTheme: onSetTheme }}>
       <body className={className}>
-        <ResizablePanelGroup direction='horizontal' className='w-full'>
-          <ResizablePanel defaultSize={17.5} minSize={17.5}>
-            <Sidebar onChangeThemeHandler={onSetTheme} />
-          </ResizablePanel>
-          <ResizableHandle
-            withHandle
-            className='dark:bg-zinc-800/90 bg-zinc-200/90'
-          />
-          <ResizablePanel defaultSize={82.5} minSize={80}>
-            <main className='px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
-              {children}
-            </main>
-          </ResizablePanel>
-        </ResizablePanelGroup>
+        <Sidebar onChangeThemeHandler={onSetTheme} />
+        <main className='ml-56 px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
+          {children}
+        </main>
         <Toaster />
       </body>
     </ThemeProvider>
@@ -113,3 +127,16 @@ const Card = ({ children }: { children: React.ReactNode }) => {
 }
 
 export default Card
+
+export function SmallerScreenAlert() {
+  return (
+    <Alert className='dark:bg-zinc-950 max-w-sm mb-6 border border-zinc-400/20 dark:border-zinc-600/20 p-6'>
+      <Terminal className='h-4 w-4' />
+      <AlertTitle>Screen Size Alert!</AlertTitle>
+      <AlertDescription>
+        You are using a small screen. Please adjust your settings for optimal
+        viewing.
+      </AlertDescription>
+    </Alert>
+  )
+}
