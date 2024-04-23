@@ -129,6 +129,7 @@ export const formatOrgData = (orgInfo: OrganizationState) => {
     whatsApp: orgInfo.whatsApp,
     email: orgInfo.email,
     businessType: orgInfo.businessType,
+    currencyType: orgInfo.currencyType || 'INR',
     website: orgInfo.website,
     pan: orgInfo.pan,
     gstin: orgInfo.gstin,

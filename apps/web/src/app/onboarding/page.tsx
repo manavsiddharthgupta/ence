@@ -28,7 +28,7 @@ const OnBoarding = async () => {
     redirect('/home')
   }
   return (
-    <div className='flex justify-between min-h-screen h-full p-8 max-w-6xl w-full mx-auto'>
+    <div className='flex justify-between min-h-screen h-full px-8 py-6 max-w-6xl w-full mx-auto'>
       <div className='w-[57%]'>
         <h1 className='font-bold text-xl'>ENCE</h1>
         <h2 className='font-bold text-3xl mt-2'>

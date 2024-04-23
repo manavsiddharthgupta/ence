@@ -5,6 +5,7 @@ export const OrganizationInitialState: OrganizationState = {
   whatsApp: null,
   website: null,
   businessRegistrationNumber: null,
+  currencyType: null,
   email: null,
   gstin: null,
   pan: null,
@@ -54,6 +55,9 @@ export const organizationReducers = (
       return { ...state, ...action.payload }
 
     case 'UPDATE_COUNTRY':
+      return { ...state, ...action.payload }
+
+    case 'UPDATE_CURRENCY':
       return { ...state, ...action.payload }
 
     default:

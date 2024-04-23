@@ -191,7 +191,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                 </span>
               )}
             </div>
-            {isPending ? (
+            {/* {isPending ? (
               <Skeleton className='w-1/2 h-9 bg-gray-500/10' />
             ) : (
               <div className='flex items-center gap-2'>
@@ -207,14 +207,14 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                       ? invoiceDetail?.sendingMethod.toLowerCase()
                       : ''}
                   </p>
-                  {/* {invoiceDetail?.sendingMethod === 'MAIL' && (
+                  {invoiceDetail?.sendingMethod === 'MAIL' && (
                     <Badge className='text-[10px] lowercase leading-[14px] px-2'>
                       {'last sent : 2h ago'}
                     </Badge>
-                  )} */}
+                  )}
                 </Button>
               </div>
-            )}
+            )} */}
           </div>
           <div className='my-8'>
             <h3 className='font-medium'>Amount Details</h3>
