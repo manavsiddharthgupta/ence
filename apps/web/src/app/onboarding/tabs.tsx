@@ -10,6 +10,15 @@ import {
   ReceiptIcon,
   ServerIcon
 } from 'lucide-react'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  SelectGroup,
+  SelectLabel
+} from '@/components/ui/select'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import { Label } from '@/components/ui/label'
@@ -88,7 +97,7 @@ const OnboardingTabs = () => {
         </Button>
         <Button
           onClick={() => {
-            if (!orgState.orgName) {
+            if (!orgState.orgName || !orgState.currencyType) {
               return
             }
             if (currTab === tabs.length) {
@@ -117,7 +126,7 @@ const ScreenOne = ({
   orgDispatch: Dispatch<OrganizationAction>
 }) => {
   return (
-    <div className='h-[260px] overflow-y-auto px-2'>
+    <div className='h-[270px] overflow-y-auto px-2'>
       <FeatureCard
         title='Payment'
         description='Streamlining Accounts Receivable ensures swift cash collection, while
@@ -168,7 +177,57 @@ const ScreenOne = ({
           />
         </div>
       </div>
-      <BusinessType orgState={orgState} orgDispatch={orgDispatch} />
+      <Select
+        value={orgState.currencyType || ''}
+        onValueChange={(curr) => {
+          orgDispatch({
+            type: 'UPDATE_CURRENCY',
+            payload: {
+              currencyType: curr
+            }
+          })
+        }}
+      >
+        <SelectTrigger className='w-52 bg-transparent border-zinc-700/60'>
+          <SelectValue
+            className='text-zinc-400'
+            placeholder='Select Currency'
+          />
+        </SelectTrigger>
+        <SelectContent className='bg-zinc-900 text-white border-zinc-800'>
+          <SelectGroup>
+            <SelectLabel>Select Currency</SelectLabel>
+            <SelectItem value='USD'>United States Dollar</SelectItem>
+            <SelectItem value='EUR'>Euro</SelectItem>
+            <SelectItem value='JPY'>Japanese Yen</SelectItem>
+            <SelectItem value='GBP'>British Pound Sterling</SelectItem>
+            <SelectItem value='AUD'>Australian Dollar</SelectItem>
+            <SelectItem value='CAD'>Canadian Dollar</SelectItem>
+            <SelectItem value='CHF'>Swiss Franc</SelectItem>
+            <SelectItem value='CNY'>Chinese Yuan</SelectItem>
+            <SelectItem value='SEK'>Swedish Krona</SelectItem>
+            <SelectItem value='NZD'>New Zealand Dollar</SelectItem>
+            <SelectItem value='NOK'>Norwegian Krone</SelectItem>
+            <SelectItem value='SGD'>Singapore Dollar</SelectItem>
+            <SelectItem value='KRW'>South Korean Won</SelectItem>
+            <SelectItem value='INR'>Indian Rupee</SelectItem>
+            <SelectItem value='BRL'>Brazilian Real</SelectItem>
+            <SelectItem value='ZAR'>South African Rand</SelectItem>
+            <SelectItem value='AED'>United Arab Emirates Dirham</SelectItem>
+            <SelectItem value='HKD'>Hong Kong Dollar</SelectItem>
+            <SelectItem value='THB'>Thai Baht</SelectItem>
+            <SelectItem value='MXN'>Mexican Peso</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      <p className='text-red-500 mt-0.5 ml-1.5 flex items-center gap-1 h-3'>
+        {!orgState.currencyType && (
+          <>
+            <InfoIcon size='8px' />
+            <span className='text-[8px]'>Currency type required</span>
+          </>
+        )}
+      </p>
     </div>
   )
 }
@@ -181,7 +240,7 @@ const ScreenTwo = ({
   orgDispatch: Dispatch<OrganizationAction>
 }) => {
   return (
-    <div className='h-[260px] overflow-y-auto px-2'>
+    <div className='h-[270px] overflow-y-auto px-2'>
       <div className='flex gap-3'>
         <FeatureCard
           title='Go Paperless'
@@ -240,7 +299,7 @@ const ScreenThree = ({
   orgDispatch: Dispatch<OrganizationAction>
 }) => {
   return (
-    <div className='h-[260px] overflow-y-auto px-2'>
+    <div className='h-[270px] overflow-y-auto px-2'>
       <FeatureCard
         title='Streamline GST payments'
         description='We facilitates seamless handling of GST transactions, reducing errors and saving time. Ensure hassle-free GST payments, fostering regulatory compliance and contributing to the overall efficiency of your business operations.'
@@ -280,22 +339,7 @@ const ScreenThree = ({
           />
         </div>
       </div>
-      <div className='w-[56%]'>
-        <Input
-          value={orgState.businessRegistrationNumber || ''}
-          type='text'
-          placeholder='Business Reg. No.'
-          className='bg-transparent border-zinc-700/60'
-          onChange={(e) => {
-            orgDispatch({
-              type: 'UPDATE_BUSINESS_REGISTRATION_NUMBER',
-              payload: {
-                businessRegistrationNumber: e.target.value
-              }
-            })
-          }}
-        />
-      </div>
+      <BusinessType orgState={orgState} orgDispatch={orgDispatch} />
     </div>
   )
 }
@@ -308,7 +352,7 @@ const ScreenFour = ({
   orgDispatch: Dispatch<OrganizationAction>
 }) => {
   return (
-    <div className='h-[260px] overflow-y-auto px-2'>
+    <div className='h-[270px] overflow-y-auto px-2'>
       <FeatureCard
         title='Customer Relationships'
         description='Access comprehensive customer profiles, consolidating contact details, purchase history, communication logs, and more. Build stronger connections by having a comprehensive understanding of each customers journey.'

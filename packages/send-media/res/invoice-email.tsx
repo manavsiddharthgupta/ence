@@ -59,7 +59,12 @@ export const EmailTemplate = ({ invoiceData }: EmailTemplateProps) => {
                 Invoice from {invoiceData?.organization?.orgName || '-'}
               </Text>
               <Text className='text-black text-[24px] leading-[24px]'>
-                <strong>{formatAmount(invoiceData?.totalAmount || 0)}</strong>
+                <strong>
+                  {formatAmount(
+                    invoiceData?.totalAmount || 0,
+                    invoiceData?.organization?.currencyType || '☒'
+                  )}
+                </strong>
               </Text>
               <Text className='text-gray-700 text-[12px] leading-[16px]'>
                 Due Date: {formatDate(invoiceData?.dueDate)}
@@ -104,7 +109,10 @@ export const EmailTemplate = ({ invoiceData }: EmailTemplateProps) => {
                         colSpan={1}
                       >
                         <Text className='text-[12px]'>
-                          {formatAmount(item?.price || 0)}
+                          {formatAmount(
+                            item?.price || 0,
+                            invoiceData?.organization?.currencyType || '☒'
+                          )}
                         </Text>
                       </Column>
                     </Row>

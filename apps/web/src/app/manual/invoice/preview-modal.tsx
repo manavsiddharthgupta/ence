@@ -15,7 +15,12 @@ import {
 } from '@/components/ui/tooltip'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Banknote, Calendar, Info, Loader } from 'lucide-react'
-import { formatAmount, formatDate, numTowords } from 'helper/format'
+import {
+  CurrencyFormat,
+  formatAmount,
+  formatDate,
+  formatNumberToWords
+} from 'helper/format'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { StatusBadge } from '@/components/status-badge'
 import CollapsiblePurchasedItems from './purchased-items'
@@ -25,6 +30,7 @@ import { Organization } from 'database'
 import { OrganizationAddress } from '@/types/organization'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Badge } from '@/components/ui/badge'
+import { useOrgInfo } from '@/context/org-info'
 
 const PreviewModal = ({
   isLoadingState,
@@ -40,6 +46,9 @@ const PreviewModal = ({
   // Todo: Will have to revamp the code structure
   const { invoiceInfoState, subTotal, customerLegalName, paymentInfoState } =
     useInvoiceContext()
+  const {
+    orgInfo: { currency_type }
+  } = useOrgInfo()
 
   const customerName = customerLegalName?.legalName || '-'
 
@@ -126,7 +135,8 @@ const PreviewModal = ({
                       subTotal +
                         +paymentInfoState.adjustmentFee +
                         +paymentInfoState.additionalCharges -
-                        subTotal * (+paymentInfoState.discount / 100)
+                        subTotal * (+paymentInfoState.discount / 100),
+                      currency_type
                     )}
                   </span>
                 </div>
@@ -218,6 +228,9 @@ export const InvoiceFormat = ({
     paymentInfoState,
     itemsInfoState
   } = useInvoiceContext()
+  const {
+    orgInfo: { currency_type }
+  } = useOrgInfo()
 
   const customerAddress = customerLegalName?.email || '-'
 
@@ -289,7 +302,7 @@ export const InvoiceFormat = ({
                   <td className='font-semibold'>{item.name || '-'}</td>
                   <td className='text-center'>{item.quantity || 0}</td>
                   <td className='text-right font-semibold'>
-                    {formatAmount(item.total)}
+                    {formatAmount(item.total, currency_type)}
                   </td>
                 </tr>
               )
@@ -303,28 +316,32 @@ export const InvoiceFormat = ({
           <div className='w-40 mt-1 px-2'>
             <div className='flex justify-between font-bold text-xs'>
               <h1>Subtotal</h1>
-              <h1>{formatAmount(subTotal)}</h1>
+              <h1>{formatAmount(subTotal, currency_type)}</h1>
             </div>
             <div className='flex justify-between text-[10px] relative'>
               <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
                 +
               </span>
               <h1>Shipping</h1>
-              <h1>{formatAmount(+paymentInfoState.shippingCharge)}</h1>
+              <h1>
+                {formatAmount(+paymentInfoState.shippingCharge, currency_type)}
+              </h1>
             </div>
             <div className='flex justify-between text-[10px] relative'>
               <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
                 +
               </span>
               <h1>Packaging</h1>
-              <h1>{formatAmount(+paymentInfoState.packagingCharge)}</h1>
+              <h1>
+                {formatAmount(+paymentInfoState.packagingCharge, currency_type)}
+              </h1>
             </div>
             <div className='flex justify-between text-[10px] relative'>
               <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
                 {+paymentInfoState.adjustmentFee >= 0 ? '+' : '-'}
               </span>
               <h1>Adjustment</h1>
-              <h1>{formatAmount(adjustmentFee)}</h1>
+              <h1>{formatAmount(adjustmentFee, currency_type)}</h1>
             </div>
             <div className='flex justify-between text-[10px] relative'>
               <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
@@ -332,7 +349,10 @@ export const InvoiceFormat = ({
               </span>
               <h1>Discount</h1>
               <h1>
-                {formatAmount(subTotal * (+paymentInfoState.discount / 100))}
+                {formatAmount(
+                  subTotal * (+paymentInfoState.discount / 100),
+                  currency_type
+                )}
               </h1>
             </div>
           </div>
@@ -345,14 +365,19 @@ export const InvoiceFormat = ({
                 subTotal +
                   +paymentInfoState.adjustmentFee +
                   +paymentInfoState.additionalCharges -
-                  subTotal * (+paymentInfoState.discount / 100)
+                  subTotal * (+paymentInfoState.discount / 100),
+                currency_type
               )}
             </h1>
           </div>
         </div>
         <p className='text-[8px] text-right'>
           SubTotal (in words) :{' '}
-          {numTowords.convert(
+          {formatNumberToWords(
+            currency_type !== '☒'
+              ? CurrencyFormat[currency_type].locale
+              : 'en-IN'
+          ).convert(
             subTotal +
               +paymentInfoState.adjustmentFee +
               +paymentInfoState.additionalCharges -
@@ -370,7 +395,8 @@ export const InvoiceFormat = ({
               subTotal +
                 +paymentInfoState.adjustmentFee +
                 +paymentInfoState.additionalCharges -
-                subTotal * (+paymentInfoState.discount / 100)
+                subTotal * (+paymentInfoState.discount / 100),
+              currency_type
             )}
           </span>
         </p>

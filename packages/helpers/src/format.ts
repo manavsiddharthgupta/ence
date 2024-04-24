@@ -1,17 +1,41 @@
 import { ToWords } from 'to-words'
+import { CurrencyType } from 'database'
 
-export const formatAmount = (amount: number) => {
+export const formatAmount = (amount: number, currency?: CurrencyType | '☒') => {
+  if (currency && currency !== '☒') {
+    const formattedNumber = amount.toLocaleString(
+      CurrencyFormat[currency].locale,
+      {
+        maximumFractionDigits: 2
+      }
+    )
+
+    return CurrencyFormat[currency].symbol + ' ' + formattedNumber
+  }
+
   const formattedNumber = amount.toLocaleString('en-IN', {
     maximumFractionDigits: 2
   })
-  return '₹ ' + formattedNumber
+  return '☒ ' + formattedNumber
 }
 
-export const formatAmountWithRs = (amount: number) => {
+export const formatAmountWithRs = (
+  amount: number,
+  currency?: CurrencyType | null
+) => {
+  if (currency) {
+    const formattedNumber = amount.toLocaleString(
+      CurrencyFormat[currency].locale,
+      {
+        maximumFractionDigits: 2
+      }
+    )
+    return currency + ' ' + formattedNumber
+  }
   const formattedNumber = amount.toLocaleString('en-IN', {
     maximumFractionDigits: 2
   })
-  return 'Rs ' + formattedNumber
+  return ' ' + formattedNumber
 }
 
 export const formatTextToCaps = (text: string) => {
@@ -71,6 +95,18 @@ export const numTowords = new ToWords({
   }
 })
 
+export function formatNumberToWords(locale: string) {
+  return new ToWords({
+    localeCode: locale,
+    converterOptions: {
+      currency: true,
+      ignoreDecimal: false,
+      ignoreZeroCurrency: false,
+      doNotAddOnly: false
+    }
+  })
+}
+
 export function formatDateTime(dateString: Date): string {
   const date = new Date(dateString)
 
@@ -125,4 +161,27 @@ export function formatCompactNumber(number: number) {
   } else if (number >= 1_000_000_000_000 && number < 1_000_000_000_000_000) {
     return (number / 1_000_000_000_000).toFixed(1) + 'T'
   }
+}
+
+export const CurrencyFormat = {
+  USD: { name: 'United States Dollar', symbol: '$', locale: 'en-US' },
+  EUR: { name: 'Euro', symbol: '€', locale: 'en-EU' },
+  JPY: { name: 'Japanese Yen', symbol: '¥', locale: 'ja-JP' },
+  GBP: { name: 'British Pound Sterling', symbol: '£', locale: 'en-GB' },
+  AUD: { name: 'Australian Dollar', symbol: '$', locale: 'en-AU' },
+  CAD: { name: 'Canadian Dollar', symbol: '$', locale: 'en-CA' },
+  CHF: { name: 'Swiss Franc', symbol: 'CHF', locale: 'de-CH' },
+  CNY: { name: 'Chinese Yuan', symbol: '¥', locale: 'zh-CN' },
+  SEK: { name: 'Swedish Krona', symbol: 'kr', locale: 'sv-SE' },
+  NZD: { name: 'New Zealand Dollar', symbol: '$', locale: 'en-NZ' },
+  NOK: { name: 'Norwegian Krone', symbol: 'kr', locale: 'no-NO' },
+  SGD: { name: 'Singapore Dollar', symbol: '$', locale: 'en-SG' },
+  KRW: { name: 'South Korean Won', symbol: '₩', locale: 'ko-KR' },
+  INR: { name: 'Indian Rupee', symbol: '₹', locale: 'en-IN' },
+  BRL: { name: 'Brazilian Real', symbol: 'R$', locale: 'pt-BR' },
+  ZAR: { name: 'South African Rand', symbol: 'R', locale: 'en-ZA' },
+  AED: { name: 'United Arab Emirates Dirham', symbol: 'د.إ', locale: 'ar-AE' },
+  HKD: { name: 'Hong Kong Dollar', symbol: 'HK$', locale: 'zh-HK' },
+  THB: { name: 'Thai Baht', symbol: '฿', locale: 'th-TH' },
+  MXN: { name: 'Mexican Peso', symbol: '$', locale: 'es-MX' }
 }

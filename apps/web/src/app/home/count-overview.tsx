@@ -1,6 +1,7 @@
 'use client'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useOrgInfo } from '@/context/org-info'
 import { useQuery } from '@tanstack/react-query'
 import { formatAmount } from 'helper/format'
 import { Banknote, Coins, TrendingUp, Wallet2 } from 'lucide-react'
@@ -78,6 +79,9 @@ const OverviewCard = ({
   icon: React.ReactNode
   type?: 'Invoice' | 'Expense'
 }) => {
+  const {
+    orgInfo: { currency_type }
+  } = useOrgInfo()
   return (
     <div className='rounded-3xl border border-zinc-400/20 dark:border-zinc-600/20 p-5 w-1/4 max-w-60'>
       <div className='flex justify-between items-center'>
@@ -87,7 +91,7 @@ const OverviewCard = ({
         <IconWrap className={color}>{icon}</IconWrap>
       </div>
       <h1 className='text-[1.75rem] leading-9 mb-3 font-semibold truncate'>
-        {formatAmount(amount || 0)}
+        {formatAmount(amount || 0, currency_type)}
       </h1>
       <CountBadge type={type} count={count} />
     </div>

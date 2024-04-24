@@ -56,3 +56,34 @@ export const getOrgIdFromDB = async (userEmail: string) => {
     return
   }
 }
+
+export const getOrgInfoTypeFromDB = async (userEmail: string) => {
+  try {
+    if (!userEmail) {
+      return null
+    }
+    const org = await db.user.findUnique({
+      where: {
+        email: userEmail
+      },
+      select: {
+        email: true,
+        organizations: {
+          select: {
+            id: true,
+            orgName: true,
+            currencyType: true
+          }
+        }
+      }
+    })
+    return {
+      orgId: org?.organizations?.id,
+      orgName: org?.organizations?.orgName,
+      currencyType: org?.organizations?.currencyType
+    }
+  } catch (err) {
+    console.error('Error while checking if Organization exist', err)
+    return
+  }
+}

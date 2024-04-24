@@ -1,6 +1,12 @@
 import { db } from '@/lib/db'
 import { ImageResponse } from '@vercel/og'
-import { formatAmountWithRs, formatDate, numTowords } from 'helper/format'
+import {
+  CurrencyFormat,
+  formatAmountWithRs,
+  formatDate,
+  formatNumberToWords,
+  numTowords
+} from 'helper/format'
 // export const runtime = 'edge'
 
 export async function GET(
@@ -132,10 +138,16 @@ export async function GET(
                           {item.quantity}
                         </td>
                         <td tw='text-center text-sm text-gray-500 w-1/6'>
-                          {formatAmountWithRs(item?.price || 0)}
+                          {formatAmountWithRs(
+                            item?.price || 0,
+                            invoice?.organization?.currencyType
+                          )}
                         </td>
                         <td tw='text-right text-sm text-gray-500 w-1/6'>
-                          {formatAmountWithRs(item?.total || 0)}
+                          {formatAmountWithRs(
+                            item?.total || 0,
+                            invoice?.organization?.currencyType
+                          )}
                         </td>
                       </tr>
                     )
@@ -147,7 +159,10 @@ export async function GET(
                       Subtotal
                     </th>
                     <td tw='text-right text-sm text-gray-500 sm:pr-0'>
-                      {formatAmountWithRs(invoice?.subTotal || 0)}
+                      {formatAmountWithRs(
+                        invoice?.subTotal || 0,
+                        invoice?.organization?.currencyType
+                      )}
                     </td>
                   </tr>
                   <tr tw='flex justify-between'>
@@ -155,7 +170,10 @@ export async function GET(
                       Adjustment Fee
                     </th>
                     <td tw='text-right text-sm text-gray-500 sm:pr-0'>
-                      {formatAmountWithRs(invoice?.adjustmentFee || 0)}
+                      {formatAmountWithRs(
+                        invoice?.adjustmentFee || 0,
+                        invoice?.organization?.currencyType
+                      )}
                     </td>
                   </tr>
                   <tr tw='flex justify-between'>
@@ -163,7 +181,10 @@ export async function GET(
                       Packaging Charge
                     </th>
                     <td tw='text-right text-sm text-gray-500 sm:pr-0'>
-                      {formatAmountWithRs(invoice?.packagingCharge || 0)}
+                      {formatAmountWithRs(
+                        invoice?.packagingCharge || 0,
+                        invoice?.organization?.currencyType
+                      )}
                     </td>
                   </tr>
                   <tr tw='flex justify-between'>
@@ -171,7 +192,10 @@ export async function GET(
                       Shipping Charge
                     </th>
                     <td tw='text-right text-sm text-gray-500 sm:pr-0'>
-                      {formatAmountWithRs(invoice?.shippingCharge || 0)}
+                      {formatAmountWithRs(
+                        invoice?.shippingCharge || 0,
+                        invoice?.organization?.currencyType
+                      )}
                     </td>
                   </tr>
                   <tr tw='flex justify-between'>
@@ -179,7 +203,10 @@ export async function GET(
                       Discount
                     </th>
                     <td tw='text-right text-sm text-gray-500 sm:pr-0'>
-                      {formatAmountWithRs(discountInRs)}
+                      {formatAmountWithRs(
+                        discountInRs,
+                        invoice?.organization?.currencyType
+                      )}
                     </td>
                   </tr>
                   <tr tw='flex justify-between'>
@@ -187,7 +214,10 @@ export async function GET(
                       Total
                     </th>
                     <td tw='text-right text-sm font-semibold text-gray-900'>
-                      {formatAmountWithRs(invoice?.totalAmount || 0)}
+                      {formatAmountWithRs(
+                        invoice?.totalAmount || 0,
+                        invoice?.organization?.currencyType
+                      )}
                     </td>
                   </tr>
                 </tfoot>
@@ -198,7 +228,13 @@ export async function GET(
                     Total Amount (in words) :
                   </p>
                   <p tw='text-[#718096] my-0 py-0'>
-                    {numTowords.convert(invoice?.totalAmount || 0, {
+                    {formatNumberToWords(
+                      invoice?.organization?.currencyType
+                        ? CurrencyFormat[
+                            invoice?.organization?.currencyType || 'INR'
+                          ].locale
+                        : 'en-IN'
+                    ).convert(invoice?.totalAmount || 0, {
                       currency: true
                     })}
                   </p>

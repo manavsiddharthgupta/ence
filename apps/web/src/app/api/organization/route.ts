@@ -61,6 +61,7 @@ export async function POST(request: Request) {
       pan,
       businessType,
       businessRegistrationNumber,
+      currencyType,
       address
     } = data as OrganizationBody
     const user = await db.user.findUnique({
@@ -86,15 +87,12 @@ export async function POST(request: Request) {
         gstin: gstin,
         pan: pan,
         businessType: businessType,
-        currencyType: 'INR'
+        currencyType: currencyType
       }
     })
 
     if (orgResponse.orgName) {
-      const res = await redis.set(
-        `user_organization:${email}`,
-        orgResponse.orgName
-      )
+      const res = await redis.set(`ORG:USER:${email}`, orgResponse.id)
     }
 
     return Response.json({

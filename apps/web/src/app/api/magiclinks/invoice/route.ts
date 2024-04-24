@@ -61,7 +61,8 @@ export async function GET(request: Request) {
         items: true,
         organization: {
           select: {
-            orgName: true
+            orgName: true,
+            currencyType: true
           }
         }
       }

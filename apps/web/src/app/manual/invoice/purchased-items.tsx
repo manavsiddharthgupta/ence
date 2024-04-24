@@ -6,12 +6,16 @@ import {
   CollapsibleTrigger
 } from '@/components/ui/collapsible'
 import { useInvoiceContext } from '@/context/invoice'
+import { useOrgInfo } from '@/context/org-info'
 import { formatAmount } from 'helper/format'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import { useState } from 'react'
 const CollapsiblePurchasedItems = () => {
   const [isopen, setIfOpen] = useState(false)
   const { subTotal, paymentInfoState, itemsInfoState } = useInvoiceContext()
+  const {
+    orgInfo: { currency_type }
+  } = useOrgInfo()
 
   const adjustmentFee =
     +paymentInfoState.adjustmentFee >= 0
@@ -56,7 +60,7 @@ const CollapsiblePurchasedItems = () => {
                     <td className='p-2'>{item.name || '-'}</td>
                     <td className='text-center p-2'>{item.quantity || 0}</td>
                     <td className='text-right p-2'>
-                      {formatAmount(item.total)}
+                      {formatAmount(item.total, currency_type)}
                     </td>
                   </tr>
                 )
@@ -70,7 +74,7 @@ const CollapsiblePurchasedItems = () => {
               <span className='text-zinc-800/60 dark:text-zinc-200/60'>
                 Total Amount
               </span>
-              <span>{formatAmount(subTotal)}</span>
+              <span>{formatAmount(subTotal, currency_type)}</span>
             </div>
             <div className='flex w-full justify-between relative mb-1'>
               <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
@@ -79,7 +83,9 @@ const CollapsiblePurchasedItems = () => {
               <span className='text-zinc-800/60 dark:text-zinc-200/60'>
                 Shipping
               </span>
-              <span>{formatAmount(+paymentInfoState.shippingCharge)}</span>
+              <span>
+                {formatAmount(+paymentInfoState.shippingCharge, currency_type)}
+              </span>
             </div>
             <div className='flex w-full justify-between relative mb-1'>
               <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
@@ -88,7 +94,9 @@ const CollapsiblePurchasedItems = () => {
               <span className='text-zinc-800/60 dark:text-zinc-200/60'>
                 Packaging
               </span>
-              <span>{formatAmount(+paymentInfoState.packagingCharge)}</span>
+              <span>
+                {formatAmount(+paymentInfoState.packagingCharge, currency_type)}
+              </span>
             </div>
             <div className='flex w-full justify-between relative mb-1'>
               <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
@@ -97,7 +105,7 @@ const CollapsiblePurchasedItems = () => {
               <span className='text-zinc-800/60 dark:text-zinc-200/60'>
                 Adjustment
               </span>
-              <span>{formatAmount(adjustmentFee)}</span>
+              <span>{formatAmount(adjustmentFee, currency_type)}</span>
             </div>
             <div className='flex w-full justify-between relative mb-1'>
               <span className='absolute -left-4 top-1/2 -translate-y-1/2 leading-3 font-bold'>
@@ -107,7 +115,10 @@ const CollapsiblePurchasedItems = () => {
                 Discount
               </span>
               <span>
-                {formatAmount(subTotal * (+paymentInfoState.discount / 100))}
+                {formatAmount(
+                  subTotal * (+paymentInfoState.discount / 100),
+                  currency_type
+                )}
               </span>
             </div>
           </div>

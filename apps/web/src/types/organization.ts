@@ -1,8 +1,11 @@
+import { CurrencyType } from 'database'
+
 export type OrganizationState = {
   orgName: string | null
   whatsApp: bigint | null
   website: string | null
   businessRegistrationNumber: string | null
+  currencyType: CurrencyType | null
   email: string | null
   gstin: string | null
   pan: string | null
@@ -23,6 +26,7 @@ export type OrganizationBody = {
   whatsApp: bigint | null
   website: string | null
   businessRegistrationNumber: string | null
+  currencyType: CurrencyType
   email: string | null
   gstin: string | null
   pan: string | null

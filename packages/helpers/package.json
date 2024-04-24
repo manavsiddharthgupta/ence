@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.1550.0",
-    "to-words": "^4.0.0"
+    "to-words": "^4.0.0",
+    "database": "*"
   }
 }
