@@ -92,7 +92,7 @@ export async function POST(request: Request) {
     })
 
     if (orgResponse.orgName) {
-      const res = await redis.set(`ORG:USER:${email}`, orgResponse.orgName)
+      const res = await redis.set(`ORG:USER:${email}`, orgResponse.id)
     }
 
     return Response.json({
