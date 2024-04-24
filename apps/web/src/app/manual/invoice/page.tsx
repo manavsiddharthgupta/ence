@@ -22,6 +22,7 @@ import { Organization } from 'database'
 import { toast } from 'sonner'
 import BackBtn from '@/components/back-btn'
 import { Sheet } from '@/components/ui/sheet'
+import { useOrgInfo } from '@/context/org-info'
 
 const createInvoice = () => {
   const [isLoading, setLoading] = useState<string | null>(null)
@@ -36,6 +37,9 @@ const createInvoice = () => {
     setSubTotal
   } = useInvoiceContext()
   const router = useRouter()
+  const {
+    orgInfo: { currency_type }
+  } = useOrgInfo()
 
   useEffect(() => {
     const getOrgDetails = async () => {
@@ -164,7 +168,8 @@ const createInvoice = () => {
                   subTotal +
                     +paymentInfoState.adjustmentFee +
                     +paymentInfoState.additionalCharges -
-                    subTotal * (+paymentInfoState.discount / 100)
+                    subTotal * (+paymentInfoState.discount / 100),
+                  currency_type
                 )}
               </h1>
             </div>

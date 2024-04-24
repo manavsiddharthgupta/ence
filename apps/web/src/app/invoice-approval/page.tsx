@@ -96,7 +96,10 @@ const InvoiceApproval = () => {
       <div className='flex justify-between items-center mt-4'>
         <div>
           <h1 className='font-bold text-4xl leading-9'>
-            {formatAmount(data?.totalAmount || 0)}
+            {formatAmount(
+              data?.totalAmount || 0,
+              data.organization.currencyType || '☒'
+            )}
           </h1>
           <p className='text-[10px] mt-1 font-semibold text-black/50'>
             Due Date: {formatDate(data?.dueDate)}
@@ -150,7 +153,10 @@ const InvoiceApproval = () => {
                       {item?.quantity || '-'}
                     </td>
                     <td className='py-2 text-right text-gray-500'>
-                      {formatAmount(item?.price || 0)}
+                      {formatAmount(
+                        item?.price || 0,
+                        data.organization.currencyType || '☒'
+                      )}
                     </td>
                   </tr>
                 )
@@ -172,7 +178,7 @@ const InvoiceApproval = () => {
           Invoice.
         </AlertDescription>
       </Alert>
-      {invoiceImageUrl && (
+      {invoiceImageUrl ? (
         <p className='text-xs text-center mt-2'>
           <a
             className='underline'
@@ -182,6 +188,8 @@ const InvoiceApproval = () => {
             Download invoice here
           </a>
         </p>
+      ) : (
+        <p className='text-xs text-center mt-2'>Wait...</p>
       )}
     </div>
   )

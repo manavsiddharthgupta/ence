@@ -42,6 +42,7 @@ import {
 import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import { invoicetextToWhatsappUrl } from '@/lib/url-encoder'
+import { useOrgInfo } from '@/context/org-info'
 
 const baseurl = process.env.NEXT_PUBLIC_API_URL
 
@@ -206,6 +207,9 @@ const InvoiceBody = ({
   onSelectInvoiceToDelete: (invoiceId: string) => void
 }) => {
   const [sendingMail, setMailStatus] = useState(false)
+  const {
+    orgInfo: { currency_type }
+  } = useOrgInfo()
   async function downloadImage(apiUri: string, fileName: string) {
     const loadingToastId = callLoadingToast(`Downloading Invoice ${fileName}`)
     try {
@@ -333,10 +337,10 @@ const InvoiceBody = ({
               <StatusBadge status={invoice.paymentStatus} />
             </td>
             <td className='p-2 text-center'>
-              {formatAmount(invoice.totalAmount)}
+              {formatAmount(invoice.totalAmount, currency_type)}
             </td>
             <td className='p-2 font-semibold text-center'>
-              {formatAmount(invoice.dueAmount)}
+              {formatAmount(invoice.dueAmount, currency_type)}
             </td>
             <td className=''>
               <DropdownMenu>

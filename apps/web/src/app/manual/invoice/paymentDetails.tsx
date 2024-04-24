@@ -5,7 +5,7 @@ import { Textarea } from '@/components/ui/textarea'
 import UploadFile from '@/components/upload-files'
 import { useInvoiceContext } from '@/context/invoice'
 import { callInfoToast } from '@/lib/helpers'
-import { formatAmount } from 'helper/format'
+import { CurrencyFormat, formatAmount } from 'helper/format'
 import { HelpCircle } from 'lucide-react'
 import {
   PAYMENT_TERMS as paymentTermsOptions,
@@ -18,6 +18,7 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
+import { useOrgInfo } from '@/context/org-info'
 const PaymentDetails = () => {
   const {
     paymentInfoState,
@@ -25,6 +26,10 @@ const PaymentDetails = () => {
     invoiceInfoDispatch,
     subTotal
   } = useInvoiceContext()
+
+  const {
+    orgInfo: { currency_type }
+  } = useOrgInfo()
 
   const onChangeNotes = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     paymentInfoDispatch({
@@ -194,7 +199,7 @@ const PaymentDetails = () => {
         <div className='max-w-xs w-full p-1 mt-2'>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
             <p>Subtotal</p>
-            <p>{formatAmount(subTotal)}</p>
+            <p>{formatAmount(subTotal, currency_type)}</p>
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5 dark:bg-zinc-800/10 bg-zinc-200/40 rounded-sm'>
             <p>Discount(%)</p>
@@ -222,7 +227,13 @@ const PaymentDetails = () => {
                   </button>
                   <Separator className='my-1 h-[0.5px] dark:bg-zinc-700 bg-zinc-300' />
                   <div className='flex justify-between w-full text-xs font-normal text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1'>
-                    <p>Packaging(₹)</p>
+                    <p>
+                      Packaging(
+                      {currency_type !== '☒'
+                        ? CurrencyFormat[currency_type].symbol
+                        : '☒'}
+                      )
+                    </p>
                     <input
                       autoFocus
                       value={paymentInfoState.packagingCharge}
@@ -232,7 +243,13 @@ const PaymentDetails = () => {
                     />
                   </div>
                   <div className='flex justify-between w-full text-xs font-normal text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5'>
-                    <p>Shipping(₹)</p>
+                    <p>
+                      Shipping(
+                      {currency_type !== '☒'
+                        ? CurrencyFormat[currency_type].symbol
+                        : '☒'}
+                      )
+                    </p>
                     <input
                       value={paymentInfoState.shippingCharge}
                       type='number'
@@ -246,11 +263,19 @@ const PaymentDetails = () => {
                 <HelpCircle size={10} strokeWidth={2.5} className='mt-0.5' />
               </Tip>
             </div>
-            <p>{formatAmount(+paymentInfoState.additionalCharges)}</p>
+            <p>
+              {formatAmount(+paymentInfoState.additionalCharges, currency_type)}
+            </p>
           </div>
           <div className='flex justify-between w-full text-sm font-medium text-zinc-600 dark:text-zinc-400 my-0.5 px-2 py-1.5 dark:bg-zinc-800/10 bg-zinc-200/40 rounded-sm'>
             <div className='flex gap-1 items-center'>
-              <p>Adjustment(₹)</p>
+              <p>
+                Adjustment(
+                {currency_type !== '☒'
+                  ? CurrencyFormat[currency_type].symbol
+                  : '☒'}
+                )
+              </p>
               <Tip info='Extra +ve or -ve charges applied to adjust the amount'>
                 <HelpCircle size={10} strokeWidth={2.5} className='mt-0.5' />
               </Tip>
@@ -269,7 +294,8 @@ const PaymentDetails = () => {
                 subTotal +
                   +paymentInfoState.adjustmentFee +
                   +paymentInfoState.additionalCharges -
-                  subTotal * (+paymentInfoState.discount / 100)
+                  subTotal * (+paymentInfoState.discount / 100),
+                currency_type
               )}
             </p>
           </div>

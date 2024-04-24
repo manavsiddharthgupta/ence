@@ -1,8 +1,6 @@
 import Tip from '@/components/component-tip'
 import AuditTrail from '@/components/invoice/audit-trail'
 import { StatusBadge } from '@/components/status-badge'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -11,7 +9,6 @@ import { formatAmount, formatDate } from 'helper/format'
 import { InvoiceBody } from '@/types/invoice'
 import {
   Banknote,
-  Bell,
   Calendar,
   CheckCircle,
   Info,
@@ -19,10 +16,14 @@ import {
 } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
+import { useOrgInfo } from '@/context/org-info'
 
 const baseurl = process.env.NEXT_PUBLIC_API_URL
 
 const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
+  const {
+    orgInfo: { currency_type }
+  } = useOrgInfo()
   const {
     isPending,
     error,
@@ -187,7 +188,7 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                 <Skeleton className='w-28 h-7 bg-gray-500/10' />
               ) : (
                 <span className='font-bold text-xl text-black dark:text-white'>
-                  {formatAmount(invoiceInfo?.dueAmount || 0)}
+                  {formatAmount(invoiceInfo?.dueAmount || 0, currency_type)}
                 </span>
               )}
             </div>
@@ -230,7 +231,10 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                   <AmountInfoSkeleton />
                 ) : (
                   <h2 className='text-lg font-bold'>
-                    {formatAmount(invoiceDetail?.invoiceTotal || 0)}
+                    {formatAmount(
+                      invoiceDetail?.invoiceTotal || 0,
+                      currency_type
+                    )}
                   </h2>
                 )}
               </div>
@@ -247,7 +251,8 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                   <h2 className='text-lg font-bold'>
                     {formatAmount(
                       (invoiceDetail?.shippingCharges || 0) +
-                        (invoiceDetail?.packagingCharges || 0)
+                        (invoiceDetail?.packagingCharges || 0),
+                      currency_type
                     )}
                   </h2>
                 )}
@@ -263,7 +268,10 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                   <AmountInfoSkeleton />
                 ) : (
                   <h2 className='text-lg font-bold'>
-                    {formatAmount(invoiceDetail?.amtToConsumer || 0)}
+                    {formatAmount(
+                      invoiceDetail?.amtToConsumer || 0,
+                      currency_type
+                    )}
                   </h2>
                 )}
               </div>
@@ -278,7 +286,10 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                   <AmountInfoSkeleton />
                 ) : (
                   <h2 className='text-lg font-bold'>
-                    {formatAmount(invoiceDetail?.paidAmount || 0)}
+                    {formatAmount(
+                      invoiceDetail?.paidAmount || 0,
+                      currency_type
+                    )}
                   </h2>
                 )}
               </div>
@@ -294,7 +305,10 @@ const Invoice = ({ invoiceId }: { invoiceId: string | null }) => {
                   <AmountInfoSkeleton />
                 ) : (
                   <h2 className='text-lg font-bold'>
-                    {formatAmount(invoiceDetail?.amountPayable || 0)}
+                    {formatAmount(
+                      invoiceDetail?.amountPayable || 0,
+                      currency_type
+                    )}
                   </h2>
                 )}
               </div>

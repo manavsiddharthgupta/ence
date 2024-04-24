@@ -1,9 +1,10 @@
 'use client'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useOrgInfo } from '@/context/org-info'
 import { useTheme } from '@/context/theme'
 import { WEEK_VALUES as getWeekName } from '@/lib/constants'
 import { useQuery } from '@tanstack/react-query'
-import { formatCompactNumber } from 'helper/format'
+import { formatCompactNumber, CurrencyFormat } from 'helper/format'
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts'
 
 const baseurl = process.env.NEXT_PUBLIC_API_URL
@@ -58,6 +59,9 @@ const formatData = (sales: any) => {
 
 export const TimeLine = () => {
   const { theme } = useTheme()
+  const {
+    orgInfo: { currency_type }
+  } = useOrgInfo()
   const { isPending, error, data } = useQuery({
     queryKey: ['repoData'],
     queryFn: () =>
@@ -109,7 +113,11 @@ export const TimeLine = () => {
             padding={{ bottom: 10 }}
             color={`${theme === 'Dark' ? '#f4f4f5' : '#18181b'}`}
             tickFormatter={(number: number) =>
-              `₹ ${formatCompactNumber(number)}`
+              currency_type !== '☒'
+                ? `${
+                    CurrencyFormat[currency_type].symbol
+                  } ${formatCompactNumber(number)}`
+                : `☒ ${formatCompactNumber(number)}`
             }
             fontSize='10px'
           />

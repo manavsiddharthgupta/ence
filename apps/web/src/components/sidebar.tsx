@@ -40,49 +40,18 @@ import { Skeleton } from './ui/skeleton'
 import Link from 'next/link'
 import FreeTrialCount from './free-trial-count'
 import { callErrorToast } from '@/lib/helpers'
+import { useOrgInfo } from '@/context/org-info'
 
 const Sidebar = ({
   onChangeThemeHandler
 }: {
   onChangeThemeHandler: () => void
 }) => {
-  const [orgName, setOrgName] = useState('-')
-  const [isPro, setPro] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [upgradeLoading, setUpgradeLoading] = useState(false)
   const { theme } = useTheme()
   const { data: session } = useSession()
   const route = useRouter()
-
-  useEffect(() => {
-    const getOrgDetails = async () => {
-      setLoading(true)
-      const response = await fetch('/api/organization')
-      const organizationRes = await response.json()
-      if (!organizationRes.ok) {
-        setOrgName('-')
-        setLoading(false)
-        return
-      }
-      setOrgName(organizationRes.data?.orgName)
-      setLoading(false)
-    }
-    getOrgDetails()
-  }, [])
-
-  useEffect(() => {
-    const checkIfPro = async () => {
-      const response = await fetch('/api/subscription')
-      const res = await response.json()
-      if (res.ok) {
-        const isPro = !!res?.data?.isPro
-        setPro(isPro)
-      } else {
-        setPro(false)
-      }
-    }
-    checkIfPro()
-  }, [])
+  const { orgInfo } = useOrgInfo()
 
   const onSubscribe = async () => {
     try {
@@ -112,15 +81,11 @@ const Sidebar = ({
                 <Avatar className='w-6 h-6'>
                   <AvatarImage src={''} />
                   <AvatarFallback>
-                    {orgName?.slice(0, 1) ?? 'NA'}
+                    {orgInfo.orgName?.slice(0, 1) ?? 'NA'}
                   </AvatarFallback>
                 </Avatar>
                 <div className='w-[calc(100%-44px)]'>
-                  {loading ? (
-                    <Skeleton className='rounded-md h-4 bg-gray-500/10' />
-                  ) : (
-                    <p className='text-xs'>{orgName}</p>
-                  )}
+                  <p className='text-xs'>{orgInfo?.orgName}</p>
                 </div>
               </div>
             </DropdownMenuTrigger>
@@ -166,7 +131,7 @@ const Sidebar = ({
                 <span className='text-xs font-medium'>Manage</span>
                 <Settings size='16px' />
               </DropdownMenuItem>
-              {isPro ? (
+              {orgInfo.isPro ? (
                 <DropdownMenuItem
                   onClick={onSubscribe}
                   disabled={upgradeLoading}
@@ -199,7 +164,7 @@ const Sidebar = ({
           <SideItems />
         </div>
       </div>
-      <FreeTrialCount isPro={isPro} />
+      <FreeTrialCount isPro={orgInfo.isPro} />
       <div className='h-8 flex flex-col justify-between mt-4'>
         <div className=' flex items-center justify-center gap-1'>
           <Switch
@@ -219,12 +184,12 @@ const Sidebar = ({
               className='w-fit flex flex-col p-1 dark:border-zinc-800 border-zinc-200 dark:bg-zinc-900 bg-white shadow-none'
             >
               <Button
-                asChild
                 className='w-fit bg-transparent border-none hover:bg-white hover:dark:bg-zinc-900 justify-start gap-2 text-xs font-medium hover:text-sky-500'
                 variant='outline'
                 size='sm'
+                disabled
               >
-                <Link href='/instant/invoice'>
+                <Link className='flex gap-2' href='/instant/invoice'>
                   <FilePlus2 size={14} strokeWidth={2} />
                   <p>Invoice</p>
                 </Link>

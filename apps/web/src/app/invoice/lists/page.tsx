@@ -60,7 +60,7 @@ const Invoices = ({
                 Manually Create
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
+            <DropdownMenuItem asChild disabled>
               <Link className='cursor-pointer' href='/instant/invoice'>
                 <Zap size={16} className='mr-4' />
                 Instantly Create

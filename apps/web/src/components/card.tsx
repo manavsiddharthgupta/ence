@@ -6,10 +6,17 @@ import Sidebar from './sidebar'
 import { Toaster } from '@/components/ui/sonner'
 import { Terminal } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { ORG_INFO, OrgInfoProvider } from '@/context/org-info'
 
 const Card = ({ children }: { children: React.ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(Theme.Dark)
   const [smallScreenAlert, setShowAlert] = useState(false)
+  const [orgInfo, setOrgInfo] = useState<ORG_INFO>({
+    avatar: '',
+    orgName: '-',
+    currency_type: '☒',
+    isPro: false
+  })
 
   useEffect(() => {
     const existedTheme =
@@ -17,6 +24,29 @@ const Card = ({ children }: { children: React.ReactNode }) => {
     if (existedTheme) {
       setTheme(existedTheme)
     }
+  }, [])
+
+  useEffect(() => {
+    const getOrgDetails = async () => {
+      const response = await fetch('/api/organization/info')
+      const orgInfoRes = await response.json()
+      if (!orgInfoRes.ok) {
+        setOrgInfo({
+          avatar: '',
+          orgName: '-',
+          currency_type: '☒',
+          isPro: false
+        })
+        return
+      }
+      setOrgInfo({
+        avatar: orgInfoRes?.data.avatar || '',
+        currency_type: orgInfoRes?.data.currency_type || '☒',
+        isPro: orgInfoRes?.data.isPro || false,
+        orgName: orgInfoRes?.data.orgName || '-'
+      })
+    }
+    getOrgDetails()
   }, [])
 
   useEffect(() => {
@@ -67,12 +97,14 @@ const Card = ({ children }: { children: React.ReactNode }) => {
   if (pathname.startsWith('/instant')) {
     return (
       <ThemeProvider value={{ theme: theme, setTheme: onSetTheme }}>
-        <body className={className}>
-          <main className='px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
-            {children}
-          </main>
-          <Toaster />
-        </body>
+        <OrgInfoProvider value={{ orgInfo, setOrgInfo }}>
+          <body className={className}>
+            <main className='px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
+              {children}
+            </main>
+            <Toaster />
+          </body>
+        </OrgInfoProvider>
       </ThemeProvider>
     )
   }
@@ -80,12 +112,14 @@ const Card = ({ children }: { children: React.ReactNode }) => {
   if (pathname.startsWith('/manual')) {
     return (
       <ThemeProvider value={{ theme: theme, setTheme: onSetTheme }}>
-        <body className={className}>
-          <main className='px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
-            {children}
-          </main>
-          <Toaster />
-        </body>
+        <OrgInfoProvider value={{ orgInfo, setOrgInfo }}>
+          <body className={className}>
+            <main className='px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
+              {children}
+            </main>
+            <Toaster />
+          </body>
+        </OrgInfoProvider>
       </ThemeProvider>
     )
   }
@@ -115,13 +149,15 @@ const Card = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <ThemeProvider value={{ theme: theme, setTheme: onSetTheme }}>
-      <body className={className}>
-        <Sidebar onChangeThemeHandler={onSetTheme} />
-        <main className='ml-56 px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
-          {children}
-        </main>
-        <Toaster />
-      </body>
+      <OrgInfoProvider value={{ orgInfo, setOrgInfo }}>
+        <body className={className}>
+          <Sidebar onChangeThemeHandler={onSetTheme} />
+          <main className='ml-56 px-4 py-8 min-h-screen dark:text-white overflow-x-auto'>
+            {children}
+          </main>
+          <Toaster />
+        </body>
+      </OrgInfoProvider>
     </ThemeProvider>
   )
 }
