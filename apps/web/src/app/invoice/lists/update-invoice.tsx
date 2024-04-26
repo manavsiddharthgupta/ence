@@ -18,6 +18,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { callErrorToast, callSuccessToast } from '@/lib/helpers'
 import { useRouter } from 'next/navigation'
+import { useOrgInfo } from '@/context/org-info'
 
 const UpdateInvoiceDialog = ({
   invoice,
@@ -33,6 +34,9 @@ const UpdateInvoiceDialog = ({
   const [approvalStatus, setApprovalStatus] = useState(approvalOption[0].value)
   const [notes, setNotes] = useState('')
   const router = useRouter()
+  const {
+    orgInfo: { currency_type }
+  } = useOrgInfo()
   useEffect(() => {
     if (
       !invoice?.dueDate ||
@@ -160,7 +164,7 @@ const UpdateInvoiceDialog = ({
               Total Amount
             </Label>
             <p className='font-base text-xs pl-1'>
-              {formatAmount(invoice?.totalAmount || 0)}
+              {formatAmount(invoice?.totalAmount || 0, currency_type)}
             </p>
           </div>
         </div>
