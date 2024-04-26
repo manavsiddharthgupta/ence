@@ -6,13 +6,14 @@ import { useRouter } from 'next/navigation'
 import { InvoicesResponse } from '@/types/invoice'
 import { Dot, IndianRupee, Loader } from 'lucide-react'
 import { callErrorToast, callSuccessToast } from '@/lib/helpers'
-import { formatAmount, formatDate } from 'helper/format'
+import { CurrencyFormat, formatAmount, formatDate } from 'helper/format'
 import { Separator } from '@/components/ui/separator'
 import { useEffect, useState } from 'react'
 import { DatePicker } from '@/components/ui/date-picker'
 import { CustomRadioGroup } from '@/components/custom-radio-group'
 import { PAYMENT_OPTION as paymentOption } from '@/lib/constants'
 import { paymentRecord } from '@/validator/schema'
+import { useOrgInfo } from '@/context/org-info'
 
 export const RecordPayment = ({
   invoice,
@@ -26,6 +27,9 @@ export const RecordPayment = ({
   const [paymentType, setPaymentType] = useState(paymentOption[0].value)
   const [isPending, setPending] = useState(false)
   const router = useRouter()
+  const {
+    orgInfo: { currency_type }
+  } = useOrgInfo()
 
   const onChangePaymentStatus = async (invoiceId: string) => {
     setPending(true)
@@ -101,7 +105,7 @@ export const RecordPayment = ({
           </div>
         </div>
         <h1 className='text-xl font-bold'>
-          {formatAmount(invoice?.dueAmount || 0)}
+          {formatAmount(invoice?.dueAmount || 0, currency_type)}
         </h1>
       </div>
       <Separator className='dark:bg-zinc-700/60 bg-zinc-300/60' />
@@ -111,11 +115,11 @@ export const RecordPayment = ({
             Amount to be Recorded
           </Label>
           <div className='relative'>
-            <IndianRupee
-              className='absolute left-3 top-1/2 -translate-y-1/2'
-              size={12}
-              strokeWidth={2}
-            />
+            <p className='absolute left-3 top-1/2 -translate-y-1/2 text-xs'>
+              {currency_type !== '☒' && currency_type !== null
+                ? CurrencyFormat[currency_type].symbol
+                : '☒'}
+            </p>
             <Input
               value={amountToPay}
               className={`border-[1px] text-xs font-medium outline-none bg-transparent ${
