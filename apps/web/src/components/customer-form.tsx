@@ -1,3 +1,4 @@
+'use client'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -12,13 +13,15 @@ import {
 import { Customer } from '@/types/invoice'
 import { Loader } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
-export const CustomerForm = ({ query }: { query: string }) => {
+export const CustomerForm = ({ query }: { query?: string }) => {
   const [legalName, setLegalName] = useState<string | undefined>(query)
   const [whatsAppNumber, setWhatsApp] = useState<string | undefined>()
   const [email, setEmail] = useState<string | undefined>()
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
   useEffect(() => {
     setLegalName(query)
   }, [query])
@@ -58,6 +61,7 @@ export const CustomerForm = ({ query }: { query: string }) => {
       setEmail(undefined)
       setWhatsApp(undefined)
       setLegalName(undefined)
+      router.refresh()
     } else {
       toast.error('Something went wrong while creating customer')
     }
