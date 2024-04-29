@@ -10,14 +10,25 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import {
   BookUser,
   ChevronLeftIcon,
   ChevronRightIcon,
+  Loader,
   User2Icon
 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 type CustomerInfo = {
   id: string
@@ -27,6 +38,10 @@ type CustomerInfo = {
 }
 
 const CustomerTable = ({ lists: customers }: { lists: CustomerInfo[] }) => {
+  const [deleteAlert, setAlertForDelete] = useState(false)
+  const [selectedCustomerToDelete, setCustomerToDelete] = useState<
+    string | null
+  >(null)
   const [currentPage, setPageNumber] = useState(1)
   const customersPerPage = 10
   const itemOffset = (currentPage - 1) * customersPerPage
@@ -54,6 +69,15 @@ const CustomerTable = ({ lists: customers }: { lists: CustomerInfo[] }) => {
     })
   }
 
+  const onSelectInvoiceToDelete = (customerId: string) => {
+    setCustomerToDelete(customerId)
+    setAlertForDelete(true)
+  }
+
+  const onCloseDeleteAlertDialog = () => {
+    setAlertForDelete(false)
+  }
+
   return (
     <>
       <div className='dark:bg-zinc-800/10 bg-zinc-100/20 border-[1px] dark:border-zinc-700/60 border-zinc-300/60 px-4 py-2 rounded-2xl'>
@@ -67,7 +91,10 @@ const CustomerTable = ({ lists: customers }: { lists: CustomerInfo[] }) => {
               <td className='p-2 w-[5%]'></td>
             </tr>
           </thead>
-          <CustomerBody customers={currentCustomers} />
+          <CustomerBody
+            onSelectCustomerToDelete={onSelectInvoiceToDelete}
+            customers={currentCustomers}
+          />
         </table>
         {customers?.length === 0 && (
           <div className='my-8 text-center w-full'>
@@ -87,13 +114,27 @@ const CustomerTable = ({ lists: customers }: { lists: CustomerInfo[] }) => {
           onHandlePreviousButton={onHandlePreviousButton}
         />
       )}
+      <Dialog open={deleteAlert} onOpenChange={onCloseDeleteAlertDialog}>
+        <DeleteAlert
+          customerInfo={currentCustomers.find((value) => {
+            return value.id === selectedCustomerToDelete
+          })}
+          onCloseAlertDialog={onCloseDeleteAlertDialog}
+        />
+      </Dialog>
     </>
   )
 }
 
 export default CustomerTable
 
-const CustomerBody = ({ customers }: { customers: CustomerInfo[] }) => {
+const CustomerBody = ({
+  customers,
+  onSelectCustomerToDelete
+}: {
+  customers: CustomerInfo[]
+  onSelectCustomerToDelete: (customerId: string) => void
+}) => {
   return (
     <tbody>
       {customers?.map((customer, ind) => {
@@ -140,7 +181,14 @@ const CustomerBody = ({ customers }: { customers: CustomerInfo[] }) => {
                   <DropdownMenuLabel>Customer Action</DropdownMenuLabel>
                   <DropdownMenuSeparator className='bg-zinc-600/20' />
                   <DropdownMenuItem disabled>Update</DropdownMenuItem>
-                  <DropdownMenuItem disabled>Delete</DropdownMenuItem>
+                  <DropdownMenuItem
+                    className='text-red-500 hover:text-red-500'
+                    onClick={() => {
+                      onSelectCustomerToDelete(customer.id)
+                    }}
+                  >
+                    Delete
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </td>
@@ -188,5 +236,75 @@ const PaginationUI = ({
         </Button>
       </div>
     </div>
+  )
+}
+
+const DeleteAlert = ({
+  customerInfo,
+  onCloseAlertDialog
+}: {
+  customerInfo: CustomerInfo | undefined
+  onCloseAlertDialog: () => void
+}) => {
+  const [isDeleting, setDeleting] = useState(false)
+  const router = useRouter()
+
+  console.log(customerInfo)
+  async function onDeleteInvoice() {
+    setDeleting(true)
+    try {
+      const response = await fetch(`/api/customer/${customerInfo?.id}`, {
+        method: 'DELETE'
+      })
+      const delRes = await response.json()
+      if (delRes.ok) {
+        toast.success(
+          'You successfully deleted customer ' + customerInfo?.legalName,
+          {
+            position: 'top-right'
+          }
+        )
+        setDeleting(false)
+        router.refresh()
+        onCloseAlertDialog()
+        return
+      } else {
+        throw new Error(`Error Deleting: ${delRes.data}`)
+      }
+    } catch (error) {
+      console.error('Error deleting customer:', error)
+      toast.error(`Error deleting customer: ${error}`, {
+        position: 'top-right'
+      })
+      setDeleting(false)
+    }
+  }
+
+  return (
+    <DialogContent className='bg-white dark:bg-zinc-950 dark:border-zinc-800 border-zinc-200 max-w-md shadow-sm'>
+      <DialogHeader>
+        <DialogTitle>Delete customer {customerInfo?.legalName}</DialogTitle>
+        <DialogDescription>
+          Are you sure you want to delete? This action cannot be undone.
+        </DialogDescription>
+      </DialogHeader>
+      <DialogFooter>
+        <Button
+          className='hover:dark:bg-white/5 hover:bg-black/5'
+          variant='ghost'
+          onClick={onCloseAlertDialog}
+        >
+          Cancel
+        </Button>
+        <Button
+          disabled={isDeleting}
+          className='bg-red-500/10 text-red-500 hover:text-red-600 hover:dark:text-red-400 hover:bg-red-500/20 border-red-300 border'
+          onClick={onDeleteInvoice}
+        >
+          {isDeleting && <Loader size={18} className='animate-spin mr-1.5' />}
+          Delete Customer
+        </Button>
+      </DialogFooter>
+    </DialogContent>
   )
 }
