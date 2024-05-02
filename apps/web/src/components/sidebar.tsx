@@ -33,6 +33,7 @@ import {
   LogOut,
   Rocket,
   Settings,
+  UsersRound,
   Zap
 } from 'lucide-react'
 import { Beta } from './beta-badge'
@@ -250,16 +251,12 @@ const SideItems = () => {
       //     { label: 'Create', to: '/invoice/create' }
       //   ]
       // }
+    },
+    {
+      label: 'Customer',
+      to: '/customers',
+      icon: <UsersRound size={14} />
     }
-    // {
-    //   label: 'Customer',
-    //   to: '/customer',
-    //   icon: <FileTextIcon />,
-    //   subType: {
-    //     status: true,
-    //     values: [{ label: 'Crete', to: '/create' }]
-    //   }
-    // }
     // { label: 'Customers', to: '/customers' },
     // { label: 'Products', to: '/products' },
     // { label: 'Setting', to: '/setting' }
