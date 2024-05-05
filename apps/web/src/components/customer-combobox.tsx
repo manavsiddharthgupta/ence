@@ -105,19 +105,18 @@ function InputCombobox({
                 key={option.id}
                 value={option}
                 className={({ active }) =>
-                  `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                  `relative cursor-default select-none py-2 pl-4 pr-4 ${
                     active
                       ? 'bg-black text-white dark:bg-white dark:text-black'
                       : 'dark:text-white text-black'
                   }`
                 }
               >
-                <div className='flex items-center gap-1'>
-                  <p className='text-sm w-1/2 truncate'>{option.legalName}</p>
-                  <div className='w-1/2 truncate flex flex-col text-xs font-medium'>
-                    <p>{option.email}</p>
-                    <p>{option.whatsAppNumber}</p>
-                  </div>
+                <div className='flex flex-col'>
+                  <p className='text-sm truncate'>{option.legalName}</p>
+                  <p className='text-xs leading-3 font-medium'>
+                    {option.email}
+                  </p>
                 </div>
               </Combobox.Option>
             ))}

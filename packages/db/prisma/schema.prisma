@@ -124,7 +124,7 @@ model User {
 }
 
 model Organization {
-  id                         String         @id @default(uuid())
+  id                         String          @id @default(uuid())
   orgName                    String
   whatsappNumber             BigInt?
   businessType               BusinessType?
@@ -136,13 +136,14 @@ model Organization {
   gstin                      String?
   pan                        String?
   currencyType               CurrencyType?
-  state                      StateType      @default(ACTIVE)
-  createdAt                  DateTime       @default(now())
-  updatedAt                  DateTime       @updatedAt
-  createdBy                  User           @relation(fields: [createdById], references: [id])
-  createdById                String         @unique
+  state                      StateType       @default(ACTIVE)
+  createdAt                  DateTime        @default(now())
+  updatedAt                  DateTime        @updatedAt
+  createdBy                  User            @relation(fields: [createdById], references: [id])
+  createdById                String          @unique
   invoices                   Invoice[]
   customerInfos              CustomerInfo[]
+  stripeAccounts             StripeAccount[]
 }
 
 model Invoice {
@@ -188,6 +189,14 @@ model CustomerInfo {
   organisationId String
 
   @@unique([whatsAppNumber, email, organisationId], name: "unique_whatsapp_email_org")
+}
+
+model StripeAccount {
+  id             String       @id @default(uuid())
+  apiToken       String       @unique
+  accountId      String
+  organization   Organization @relation(fields: [organisationId], references: [id])
+  organisationId String
 }
 
 model InvoiceRelatedDocument {

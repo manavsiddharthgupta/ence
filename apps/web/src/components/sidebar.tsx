@@ -125,12 +125,14 @@ const Sidebar = ({
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator className='dark:bg-zinc-700/40 bg-zinc-300/40' />
-              <DropdownMenuItem
-                disabled
-                className='flex justify-between items-center p-2 cursor-pointer'
-              >
-                <span className='text-xs font-medium'>Manage</span>
-                <Settings size='16px' />
+              <DropdownMenuItem asChild>
+                <Link
+                  className='flex justify-between items-center p-2 cursor-pointer'
+                  href='/account'
+                >
+                  <span className='text-xs font-medium'>Account</span>
+                  <Settings size='16px' />
+                </Link>
               </DropdownMenuItem>
               {orgInfo.isPro ? (
                 <DropdownMenuItem
