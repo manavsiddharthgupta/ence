@@ -15,7 +15,7 @@ import {
   checkOnDemandValidation,
   formatInstantInvoiceData
 } from '@/lib/helpers'
-import { formatAmount } from 'helper/format'
+import { CurrencyFormat, formatAmount } from 'helper/format'
 import {
   Dispatch,
   SetStateAction,
@@ -46,6 +46,7 @@ import { ImageMagnifier } from '@/components/img-magnifier'
 import { motion } from 'framer-motion'
 import { Option } from '@/types/invoice'
 import InstantInputCombobox from './customer-input'
+import { useOrgInfo } from '@/context/org-info'
 
 const InstantDrawer = ({
   blobUrl,
@@ -348,6 +349,9 @@ const InvoiceInfo = () => {
     dueDate,
     setDueDate
   } = useInstantInvoiceContext()
+  const {
+    orgInfo: { currency_type }
+  } = useOrgInfo()
 
   useEffect(() => {
     if (paymentTerm === 'immediate') {
@@ -426,7 +430,7 @@ const InvoiceInfo = () => {
         </Label>
         <div className='relative'>
           <p className='absolute top-1/2 -translate-y-1/2 left-2 text-sky-950 dark:text-white'>
-            ₹
+            {currency_type === '☒' ? '☒' : CurrencyFormat[currency_type].symbol}
           </p>
           <Input
             value={instantInvoiceDetails.invoiceTotal || ''}
@@ -621,6 +625,9 @@ const Footer = ({
     paymentTerm,
     sendingMethod
   } = useInstantInvoiceContext()
+  const {
+    orgInfo: { currency_type }
+  } = useOrgInfo()
 
   const onCreateInstantInvoice = async () => {
     const isValid = checkOnDemandValidation(
@@ -679,7 +686,8 @@ const Footer = ({
           {formatAmount(
             instantInvoiceDetails.invoiceTotal === null
               ? 0
-              : +instantInvoiceDetails.invoiceTotal
+              : +instantInvoiceDetails.invoiceTotal,
+            currency_type
           )}
         </h1>
       </div>
