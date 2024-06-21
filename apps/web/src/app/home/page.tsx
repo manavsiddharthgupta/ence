@@ -66,7 +66,10 @@ const Announcements = () => {
       <RocketIcon className='h-4 w-4' />
       <AlertTitle>Heads up!</AlertTitle>
       <AlertDescription>
-        Hey, We are getting better with features everyday. Please reach out to{' '}
+        Due to Stripe's temporary invite-only policy in India, we are currently
+        unable to upgrade our app to accept international payments. We apologize
+        for the inconvenience and appreciate your understanding. Please reach
+        out to{' '}
         <Link className='font-medium' href='mailto:@info.ence.in'>
           @info.ence.in
         </Link>{' '}

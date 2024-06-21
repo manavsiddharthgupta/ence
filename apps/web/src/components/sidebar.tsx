@@ -144,7 +144,7 @@ const Sidebar = ({
               ) : (
                 <DropdownMenuItem
                   onClick={onSubscribe}
-                  disabled={upgradeLoading}
+                  disabled //={upgradeLoading}
                   className='flex gap-2 justify-between items-center p-2 cursor-pointer'
                 >
                   <span className='text-xs font-medium'>Upgrade</span>
@@ -188,7 +188,7 @@ const Sidebar = ({
                 className='w-fit bg-transparent border-none hover:bg-white hover:dark:bg-zinc-900 justify-start gap-2 text-xs font-medium hover:text-sky-500'
                 variant='outline'
                 size='sm'
-                disabled
+                asChild
               >
                 <Link className='flex gap-2' href='/instant/invoice'>
                   <FilePlus2 size={14} strokeWidth={2} />
@@ -199,7 +199,7 @@ const Sidebar = ({
                 className='w-fit bg-transparent border-none hover:bg-white hover:dark:bg-zinc-900 justify-start gap-2 text-xs font-medium hover:text-sky-500'
                 variant='outline'
                 size='sm'
-                disabled
+                disabled // change to asChild
               >
                 <Link className='flex gap-2' href='/instant/expense'>
                   <FileMinus2 size={14} strokeWidth={2} />
