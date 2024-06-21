@@ -144,7 +144,7 @@ const Sidebar = ({
               ) : (
                 <DropdownMenuItem
                   onClick={onSubscribe}
-                  disabled={upgradeLoading}
+                  disabled //={upgradeLoading}
                   className='flex gap-2 justify-between items-center p-2 cursor-pointer'
                 >
                   <span className='text-xs font-medium'>Upgrade</span>
