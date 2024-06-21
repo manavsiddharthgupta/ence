@@ -3,6 +3,7 @@ const nextConfig = {
   images: {
     domains: [
       'ence-invoice.s3.ap-south-1.amazonaws.com',
+      'ence-invoice.s3.amazonaws.com',
       'localhost',
       'ence.in'
     ]

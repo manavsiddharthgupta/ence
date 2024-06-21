@@ -31,7 +31,6 @@ export const ImageMagnifier = ({
     >
       <Image
         src={blobUrl}
-        blurDataURL={blobUrl}
         width='0'
         height='0'
         sizes='100vw'
@@ -53,7 +52,6 @@ export const ImageMagnifier = ({
         onMouseLeave={() => {
           setShowMagnifier(false)
         }}
-        placeholder='blur'
       />
       <div
         style={{
