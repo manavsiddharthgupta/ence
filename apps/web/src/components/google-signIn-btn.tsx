@@ -10,7 +10,7 @@ const GoogleSignInBtn = () => {
         signIn('google', { redirect: true, callbackUrl: '/onboarding?scn=1' })
       }
       variant='secondary'
-      className='mt-4'
+      className='mt-4 bg-zinc-800 text-white hover:bg-zinc-700'
     >
       <Image src={google} alt='google' width={24} height={24} />
       <span className='ml-2'>Continue With Google</span>
