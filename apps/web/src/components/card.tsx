@@ -66,7 +66,7 @@ const Card = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname()
   if (pathname.startsWith('/auth')) {
     return (
-      <body className='bg-zinc-900 text-white'>
+      <body className='bg-white text-black'>
         <main className='min-h-screen'>{children}</main>
       </body>
     )

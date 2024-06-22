@@ -1,26 +1,28 @@
 import GoogleSignInBtn from '@/components/google-signIn-btn'
 import Image from 'next/image'
-import streamlineVector from '@/svgs/streamline-vector.svg'
+import streamlineVector from '@/svgs/ence.ico'
 
 const SignIn = () => {
   return (
-    <div className='w-full h-screen'>
-      <div className='border border-zinc-200/30 max-w-md h-[90%] w-full absolute bottom-0 left-1/2 -translate-x-1/2 rounded-t-3xl shadow-xl p-8 flex flex-col justify-between bg-zinc-600/20'>
-        <h1 className='text-2xl font-bold'>ENCE</h1>
-        <div className='h-1/2 flex justify-center items-center'>
-          <Image src={streamlineVector} height={200} alt='inv-vector' />
+    <div className='w-full h-screen flex'>
+      <div className='md:w-1/2 w-full flex justify-center items-center'>
+        <div className='flex flex-col items-center'>
+          <div className='py-3'>
+            <h1 className='text-3xl px-2 font-bold text-center'>
+              Welcome to Ence
+            </h1>
+            <p className='text-sm mt-4 text-zinc-600 text-center max-w-96 px-2 mx-auto'>
+              Empower Your Business with Seamless Invoicing, Instant Digital
+              Receipts, and Intelligent Insights.
+            </p>
+          </div>
+          <GoogleSignInBtn />
         </div>
-        <div className='w-full text-center rounded-lg mx-auto py-3 px-2'>
-          <h1 className='text-xl leading-6 font-bold'>
-            Revolutionizing Business Transactions, Where Simplicity Meets
-            Efficiency.
-          </h1>
-          <p className='text-xs mt-2 text-zinc-400 max-w-xs mx-auto'>
-            Empower Your Business with Seamless Invoicing, Instant Digital
-            Receipts, and Intelligent Insights.
-          </p>
+      </div>
+      <div className='md:block w-1/2 bg-zinc-800 hidden'>
+        <div className='w-full h-full flex justify-center items-center'>
+          <Image src={streamlineVector} height={100} alt='inv-vector' />
         </div>
-        <GoogleSignInBtn />
       </div>
     </div>
   )
